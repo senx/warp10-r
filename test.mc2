@@ -1,2 +1,0 @@
-NEWGTS 1 1000 <% 'i' STORE $i 1 w * NaN NaN NaN $i PI 120 / * COS ADDVALUE %> FOR
-'Cosinus example' RENAME
