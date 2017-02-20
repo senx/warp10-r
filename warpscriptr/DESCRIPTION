@@ -1,0 +1,10 @@
+Package: warpscriptr
+Title: R Client for executing Warpscript on a Warp10 instance
+Version: 1.0
+Authors@R: person("Jean-Charles", "Vialatte", email = "jean-charles.vialatte@cityzendata.com", role = c("aut", "cre"))
+Description: Post a warpscript request to an egress endpoint. Merge GTS contained in the response as a dataframe.
+Depends: R (>= 3.3.2)
+License: Apache 2.0
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1.9000
