@@ -1,0 +1,10 @@
+library(devtools)
+library(roxygen2)
+
+setwd('./warpscriptr')
+document()
+setwd('..')
+install('warpscriptr')
+system('rm warpscriptr.pdf')
+system('R CMD Rd2pdf warpscriptr')
+system('tar czvf warpscriptr.tar.gz warpscriptr')

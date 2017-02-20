@@ -2,7 +2,7 @@
 % Please edit documentation in R/client.R
 \name{permalink}
 \alias{permalink}
-\title{Permalink}
+\title{Generate a Permalink}
 \usage{
 permalink(warpscript, plot = FALSE,
   endpoint = "http://localhost:8080/api/v0/exec",
@@ -11,11 +11,14 @@ permalink(warpscript, plot = FALSE,
 \arguments{
 \item{warpscript}{code or file name ending with .mc2}
 
+\item{plot}{the link point to the plot. Default to FALSE}
+
 \item{endpoint}{egress endpoint. Default to "http://localhost:8080/api/v0/exec"}
 
-\item{the}{link point to the plot. Default to FALSE}
-
 \item{endpoint}{address of quantum instance. Default to "http://localhost:8090"}
+}
+\value{
+url
 }
 \description{
 Generate a permalink to a quantum instance.

@@ -3,7 +3,7 @@ library(jsonlite)
 library(stringr)
 library(RCurl)
 
-#' extractGTS
+#' Extract Geo Time Series
 #'
 #' Extract all GTS from a JSON response and return them merged as a data frame
 #' @param response response body of a post request
@@ -47,12 +47,13 @@ extractGTS <- function(response, withLabels=FALSE){
   return(df)
 }
 
-#' postWarpscript
+#' Post Warpscript Code
 #' 
-#' Post warpscript code and retrieve response as string, json, named list or dataframe.
+#' Post warpscript code to a Warp 10 instance and retrieve response as string, json, named list or dataframe.
 #' @param warpscript code or file name ending with .mc2
 #' @param endpoint egress endpoint. Default to "http://localhost:8080/api/v0/exec"
 #' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "dataframe". Default to "json". If outputType is "dataframe", only GTS contained in the response will be present in the returned dataframe.
+#' @return string or json or named list or dataframe
 #' @export
 
 postWarpscript <- function(warpscript, endpoint="http://localhost:8080/api/v0/exec", outputType="json"){
@@ -106,13 +107,14 @@ postWarpscript <- function(warpscript, endpoint="http://localhost:8080/api/v0/ex
 
 }
 
-#' Permalink
+#' Generate a Permalink
 #' 
 #' Generate a permalink to a quantum instance.
 #' @param warpscript code or file name ending with .mc2
-#' @param the link point to the plot. Default to FALSE
+#' @param plot the link point to the plot. Default to FALSE
 #' @param endpoint egress endpoint. Default to "http://localhost:8080/api/v0/exec"
 #' @param endpoint address of quantum instance. Default to "http://localhost:8090"
+#' @return url
 #' @export
 
 permalink <- function(warpscript, plot=FALSE, endpoint="http://localhost:8080/api/v0/exec", quantum="http://localhost:8090"){

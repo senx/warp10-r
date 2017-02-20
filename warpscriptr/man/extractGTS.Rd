@@ -2,7 +2,7 @@
 % Please edit documentation in R/client.R
 \name{extractGTS}
 \alias{extractGTS}
-\title{extractGTS}
+\title{Extract Geo Time Series}
 \usage{
 extractGTS(response, withLabels = FALSE)
 }

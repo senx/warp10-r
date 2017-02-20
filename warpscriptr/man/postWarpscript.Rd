@@ -2,7 +2,7 @@
 % Please edit documentation in R/client.R
 \name{postWarpscript}
 \alias{postWarpscript}
-\title{postWarpscript}
+\title{Post Warpscript Code}
 \usage{
 postWarpscript(warpscript, endpoint = "http://localhost:8080/api/v0/exec",
   outputType = "json")
@@ -14,6 +14,9 @@ postWarpscript(warpscript, endpoint = "http://localhost:8080/api/v0/exec",
 
 \item{outputType}{the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "dataframe". Default to "json". If outputType is "dataframe", only GTS contained in the response will be present in the returned dataframe.}
 }
+\value{
+string or json or named list or dataframe
+}
 \description{
-Post warpscript code and retrieve response as string, json, named list or dataframe.
+Post warpscript code to a Warp 10 instance and retrieve response as string, json, named list or dataframe.
 }
