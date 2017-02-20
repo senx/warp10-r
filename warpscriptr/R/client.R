@@ -34,7 +34,22 @@ extractGTS <- function(response, withLabels=FALSE){
         if (withLabels) {
           gtsColName = paste0(gtsColName,caught[gts_id,3])  
         }
-        colnames(values) <- c("timestamp", gtsColName)
+        numCol = ncol(values)
+        if (is.null(numCol)){
+          stop('Datapoints of a same GTS must have geo stamps of same dimension')
+        }
+        if (numCol == 2){
+          colnames(values) <- c("timestamp", gtsColName)
+        }
+        if (numCol == 3){
+          colnames(values) <- c("timestamp", paste0(gtsColName,'.geo'), gtsColName)
+        }
+        if (numCol == 4){
+          colnames(values) <- c("timestamp", paste0(gtsColName,'.lat'), paste0(gtsColName,'.lon'), gtsColName)
+        }
+        if (numCol == 5){
+          colnames(values) <- c("timestamp", paste0(gtsColName,'.lat'), paste0(gtsColName,'.lon'), paste0(gtsColName,'.elev'), gtsColName)
+        }        
         values <- data.frame(values)
         df <- merge(df, values,by="timestamp", all=TRUE)
       }
