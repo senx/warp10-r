@@ -1,8 +1,3 @@
-library(httr)
-library(jsonlite)
-library(stringr)
-library(RCurl)
-
 #' Extract Geo Time Series
 #'
 #' Extract all GTS from a JSON response and return them merged as a data frame
@@ -10,6 +5,8 @@ library(RCurl)
 #' @param withLabels if TRUE, column names also include Labels. Default to FALSE
 #' @return dataframe
 #' @export
+#' @importFrom jsonlite minify fromJSON
+#' @importFrom stringr str_match_all
 
 extractGTS <- function(response, withLabels=FALSE){
 
@@ -55,6 +52,8 @@ extractGTS <- function(response, withLabels=FALSE){
 #' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "dataframe". Default to "json". If outputType is "dataframe", only GTS contained in the response will be present in the returned dataframe.
 #' @return string or json or named list or dataframe
 #' @export
+#' @importFrom httr POST content
+#' @importFrom jsonlite fromJSON minify prettify
 
 postWarpscript <- function(warpscript, endpoint="http://localhost:8080/api/v0/exec", outputType="json"){
 
@@ -116,6 +115,7 @@ postWarpscript <- function(warpscript, endpoint="http://localhost:8080/api/v0/ex
 #' @param endpoint address of quantum instance. Default to "http://localhost:8090"
 #' @return url
 #' @export
+#' @importFrom RCurl base64
 
 permalink <- function(warpscript, plot=FALSE, endpoint="http://localhost:8080/api/v0/exec", quantum="http://localhost:8090"){
 
