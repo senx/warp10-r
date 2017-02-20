@@ -10,7 +10,7 @@ postWarpscript(warpscript, outputType = "json",
 \arguments{
 \item{warpscript}{code or file name ending with .mc2}
 
-\item{outputType}{the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "dataframe". Default to "json". If outputType is "dataframe", only GTS contained in the response will be present in the returned dataframe.}
+\item{outputType}{the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "dataframe". Default to "json". If outputType is "dataframe", only GTS present in the response will be included in the returned dataframe.}
 
 \item{endpoint}{egress endpoint. Default to "http://localhost:8080/api/v0/exec"}
 }

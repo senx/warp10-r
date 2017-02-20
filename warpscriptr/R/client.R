@@ -66,7 +66,7 @@ extractGTS <- function(response, withLabels=FALSE){
 #' 
 #' Post warpscript code to a Warp 10 instance and retrieve response as string, json, named list or dataframe.
 #' @param warpscript code or file name ending with .mc2
-#' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "dataframe". Default to "json". If outputType is "dataframe", only GTS contained in the response will be present in the returned dataframe.
+#' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "dataframe". Default to "json". If outputType is "dataframe", only GTS present in the response will be included in the returned dataframe.
 #' @param endpoint egress endpoint. Default to "http://localhost:8080/api/v0/exec"
 #' @return string or json or named list or dataframe
 #' @export
@@ -128,9 +128,9 @@ postWarpscript <- function(warpscript, outputType="json", endpoint="http://local
 #' 
 #' Generate a permalink to a quantum instance.
 #' @param warpscript code or file name ending with .mc2
-#' @param plot the link point to the plot. Default to FALSE
+#' @param plot if TRUE, the generated link points to a plot. Default to FALSE
 #' @param endpoint egress endpoint. Default to "http://localhost:8080/api/v0/exec"
-#' @param endpoint address of quantum instance. Default to "http://localhost:8090"
+#' @param quantum address of quantum instance. Default to "http://localhost:8090"
 #' @return url
 #' @export
 #' @importFrom RCurl base64

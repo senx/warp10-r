@@ -11,11 +11,11 @@ permalink(warpscript, plot = FALSE,
 \arguments{
 \item{warpscript}{code or file name ending with .mc2}
 
-\item{plot}{the link point to the plot. Default to FALSE}
+\item{plot}{if TRUE, the generated link points to a plot. Default to FALSE}
 
 \item{endpoint}{egress endpoint. Default to "http://localhost:8080/api/v0/exec"}
 
-\item{endpoint}{address of quantum instance. Default to "http://localhost:8090"}
+\item{quantum}{address of quantum instance. Default to "http://localhost:8090"}
 }
 \value{
 url
