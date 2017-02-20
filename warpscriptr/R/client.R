@@ -48,14 +48,14 @@ extractGTS <- function(response, withLabels=FALSE){
 #' 
 #' Post warpscript code to a Warp 10 instance and retrieve response as string, json, named list or dataframe.
 #' @param warpscript code or file name ending with .mc2
-#' @param endpoint egress endpoint. Default to "http://localhost:8080/api/v0/exec"
 #' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "dataframe". Default to "json". If outputType is "dataframe", only GTS contained in the response will be present in the returned dataframe.
+#' @param endpoint egress endpoint. Default to "http://localhost:8080/api/v0/exec"
 #' @return string or json or named list or dataframe
 #' @export
 #' @importFrom httr POST content
 #' @importFrom jsonlite fromJSON minify prettify
 
-postWarpscript <- function(warpscript, endpoint="http://localhost:8080/api/v0/exec", outputType="json"){
+postWarpscript <- function(warpscript, outputType="json", endpoint="http://localhost:8080/api/v0/exec"){
 
   if (substr(warpscript, nchar(warpscript) - 3, nchar(warpscript)) == '.mc2'){
     warpscript = readLines(warpscript, warn=FALSE)
