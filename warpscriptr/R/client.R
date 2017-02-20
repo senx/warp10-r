@@ -13,12 +13,15 @@ extractGTS <- function(response, withLabels=FALSE){
   body = gsub('(\\W)NaN(\\W)', '\\1null\\2', response)
   body = minify(body)
 
-  # we start by replacing labels and attributes {"key":"value"} as {key=value}
-  headRegexp = '\"([la])\":\\{\"([^\"]*)\":\"([^\"]*)\",'
-  tailRegexp = ',\"([^\"]*)\":\"([^\"]*)\"'
+  if (withLabels){
 
-  body = gsub(headRegexp, '\"\\1\":{\\2=\\3,', body)
-  body = gsub(tailRegexp, ',\\1=\\2', body)
+    # we start by replacing labels {"key":"value"} as {key=value}
+    headRegexp = '\"l\":\\{\"([^\"]*)\":\"([^\"]*)\",'
+    tailRegexp = ',\"([^\"]*)\":\"([^\"]*)\"'
+
+    body = gsub(headRegexp, '\"l\":{\\1=\\2,', body)
+    body = gsub(tailRegexp, ',\\1=\\2', body)
+  }
 
   # then we extract all gts within the json
   gtsRegexp = '\\{\"c\":\"([^\"]*)\",\"l\":(\\{[^\"]*\\}),\"a\":\\{[^\"]*\\},\"v\":(\\[[^\\}]*\\])\\}'
