@@ -6,22 +6,16 @@ R client for executing Warpscript on a Warp10 instance
 
 Require devtools and roxygen2
 
-```
-#!bash
-
+```bash
 Rscript install.R
 ```
 
 ### First step ###
 
-
-```
-#!R
-
+```R
 library(warp10r)
 postWarpscript("'Hello world' NOW", outputType="pretty", endpoint="http://localhost:8080/api/v0/exec")
 ```
-
 
 ### Documentation ###
 
