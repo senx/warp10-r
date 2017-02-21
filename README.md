@@ -17,6 +17,14 @@ library(warp10r)
 postWarpscript("'Hello world' NOW", outputType="pretty", endpoint="http://localhost:8080/api/v0/exec")
 ```
 
+```R
+Status: 200
+[
+  1487669519106000,
+  "Hello world"
+]
+```
+
 ### Documentation ###
 
 see `warp10r.pdf`
