@@ -1,4 +1,4 @@
-# warpscriptr #
+# warp10r #
 
 R client for executing Warpscript on a Warp10 instance
 
@@ -18,11 +18,11 @@ Rscript install.R
 ```
 #!R
 
-library(warpscriptr)
+library(warp10r)
 postWarpscript("'Hello world' NOW", outputType="pretty", endpoint="http://localhost:8080/api/v0/exec")
 ```
 
 
 ### Documentation ###
 
-see `warpscriptr.pdf`
+see `warp10r.pdf`
