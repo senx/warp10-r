@@ -10,9 +10,14 @@ Require devtools and roxygen2
 Rscript install.R
 ```
 
-### First step ###
+### Documentation ###
 
-Hello World
+see `warp10r.pdf`
+
+
+### First steps ###
+
+# Hello World
 
 ```R
 library(warp10r)
@@ -27,7 +32,7 @@ Status: 200
 ]
 ```
 
-Example with Geo Time Series
+# Example with Geo Time Series
 
 ```R
 postWarpscript(
@@ -52,6 +57,15 @@ postWarpscript(
 11      1100 0.6551525           NA          NA        NA
 ```
 
-### Documentation ###
+# Permalink example
 
-see `warp10r.pdf`
+```R
+permalink(
+  "NEWGTS 1 1000 <% 'i' STORE $i 1 w * NaN NaN NaN $i PI 120 / * COS ADDVALUE %> FOR
+  'Cosinus example' RENAME",
+  plot=TRUE,
+  endpoint="https://warp.cityzendata.net/api/v0/exec",
+  quantum="https://home.cityzendata.net/quantum/")
+```
+
+[`[1] "https://home.cityzendata.net/quantum/#/plot/TkVXR1RTIDEgMTAwMCA8JSAnaScgU1RPUkUgJGkgMSB3ICogTmFOIE5hTiBOYU4gJGkgUEkgMTIwIC8gKiBDT1MgQUREVkFMVUUgJT4gRk9SCiAgJ0Nvc2ludXMgZXhhbXBsZScgUkVOQU1F/aHR0cHM6Ly93YXJwLmNpdHl6ZW5kYXRhLm5ldC9hcGkvdjAvZXhlYw==`](https://home.cityzendata.net/quantum/#/plot/TkVXR1RTIDEgMTAwMCA8JSAnaScgU1RPUkUgJGkgMSB3ICogTmFOIE5hTiBOYU4gJGkgUEkgMTIwIC8gKiBDT1MgQUREVkFMVUUgJT4gRk9SCiAgJ0Nvc2ludXMgZXhhbXBsZScgUkVOQU1F/aHR0cHM6Ly93YXJwLmNpdHl6ZW5kYXRhLm5ldC9hcGkvdjAvZXhlYw==)"
