@@ -17,7 +17,7 @@ see `warp10r.pdf`
 
 ### First steps ###
 
-# Hello World
+Hello World
 
 ```R
 library(warp10r)
@@ -32,7 +32,7 @@ Status: 200
 ]
 ```
 
-# Example with Geo Time Series
+Example with Geo Time Series
 
 ```R
 postWarpscript(
@@ -57,7 +57,7 @@ postWarpscript(
 11      1100 0.6551525           NA          NA        NA
 ```
 
-# Permalink example
+Permalink example
 
 ```R
 permalink(
