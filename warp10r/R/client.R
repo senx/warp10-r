@@ -3,7 +3,7 @@
 #' Extract all GTS from a JSON response and return them merged as a data frame
 #' @param response response body of a post request
 #' @param withLabels if TRUE, column names also include Labels. Default to FALSE
-#' @return dataframe
+#' @return data frame
 #' @export
 #' @importFrom jsonlite minify fromJSON
 #' @importFrom stringr str_match_all
@@ -64,11 +64,11 @@ extractGTS <- function(response, withLabels=FALSE){
 
 #' Post Warpscript Code
 #' 
-#' Post warpscript code to a Warp 10 instance and retrieve response as string, json, named list or dataframe.
+#' Post warpscript code to a Warp 10 instance and retrieve response as string, json, named list or data frame.
 #' @param warpscript code or file name ending with .mc2
-#' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "dataframe". Default to "json". If outputType is "dataframe", only GTS present in the response will be included in the returned dataframe.
+#' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "dataFrame". Default to "json". If outputType is "dataFrame", only GTS present in the response will be included in the returned data frame.
 #' @param endpoint egress endpoint. Default to "http://localhost:8080/api/v0/exec"
-#' @return string or json or named list or dataframe
+#' @return string or json or named list or data frame
 #' @export
 #' @importFrom httr POST content
 #' @importFrom jsonlite fromJSON minify prettify
