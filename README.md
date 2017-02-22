@@ -4,7 +4,7 @@ R client for executing Warpscript on a Warp10 instance
 
 ### Installation from source ###
 
-Require devtools and roxygen2
+Require library devtools
 
 ```bash
 Rscript install.R
