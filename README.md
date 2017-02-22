@@ -38,7 +38,8 @@ Example with Geo Time Series
 postWarpscript(
   "NEWGTS 'randGTS' RENAME 1 10 <% 100 * RAND RAND NaN RAND ADDVALUE %> FOR
   NEWGTS 'nogeoTS' RENAME 2 11 <% 100 * NaN NaN NaN RAND ADDVALUE %> FOR",
-  outputType='dataFrame')
+  outputType="dataFrame",
+  endpoint="http://localhost:8080/api/v0/exec")
 ```
 
 ```out
