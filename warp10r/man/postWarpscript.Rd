@@ -15,8 +15,8 @@ postWarpscript(warpscript, outputType = "json",
 \item{endpoint}{egress endpoint. Default to "http://localhost:8080/api/v0/exec"}
 }
 \value{
-string or json or named list or data frame
+character vector or json or named list or data frame
 }
 \description{
-Post warpscript code to a Warp 10 instance and retrieve response as string, json, named list or data frame.
+Post warpscript code to a Warp 10 instance and retrieve response as charcter vector, json, named list or data frame.
 }

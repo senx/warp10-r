@@ -160,7 +160,7 @@ permalink <- function(warpscript, plot=FALSE, endpoint="http://localhost:8080/ap
 #' @importFrom httr POST content add_headers upload_file
 
 pushWarp10 <- function(data, token, endpoint="http://localhost:8080/api/v0/update"){
-  if ((substr(data, nchar(data) - 4, nchar(data)) == '.data') || (substr(data, nchar(data) - 2, nchar(data)) == '.gz')) {
+  if ((substr(data, nchar(data) - 4, nchar(data)) == '.data') | (substr(data, nchar(data) - 2, nchar(data)) == '.gz')) {
     data = upload_file(data)
   }
 
@@ -171,4 +171,99 @@ pushWarp10 <- function(data, token, endpoint="http://localhost:8080/api/v0/updat
   if (request$status != 200) {
     cat(content(request, "text", encoding="UTF-8"))
   }
+}
+
+#' Convert a data frame
+#' 
+#' Convert a data frame into GTS input format. First column of the data frame must be named "timestamp". Column names corresponding to GTS values must be in the <selector> form: "classname{label1=value1,label2=value2,..}" (or "classname"). Column names corresponding to geographic information must be be in the form "<selector>.lat", "<selector>.lon" or "<selector>.elev"
+#' @param dataFrame data frame
+#' @return character vector
+#' @export
+
+toGtsInputFormat <- function(dataFrame){
+  c <- colnames(dataFrame)
+
+  if (c[1] != 'timestamp') {
+    stop("First column must be named timestamp")
+  }
+
+  lat <- c[substr(c, nchar(c) - 3, nchar(c)) == '.lat']
+  lon <- c[substr(c, nchar(c) - 3, nchar(c)) == '.lon']
+  elev <- c[substr(c, nchar(c) - 4, nchar(c)) == '.elev']
+  value <- c[(!(c %in% lat)) & (!(c %in% lon)) & (!(c %in% elev))]
+
+  res <- ''
+  for (name in value) {
+
+    if (name == 'timestamp') {
+      next
+    }
+
+    sub <- c('timestamp', name)
+
+    nlat <- paste0(name, '.lat')
+    nlon <- paste0(name, '.lon')
+    nelev <- paste0(name, '.elev')
+
+    if ((nelev %in% elev)) {
+      sub <- c('timestamp', nelev, name)
+    }
+
+    if ((nlat %in% lat) & (nlon %in% lon)) {
+      sub <- c('timestamp', nlat, nlon, name)
+    }
+
+    if ((nlat %in% lat) & (nlon %in% lon) & (nelev %in% elev)) {
+      sub <- c('timestamp', nlat, nlon, nelev, name)
+    }
+
+    subDf <- dataFrame[sub]
+    first <- TRUE
+
+    for (rowId in 1:nrow(subDf)) {
+      if (is.na(subDf[name][rowId,1])) {
+        next
+      }
+
+      if (ncol(subDf) == 2) {
+        if (first) {
+          res <- paste0(res, subDf[rowId, 1], '// ', name, ' ', subDf[rowId, 2], '\n')
+          first <- FALSE
+        } else {
+          res <- paste0(res, subDf[rowId, 1], '// ', subDf[rowId, 2], '\n')
+        }        
+      }
+
+      if (ncol(subDf) == 3) {
+        if (first) {
+          res <- paste0(res, subDf[rowId, 1], '//', subDf[rowId,2], ' ', name, ' ', subDf[rowId, 3], '\n')
+          first <- FALSE
+        } else {
+          res <- paste0(res, subDf[rowId, 1], '//', subDf[rowId,2], ' ', subDf[rowId, 3], '\n')
+        }        
+      }
+
+      if (ncol(subDf) == 4) {
+        if (first) {
+          res <- paste0(res, subDf[rowId, 1], '/', subDf[rowId,2], ':', subDf[rowId,3], '/ ', name, ' ', subDf[rowId, 4], '\n')
+          first <- FALSE
+        } else {
+          res <- paste0(res, subDf[rowId, 1], '/', subDf[rowId,2], ':', subDf[rowId,3], '/ ', subDf[rowId, 4], '\n')
+        }
+      }
+
+      if (ncol(subDf) == 5) {
+        if (first) {
+          res <- paste0(res, subDf[rowId, 1], '/', subDf[rowId,2], ':', subDf[rowId,3], '/', subDf[rowId,4], ' ', name, ' ', subDf[rowId, 5], '\n')
+          first <- FALSE
+        } else {
+          res <- paste0(res, subDf[rowId, 1], '/', subDf[rowId,2], ':', subDf[rowId,3], '/', subDf[rowId,4], ' ', subDf[rowId, 5], '\n')
+        }
+      }
+
+    }
+  }
+
+  res = gsub('(\\W)NA(\\W)', '\\1\\2', res)
+  return(res)
 }

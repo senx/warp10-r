@@ -7,7 +7,7 @@
 extractGTS(response, withLabels = FALSE)
 }
 \arguments{
-\item{response}{response body of a post request}
+\item{response}{response body of a post request (a character vector or a json)}
 
 \item{withLabels}{if TRUE, column names also include Labels. Default to FALSE}
 }
