@@ -16,10 +16,10 @@ extractGTS <- function(response, withLabels=FALSE){
   if (withLabels){
 
     # we start by replacing labels {"key":"value"} as {key=value}
-    headRegexp = '\"l\":\\{\"([^\"]*)\":\"([^\"]*)\",'
+    headRegexp = '\"l\":\\{\"([^\"]*)\":\"([^\"]*)\"'
     tailRegexp = ',\"([^\"]*)\":\"([^\"]*)\"'
 
-    body = gsub(headRegexp, '\"l\":{\\1=\\2,', body)
+    body = gsub(headRegexp, '\"l\":{\\1=\\2', body)
     body = gsub(tailRegexp, ',\\1=\\2', body)
   }
 
