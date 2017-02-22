@@ -148,3 +148,27 @@ permalink <- function(warpscript, plot=FALSE, endpoint="http://localhost:8080/ap
 
   return(url)
 }
+
+
+#' Push data points
+#' 
+#' Push data points to an ingress instance.
+#' @param data data points in GTS input format as a character vector or a filename ending with .data or .gz
+#' @param token write token
+#' @param endpoint ingress endpoint. Default to "http://localhost:8080/api/v0/update"
+#' @export
+#' @importFrom httr POST content add_headers upload_file
+
+pushWarp10 <- function(data, token, endpoint="http://localhost:8080/api/v0/update"){
+  if ((substr(data, nchar(data) - 4, nchar(data)) == '.data') || (substr(data, nchar(data) - 2, nchar(data)) == '.gz')) {
+    data = upload_file(data)
+  }
+
+  request = POST(endpoint, add_headers("X-Warp10-Token"=token), body=data)
+
+  # print status
+  cat(paste0(" Status: ", request$status, "\n"))
+  if (request$status != 200) {
+    cat(content(request, "text", encoding="UTF-8"))
+  }
+}
