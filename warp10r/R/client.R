@@ -53,7 +53,7 @@ extractGTS <- function(response, withLabels=FALSE){
         if (numCol == 5){
           colnames(values) <- c("timestamp", paste0(gtsColName,'.lat'), paste0(gtsColName,'.lon'), paste0(gtsColName,'.elev'), gtsColName)
         }        
-        values <- data.frame(values)
+        values <- data.frame(values, check.names=FALSE)
         df <- merge(df, values,by="timestamp", all=TRUE)
       }
     }
