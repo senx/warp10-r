@@ -1,7 +1,7 @@
 #' Extract Geo Time Series
 #'
 #' Extract all GTS from a JSON response and return them merged as a data frame
-#' @param response response body of a post request
+#' @param response response body of a post request (a character vector or a json)
 #' @param withLabels if TRUE, column names also include Labels. Default to FALSE
 #' @return data frame
 #' @export
@@ -13,15 +13,12 @@ extractGTS <- function(response, withLabels=FALSE){
   body = gsub('(\\W)NaN(\\W)', '\\1null\\2', response)
   body = minify(body)
 
-  if (withLabels){
+  # we start by replacing labels {"key":"value"} as {key=value}
+  headRegexp = '\"([la])\":\\{\"([^\"]*)\":\"([^\"]*)\"'
+  tailRegexp = ',\"([^\"]*)\":\"([^\"]*)\"'
 
-    # we start by replacing labels {"key":"value"} as {key=value}
-    headRegexp = '\"l\":\\{\"([^\"]*)\":\"([^\"]*)\"'
-    tailRegexp = ',\"([^\"]*)\":\"([^\"]*)\"'
-
-    body = gsub(headRegexp, '\"l\":{\\1=\\2', body)
-    body = gsub(tailRegexp, ',\\1=\\2', body)
-  }
+  body = gsub(headRegexp, '\"\\1\":{\\2=\\3', body)
+  body = gsub(tailRegexp, ',\\1=\\2', body)
 
   # then we extract all gts within the json
   gtsRegexp = '\\{\"c\":\"([^\"]*)\",\"l\":(\\{[^\"]*\\}),\"a\":\\{[^\"]*\\},\"v\":(\\[[^\\}]*\\])\\}'
@@ -64,11 +61,11 @@ extractGTS <- function(response, withLabels=FALSE){
 
 #' Post Warpscript Code
 #' 
-#' Post warpscript code to a Warp 10 instance and retrieve response as string, json, named list or data frame.
+#' Post warpscript code to a Warp 10 instance and retrieve response as charcter vector, json, named list or data frame.
 #' @param warpscript code or file name ending with .mc2
 #' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "dataFrame". Default to "json". If outputType is "dataFrame", only GTS present in the response will be included in the returned data frame.
 #' @param endpoint egress endpoint. Default to "http://localhost:8080/api/v0/exec"
-#' @return string or json or named list or data frame
+#' @return character vector or json or named list or data frame
 #' @export
 #' @importFrom httr POST content
 #' @importFrom jsonlite fromJSON minify prettify
