@@ -61,16 +61,17 @@ extractGTS <- function(response, withLabels=FALSE){
 
 #' Post Warpscript Code
 #' 
-#' Post warpscript code to a Warp 10 instance and retrieve response as charcter vector, json, named list or data frame.
+#' Post warpscript code to a Warp 10 instance and retrieve response as character vector, json, named list or data frame.
 #' @param warpscript code or file name ending with .mc2
 #' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "dataFrame". Default to "json". If outputType is "dataFrame", only GTS present in the response will be included in the returned data frame.
 #' @param endpoint egress endpoint. Default to "http://localhost:8080/api/v0/exec"
+#' @param withLabels if TRUE and if outputType is "dataFrame", column names also include Labels. Default to FALSE
 #' @return character vector or json or named list or data frame
 #' @export
 #' @importFrom httr POST content
 #' @importFrom jsonlite fromJSON minify prettify
 
-postWarpscript <- function(warpscript, outputType="json", endpoint="http://localhost:8080/api/v0/exec"){
+postWarpscript <- function(warpscript, outputType="json", endpoint="http://localhost:8080/api/v0/exec", withLabels=FALSE){
 
   if (substr(warpscript, nchar(warpscript) - 3, nchar(warpscript)) == '.mc2'){
     warpscript = readLines(warpscript, warn=FALSE)
@@ -99,7 +100,7 @@ postWarpscript <- function(warpscript, outputType="json", endpoint="http://local
     }
 
     if (outputType == "dataFrame"){
-      return(extractGTS(body))
+      return(extractGTS(body, withLabels))
     }
 
     body = gsub('(\\W)NaN(\\W)', '\\1null\\2', body)
@@ -175,9 +176,9 @@ pushWarp10 <- function(data, token, endpoint="http://localhost:8080/api/v0/updat
 
 #' Convert a data frame
 #' 
-#' Convert a data frame into GTS input format. First column of the data frame must be named "timestamp". Column names corresponding to GTS values must be in the <selector> form: "classname{label1=value1,label2=value2,..}" (or "classname"). Column names corresponding to geographic information must be be in the form "<selector>.lat", "<selector>.lon" or "<selector>.elev"
-#' @param dataFrame data frame
-#' @return character vector
+#' Convert a data frame into GTS input format.
+#' @param dataFrame first column must be named "timestamp". Column names corresponding to GTS values must be in the <selector> form: "classname\{label1=value1,label2=value2,...\}" (or "classname"). Optional geo columns must be named "<selector>.lat", "<selector>.lon" or "<selector>.elev"
+#' @return data points in GTS input format as a character vector
 #' @export
 
 toGtsInputFormat <- function(dataFrame){
@@ -217,6 +218,11 @@ toGtsInputFormat <- function(dataFrame){
       sub <- c('timestamp', nlat, nlon, nelev, name)
     }
 
+    classname <- name
+    if (substr(name, nchar(name), nchar(name)) != '}'){
+      classname <- paste0(name, '{}')
+    }
+
     subDf <- dataFrame[sub]
     first <- TRUE
 
@@ -227,7 +233,7 @@ toGtsInputFormat <- function(dataFrame){
 
       if (ncol(subDf) == 2) {
         if (first) {
-          res <- paste0(res, subDf[rowId, 1], '// ', name, ' ', subDf[rowId, 2], '\n')
+          res <- paste0(res, subDf[rowId, 1], '// ', classname, ' ', subDf[rowId, 2], '\n')
           first <- FALSE
         } else {
           res <- paste0(res, subDf[rowId, 1], '// ', subDf[rowId, 2], '\n')
@@ -236,7 +242,7 @@ toGtsInputFormat <- function(dataFrame){
 
       if (ncol(subDf) == 3) {
         if (first) {
-          res <- paste0(res, subDf[rowId, 1], '//', subDf[rowId,2], ' ', name, ' ', subDf[rowId, 3], '\n')
+          res <- paste0(res, subDf[rowId, 1], '//', subDf[rowId,2], ' ', classname, ' ', subDf[rowId, 3], '\n')
           first <- FALSE
         } else {
           res <- paste0(res, subDf[rowId, 1], '//', subDf[rowId,2], ' ', subDf[rowId, 3], '\n')
@@ -245,7 +251,7 @@ toGtsInputFormat <- function(dataFrame){
 
       if (ncol(subDf) == 4) {
         if (first) {
-          res <- paste0(res, subDf[rowId, 1], '/', subDf[rowId,2], ':', subDf[rowId,3], '/ ', name, ' ', subDf[rowId, 4], '\n')
+          res <- paste0(res, subDf[rowId, 1], '/', subDf[rowId,2], ':', subDf[rowId,3], '/ ', classname, ' ', subDf[rowId, 4], '\n')
           first <- FALSE
         } else {
           res <- paste0(res, subDf[rowId, 1], '/', subDf[rowId,2], ':', subDf[rowId,3], '/ ', subDf[rowId, 4], '\n')
@@ -254,7 +260,7 @@ toGtsInputFormat <- function(dataFrame){
 
       if (ncol(subDf) == 5) {
         if (first) {
-          res <- paste0(res, subDf[rowId, 1], '/', subDf[rowId,2], ':', subDf[rowId,3], '/', subDf[rowId,4], ' ', name, ' ', subDf[rowId, 5], '\n')
+          res <- paste0(res, subDf[rowId, 1], '/', subDf[rowId,2], ':', subDf[rowId,3], '/', subDf[rowId,4], ' ', classname, ' ', subDf[rowId, 5], '\n')
           first <- FALSE
         } else {
           res <- paste0(res, subDf[rowId, 1], '/', subDf[rowId,2], ':', subDf[rowId,3], '/', subDf[rowId,4], ' ', subDf[rowId, 5], '\n')

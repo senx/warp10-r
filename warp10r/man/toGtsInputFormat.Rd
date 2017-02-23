@@ -7,11 +7,11 @@
 toGtsInputFormat(dataFrame)
 }
 \arguments{
-\item{dataFrame}{data frame}
+\item{dataFrame}{first column must be named "timestamp". Column names corresponding to GTS values must be in the <selector> form: "classname\{label1=value1,label2=value2,...\}" (or "classname"). Optional geo columns must be named "<selector>.lat", "<selector>.lon" or "<selector>.elev"}
 }
 \value{
-character vector
+data points in GTS input format as a character vector
 }
 \description{
-Convert a data frame into GTS input format. First column of the data frame must be named "timestamp". Column names corresponding to GTS values must be in the <selector> form: "classname{label1=value1,label2=value2,..}" (or "classname"). Column names corresponding to geographic information must be be in the form "<selector>.lat", "<selector>.lon" or "<selector>.elev"
+Convert a data frame into GTS input format.
 }
