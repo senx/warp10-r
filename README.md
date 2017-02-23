@@ -21,7 +21,7 @@ Hello World
 
 ```R
 library(warp10r)
-postWarpscript("'Hello world' NOW", outputType="pretty", endpoint="http://localhost:8080/api/v0/exec")
+postWarpscript("'Hello world' NOW", outputType="pretty", endpoint="https://warp.cityzendata.net/api/v0/exec")
 ```
 
 ```out
@@ -39,7 +39,7 @@ postWarpscript(
   "NEWGTS 'randGTS' RENAME 1 10 <% 100 * RAND RAND NaN RAND ADDVALUE %> FOR
   NEWGTS 'nogeoTS' RENAME 2 11 <% 100 * NaN NaN NaN RAND ADDVALUE %> FOR",
   outputType="dataFrame",
-  endpoint="http://localhost:8080/api/v0/exec")
+  endpoint="https://warp.cityzendata.net/api/v0/exec")
 ```
 
 ```out
@@ -56,6 +56,16 @@ postWarpscript(
 9        900 0.1251300 0.4399808077 0.252384050 0.7146097
 10      1000 0.1570902 0.0002819253 0.726212533 0.1683950
 11      1100 0.6551525           NA          NA        NA
+```
+
+Push example
+
+```R
+pushWarp10(toGtsInputFormat(.Last.value), token="<myToken>", endpoint="http://<myEndpoint>/api/v0/update")
+```
+
+```out
+ Status: 200
 ```
 
 Permalink example
