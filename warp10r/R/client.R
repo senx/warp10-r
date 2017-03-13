@@ -56,6 +56,7 @@ extractGTS <- function(response, withLabels=FALSE){
         if (!(is.numeric(values$timestamp))) {
           convert <- function(x) {as.numeric(as.character(x))}
           values[, c(1:(numCol-1))] <- sapply(values[, c(1:(numCol-1))], convert)
+          values[, numCol] <- as.character(values[, numCol])
         }
 
         # merge
