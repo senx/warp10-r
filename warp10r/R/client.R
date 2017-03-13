@@ -54,6 +54,11 @@ extractGTS <- function(response, withLabels=FALSE){
         df <- merge(df, values,by="timestamp", all=TRUE)
       }
     }
+
+    # convert if wrong type
+    if (!(is.numeric(df$timestamp))) {
+      df[, c(1:(ncol(df)-1))] <- sapply(df[, c(1:(ncol(df)-1))], as.numeric)
+    }
   }
 
   return(df)
