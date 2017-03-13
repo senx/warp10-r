@@ -51,13 +51,16 @@ extractGTS <- function(response, withLabels=FALSE){
           colnames(values) <- c("timestamp", paste0(gtsColName,'.lat'), paste0(gtsColName,'.lon'), paste0(gtsColName,'.elev'), gtsColName)
         }        
         values <- data.frame(values, check.names=FALSE)
+        
+        # convert if wrong type
+        if (!(is.numeric(values$timestamp))) {
+          convert <- function(x) {as.numeric(as.character(x))}
+          values[, c(1:(numCol-1))] <- sapply(values[, c(1:(numCol-1))], convert)
+        }
+
+        # merge
         df <- merge(df, values,by="timestamp", all=TRUE)
       }
-    }
-
-    # convert if wrong type
-    if (!(is.numeric(df$timestamp))) {
-      df[, c(1:(ncol(df)-1))] <- sapply(df[, c(1:(ncol(df)-1))], as.numeric)
     }
   }
 
