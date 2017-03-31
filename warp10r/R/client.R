@@ -77,7 +77,7 @@ extractGTS <- function(response, withLabels=FALSE){
 #' @param withLabels if TRUE and if outputType is "dataFrame", column names also include Labels. Default to FALSE
 #' @return character vector or json or named list or data frame
 #' @export
-#' @importFrom httr POST content
+#' @importFrom httr POST content headers
 #' @importFrom jsonlite fromJSON minify prettify
 
 postWarpscript <- function(warpscript, outputType="json", endpoint="http://localhost:8080/api/v0/exec", withLabels=FALSE){
@@ -97,10 +97,8 @@ postWarpscript <- function(warpscript, outputType="json", endpoint="http://local
   if (request$status != 200) {
 
     # parse error message
-    body = strsplit(body,"\n")[[1]][9]
-    n = nchar(body)
-    msg = substring(body, 9, n - 10)
-    cat(paste0(msg,"\n"))
+    h <- headers(request)
+    cat(paste0("ERROR line #", h[["X-Warp10-Error-Line"]], ": ", h[["X-Warp10-Error-Message"]], "\n"))
   
   } else {
 
