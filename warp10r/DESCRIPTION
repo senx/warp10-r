@@ -3,7 +3,7 @@ Title: R Client for executing Warpscript on a Warp10 instance
 Version: 1.0
 Authors@R: person("Jean-Charles", "Vialatte", email = "jean-charles.vialatte@cityzendata.com", role = c("aut", "cre"))
 Description: This R client enables to make basic ingress and egress routine with Warp 10.
-Depends: R (>= 3.3.2), httr, RCurl, jsonlite, stringr
+Depends: R (>= 3.3.2)
 License: Apache 2.0
 Encoding: UTF-8
 RoxygenNote: 6.0.1.9000

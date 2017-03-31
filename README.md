@@ -4,6 +4,8 @@ R client for executing Warpscript on a Warp10 instance
 
 ### Installation from source ###
 
+Require R libraries: httr, RCurl, jsonlite, stringr, bitops
+
 ```bash
 R CMD INSTALL warp10r
 ```
