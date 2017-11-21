@@ -130,6 +130,49 @@ postWarpscript <- function(warpscript, outputType="json", endpoint="http://local
 
 }
 
+#' Post Warpscript Code
+#' 
+#' Post warpscript code to a Warp 10 instance and retrieve response as character vector, json, named list or data frame.
+#' @param warpscript code or file name ending with .mc2
+#' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "dataFrame". Default to "json". If outputType is "dataFrame", only GTS present in the response will be included in the returned data frame.
+#' @param endpoint egress endpoint. Default to "http://localhost:8080/api/v0/exec"
+#' @param withLabels if TRUE and if outputType is "dataFrame", column names also include Labels. Default to FALSE
+#' @return character vector or json or named list or data frame
+#' @export
+#' @importFrom httr POST content headers
+#' @importFrom jsonlite fromJSON minify prettify
+
+postWarpscript_ <- function(warpscript, endpoint="http://localhost:8080/api/v0/exec", withLabels=FALSE){
+
+  if (substr(warpscript, nchar(warpscript) - 3, nchar(warpscript)) == '.mc2'){
+    warpscript = readLines(warpscript, warn=FALSE)
+  }
+
+  # post request
+  request = POST(endpoint, body=paste0(warpscript, if (withLabels) preconverter_with_labels else preconverter))
+  cat(paste0(" Status: ", request$status, "\n"))
+
+  # retrieve body
+  body <- content(request, "text", encoding="UTF-8")
+
+  # check status and return error or parsed JSON
+  if (request$status != 200) {
+
+    # parse error message
+    h <- headers(request)
+    cat(paste0("ERROR line #", h[["X-Warp10-Error-Line"]], ": ", h[["X-Warp10-Error-Message"]], "\n"))
+  
+  } else {
+
+    body <- gsub('NaN', 'null', body)
+    raw <- fromJSON(body, simplifyDataFrame=FALSE)
+    dt <- data.table(raw[[2]])
+    colnames(dt) <- raw[[1]]
+    return(dt)
+  }
+
+}
+
 #' Generate a Permalink
 #' 
 #' Generate a permalink to a quantum instance.
@@ -281,3 +324,99 @@ toGtsInputFormat <- function(dataFrame){
   res = gsub('(\\W)NA(\\W)', '\\1\\2', res)
   return(res)
 }
+
+preconverter = "
+//
+// Prepare List of Gts to be converted in R data.table object
+//
+
+// retrieve first level of the stack
+'gtsList' STORE CLEAR
+
+// check if it a list of GTS
+$gtsList <% TYPEOF 'LIST' != %> <% 'List of Gts must be on first level of the stack' MSGFAIL %> IFT
+$gtsList <% <% TYPEOF 'GTS' != %> <% 'List of Gts must be on first level of the stack' MSGFAIL %> IFT %> FOREACH
+
+// make tickbase GTS
+$gtsList TICKS 'ticks' STORE
+$ticks [] [] [] $ticks MAKEGTS 'baseGTS' STORE
+
+// function: meta-data gathering
+[] 'meta' STORE
+<% $meta SWAP + 'meta' STORE %> 'colName' STORE
+
+// function: check not all NaN
+<% UNIQUE DUP SIZE 1 == SWAP 0 GET ISNaN && %> 'isAllNaN' STORE
+
+// data
+$ticks 'timestamps' @colName
+$gtsList
+<%
+  'gts' STORE
+  $gts NAME 'name' STORE
+  [ [ $gts  $baseGTS ] []
+  <%
+    'info' STORE
+    $info 0 GET $info 4 GET 0 GET $info 5 GET 0 GET $info 6 GET 0 GET $info 7 GET 0 GET <% DUP TYPEOF 'NULL' == %> <% DROP NaN %> IFT
+  %>
+  MACROREDUCER
+  ] REDUCE 0 GET 'gts' STORE
+  $gts LOCATIONS 'lon' STORE 'lat' STORE
+  <% $lat @isAllNaN ! %> <% $lat $name '.lat' + @colName %> IFT
+  <% $lon @isAllNaN ! %> <% $lon $name '.lon' + @colName %> IFT
+  $gts ELEVATIONS 'elev' STORE
+  <% $elev @isAllNaN ! %> <% $elev $name '.elev' + @colName %> IFT
+  $gts VALUES $name @colName
+%>
+FOREACH
+DEPTH ->LIST ZIP
+$meta
+"
+
+preconverter_with_labels = "
+//
+// Prepare List of Gts to be converted in R data.table object
+//
+
+// retrieve first level of the stack
+'gtsList' STORE CLEAR
+
+// check if it a list of GTS
+$gtsList <% TYPEOF 'LIST' != %> <% 'List of Gts must be on first level of the stack' MSGFAIL %> IFT
+$gtsList <% <% TYPEOF 'GTS' != %> <% 'List of Gts must be on first level of the stack' MSGFAIL %> IFT %> FOREACH
+
+// make tickbase GTS
+$gtsList TICKS 'ticks' STORE
+$ticks [] [] [] $ticks MAKEGTS 'baseGTS' STORE
+
+// function: meta-data gathering
+[] 'meta' STORE
+<% $meta SWAP + 'meta' STORE %> 'colName' STORE
+
+// function: check not all NaN
+<% UNIQUE DUP SIZE 1 == SWAP 0 GET ISNaN && %> 'isAllNaN' STORE
+
+// data
+$ticks 'timestamps' @colName
+$gtsList
+<%
+  'gts' STORE
+  $gts NAME $gts LABELS ->JSON + 'name' STORE
+  [ [ $gts  $baseGTS ] []
+  <%
+    'info' STORE
+    $info 0 GET $info 4 GET 0 GET $info 5 GET 0 GET $info 6 GET 0 GET $info 7 GET 0 GET <% DUP TYPEOF 'NULL' == %> <% DROP NaN %> IFT
+  %>
+  MACROREDUCER
+  ] REDUCE 0 GET 'gts' STORE
+  $gts LOCATIONS 'lon' STORE 'lat' STORE
+  <% $lat @isAllNaN ! %> <% $lat $name '.lat' + @colName %> IFT
+  <% $lon @isAllNaN ! %> <% $lon $name '.lon' + @colName %> IFT
+  $gts ELEVATIONS 'elev' STORE
+  <% $elev @isAllNaN ! %> <% $elev $name '.elev' + @colName %> IFT
+  $gts VALUES $name @colName
+%>
+FOREACH
+DEPTH ->LIST ZIP
+$meta
+"
