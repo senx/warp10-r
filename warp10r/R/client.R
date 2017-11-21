@@ -1,12 +1,13 @@
 #' Extract Geo Time Series
 #'
-#' Extract all GTS from a JSON response and return them merged as a data frame
+#' Extract all GTS from a JSON response and return them merged as a data.table
 #' @param response response body of a post request (a character vector or a json)
 #' @param withLabels if TRUE, column names also include Labels. Default to FALSE
-#' @return data frame
+#' @return data.table
 #' @export
 #' @importFrom jsonlite minify fromJSON
 #' @importFrom stringr str_match_all
+#' @importFrom data.table data.table
 
 extractGTS <- function(response, withLabels=FALSE){
 
@@ -24,8 +25,8 @@ extractGTS <- function(response, withLabels=FALSE){
   gtsRegexp = '\\{\"c\":\"([^\"]*)\",\"l\":(\\{[^\"]*\\}),\"a\":\\{[^\"]*\\},\"v\":(\\[[^\\}]*\\])\\}'
   caught = str_match_all(body, gtsRegexp)[[1]]
 
-  # and build a dataFrame out of it
-  df <- data.frame(timestamp=integer())
+  # and build a data.table out of it
+  dt <- data.table(timestamp=integer())
   if (length(caught) > 0) {
     for (gts_id in 1:nrow(caught)){
       values = fromJSON(caught[gts_id,4])
@@ -50,7 +51,7 @@ extractGTS <- function(response, withLabels=FALSE){
         if (numCol == 5){
           colnames(values) <- c("timestamp", paste0(gtsColName,'.lat'), paste0(gtsColName,'.lon'), paste0(gtsColName,'.elev'), gtsColName)
         }        
-        values <- data.frame(values, check.names=FALSE)
+        values <- data.table(values, check.names=FALSE)
         
         # convert if wrong type
         if (!(is.numeric(values$timestamp))) {
@@ -60,12 +61,12 @@ extractGTS <- function(response, withLabels=FALSE){
         }
 
         # merge
-        df <- merge(df, values,by="timestamp", all=TRUE)
+        dt <- merge(dt, values, by="timestamp", all=TRUE)
       }
     }
   }
 
-  return(df)
+  return(dt)
 }
 
 #' Post Warpscript Code
@@ -106,7 +107,7 @@ postWarpscript <- function(warpscript, outputType="json", endpoint="http://local
       return(body)
     }
 
-    if (outputType == "dataFrame"){
+    if (outputType == "dataFrame" || outputType == "dataTable"){
       return(extractGTS(body, withLabels))
     }
 

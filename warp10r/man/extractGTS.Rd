@@ -12,8 +12,8 @@ extractGTS(response, withLabels = FALSE)
 \item{withLabels}{if TRUE, column names also include Labels. Default to FALSE}
 }
 \value{
-data frame
+data.table
 }
 \description{
-Extract all GTS from a JSON response and return them merged as a data frame
+Extract all GTS from a JSON response and return them merged as a data.table
 }
