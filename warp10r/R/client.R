@@ -117,7 +117,7 @@ postWarpscript <- function(warpscript, outputType="json", endpoint="http://local
     }
 
     if (outputType == "data.table"){
-      body <- gsub('NaN', 'null', body)
+      body <- gsub('(NaN|8888888888888888888|\"lviaezcdcdsqlzeuvnj\")', 'null', body)
       raw <- fromJSON(body, simplifyDataFrame=FALSE)
       dt <- data.table(raw[[2]])
       colnames(dt) <- raw[[1]]
@@ -302,7 +302,7 @@ preconverter = "
 // retrieve first level of the stack
 'gtsList' STORE CLEAR
 
-// check if it a list of GTS
+// check if it is a list of GTS
 $gtsList <% TYPEOF 'LIST' != %> <% 'List of Gts must be on first level of the stack' MSGFAIL %> IFT
 $gtsList <% <% TYPEOF 'GTS' != %> <% 'List of Gts must be on first level of the stack' MSGFAIL %> IFT %> FOREACH
 
@@ -317,16 +317,20 @@ $ticks [] [] [] $ticks MAKEGTS 'baseGTS' STORE
 // function: check not all NaN
 <% UNIQUE DUP SIZE 1 == SWAP 0 GET ISNaN && %> 'isAllNaN' STORE
 
+// function: define NA equivalent
+<% { 'DOUBLE' NaN 'STRING' 'lviaezcdcdsqlzeuvnj' 'LONG' 8888888888888888888 } SWAP GET %> 'NA' STORE
+
 // data
 $ticks 'timestamps' @colName
 $gtsList
 <%
   'gts' STORE
   $gts NAME 'name' STORE
+  $gts VALUES 0 GET TYPEOF 'type' STORE
   [ [ $gts  $baseGTS ] []
   <%
     'info' STORE
-    $info 0 GET $info 4 GET 0 GET $info 5 GET 0 GET $info 6 GET 0 GET $info 7 GET 0 GET <% DUP TYPEOF 'NULL' == %> <% DROP NaN %> IFT
+    $info 0 GET $info 4 GET 0 GET $info 5 GET 0 GET $info 6 GET 0 GET $info 7 GET 0 GET <% DUP TYPEOF 'NULL' == %> <% DROP $type @NA %> IFT
   %>
   MACROREDUCER
   ] REDUCE 0 GET 'gts' STORE
@@ -350,7 +354,7 @@ preconverter_with_labels = "
 // retrieve first level of the stack
 'gtsList' STORE CLEAR
 
-// check if it a list of GTS
+// check if it is a list of GTS
 $gtsList <% TYPEOF 'LIST' != %> <% 'List of Gts must be on first level of the stack' MSGFAIL %> IFT
 $gtsList <% <% TYPEOF 'GTS' != %> <% 'List of Gts must be on first level of the stack' MSGFAIL %> IFT %> FOREACH
 
@@ -365,16 +369,20 @@ $ticks [] [] [] $ticks MAKEGTS 'baseGTS' STORE
 // function: check not all NaN
 <% UNIQUE DUP SIZE 1 == SWAP 0 GET ISNaN && %> 'isAllNaN' STORE
 
+// function: define NA equivalent
+<% { 'DOUBLE' NaN 'STRING' 'lviaezcdcdsqlzeuvnj' 'LONG' 8888888888888888888 } SWAP GET %> 'NA' STORE
+
 // data
 $ticks 'timestamps' @colName
 $gtsList
 <%
   'gts' STORE
   $gts NAME $gts LABELS ->JSON + 'name' STORE
+  $gts VALUES 0 GET TYPEOF 'type' STORE
   [ [ $gts  $baseGTS ] []
   <%
     'info' STORE
-    $info 0 GET $info 4 GET 0 GET $info 5 GET 0 GET $info 6 GET 0 GET $info 7 GET 0 GET <% DUP TYPEOF 'NULL' == %> <% DROP NaN %> IFT
+    $info 0 GET $info 4 GET 0 GET $info 5 GET 0 GET $info 6 GET 0 GET $info 7 GET 0 GET <% DUP TYPEOF 'NULL' == %> <% DROP $type @NA %> IFT
   %>
   MACROREDUCER
   ] REDUCE 0 GET 'gts' STORE
