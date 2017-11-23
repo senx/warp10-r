@@ -15,5 +15,5 @@ extractGTS(response, withLabels = FALSE)
 data.table
 }
 \description{
-Extract all GTS from a JSON response and return them merged as a data.table
+Extract all GTS from a JSON response and return them merged as a data.table. If too slow, consider using postWarpscript with outputType="data.table" instead.
 }

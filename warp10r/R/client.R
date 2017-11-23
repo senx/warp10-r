@@ -71,12 +71,12 @@ extractGTS <- function(response, withLabels=FALSE){
 
 #' Post Warpscript Code
 #' 
-#' Post warpscript code to a Warp 10 instance and retrieve response as character vector, json, named list or data frame.
+#' Post warpscript code to a Warp 10 instance and retrieve response as character vector, json, named list or data.table
 #' @param warpscript code or file name ending with .mc2
-#' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "data.table". Default to "json". If outputType is "data.table", require the first level of the warpscript stack to be a list of GTS"
+#' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "data.table". If outputType is "data.table", it requires the first level of the warpscript stack to be a list of GTS. Default to "json". Output type "dataFrame" is deprecated in favor of "data.table".
 #' @param endpoint egress endpoint. Default to "http://localhost:8080/api/v0/exec"
 #' @param withLabels if TRUE and if outputType is "data.table", column names also include Labels. Default to FALSE
-#' @return character vector or json or named list or data frame
+#' @return character vector or json or named list or data.table
 #' @export
 #' @importFrom httr POST content headers
 #' @importFrom jsonlite fromJSON minify prettify

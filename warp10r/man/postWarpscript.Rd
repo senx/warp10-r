@@ -10,15 +10,15 @@ postWarpscript(warpscript, outputType = "json",
 \arguments{
 \item{warpscript}{code or file name ending with .mc2}
 
-\item{outputType}{the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "dataFrame". Default to "json". If outputType is "dataFrame", only GTS present in the response will be included in the returned data frame.}
+\item{outputType}{the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "data.table". If outputType is "data.table", it requires the first level of the warpscript stack to be a list of GTS. Default to "json". Output type "dataFrame" is deprecated in favor of "data.table".}
 
 \item{endpoint}{egress endpoint. Default to "http://localhost:8080/api/v0/exec"}
 
-\item{withLabels}{if TRUE and if outputType is "dataFrame", column names also include Labels. Default to FALSE}
+\item{withLabels}{if TRUE and if outputType is "data.table", column names also include Labels. Default to FALSE}
 }
 \value{
-character vector or json or named list or data frame
+character vector or json or named list or data.table
 }
 \description{
-Post warpscript code to a Warp 10 instance and retrieve response as character vector, json, named list or data frame.
+Post warpscript code to a Warp 10 instance and retrieve response as character vector, json, named list or data.table
 }
