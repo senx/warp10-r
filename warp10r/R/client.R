@@ -1,6 +1,6 @@
 #' Extract Geo Time Series
 #'
-#' Extract all GTS from a JSON response and return them merged as a data.table
+#' Extract all GTS from a JSON response and return them merged as a data.table. If too slow, consider using postWarpscript with outputType="data.table" instead.
 #' @param response response body of a post request (a character vector or a json)
 #' @param withLabels if TRUE, column names also include Labels. Default to FALSE
 #' @return data.table
@@ -73,9 +73,9 @@ extractGTS <- function(response, withLabels=FALSE){
 #' 
 #' Post warpscript code to a Warp 10 instance and retrieve response as character vector, json, named list or data frame.
 #' @param warpscript code or file name ending with .mc2
-#' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "dataFrame". Default to "json". If outputType is "dataFrame", only GTS present in the response will be included in the returned data frame.
+#' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "data.table". Default to "json". If outputType is "data.table", require the first level of the warpscript stack to be a list of GTS"
 #' @param endpoint egress endpoint. Default to "http://localhost:8080/api/v0/exec"
-#' @param withLabels if TRUE and if outputType is "dataFrame", column names also include Labels. Default to FALSE
+#' @param withLabels if TRUE and if outputType is "data.table", column names also include Labels. Default to FALSE
 #' @return character vector or json or named list or data frame
 #' @export
 #' @importFrom httr POST content headers
@@ -84,11 +84,15 @@ extractGTS <- function(response, withLabels=FALSE){
 postWarpscript <- function(warpscript, outputType="json", endpoint="http://localhost:8080/api/v0/exec", withLabels=FALSE){
 
   if (substr(warpscript, nchar(warpscript) - 3, nchar(warpscript)) == '.mc2'){
-    warpscript = readLines(warpscript, warn=FALSE)
+    warpscript <- readLines(warpscript, warn=FALSE)
   }
 
   # post request
-  request = POST(endpoint, body=warpscript)
+  if (outputType == "data.table"){
+    request <- POST(endpoint, body=paste0(warpscript, if (withLabels) preconverter_with_labels else preconverter))
+  } else {
+    request <- POST(endpoint, body=warpscript)
+  }
   cat(paste0(" Status: ", request$status, "\n"))
 
   # retrieve body
@@ -107,11 +111,20 @@ postWarpscript <- function(warpscript, outputType="json", endpoint="http://local
       return(body)
     }
 
-    if (outputType == "dataFrame" || outputType == "dataTable"){
+    if (outputType == "dataFrame"){
+      cat("outputType=\"dataFrame\" is deprecated. Consider using outputType=\"data.table\" instead")
       return(extractGTS(body, withLabels))
     }
 
-    body = gsub('(\\W)NaN(\\W)', '\\1null\\2', body)
+    if (outputType == "data.table"){
+      body <- gsub('NaN', 'null', body)
+      raw <- fromJSON(body, simplifyDataFrame=FALSE)
+      dt <- data.table(raw[[2]])
+      colnames(dt) <- raw[[1]]
+      return(dt)
+    }
+
+    body <- gsub('(\\W)NaN(\\W)', '\\1null\\2', body)
 
     if (outputType == "json"){
       return(minify(body))
@@ -127,50 +140,6 @@ postWarpscript <- function(warpscript, outputType="json", endpoint="http://local
 
     cat("ERROR: unrecognized outputType\n")
   }
-
-}
-
-#' Post Warpscript Code
-#' 
-#' Post warpscript code to a Warp 10 instance and retrieve response as character vector, json, named list or data frame.
-#' @param warpscript code or file name ending with .mc2
-#' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "dataFrame". Default to "json". If outputType is "dataFrame", only GTS present in the response will be included in the returned data frame.
-#' @param endpoint egress endpoint. Default to "http://localhost:8080/api/v0/exec"
-#' @param withLabels if TRUE and if outputType is "dataFrame", column names also include Labels. Default to FALSE
-#' @return character vector or json or named list or data frame
-#' @export
-#' @importFrom httr POST content headers
-#' @importFrom jsonlite fromJSON minify prettify
-
-postWarpscript_ <- function(warpscript, endpoint="http://localhost:8080/api/v0/exec", withLabels=FALSE){
-
-  if (substr(warpscript, nchar(warpscript) - 3, nchar(warpscript)) == '.mc2'){
-    warpscript = readLines(warpscript, warn=FALSE)
-  }
-
-  # post request
-  request = POST(endpoint, body=paste0(warpscript, if (withLabels) preconverter_with_labels else preconverter))
-  cat(paste0(" Status: ", request$status, "\n"))
-
-  # retrieve body
-  body <- content(request, "text", encoding="UTF-8")
-
-  # check status and return error or parsed JSON
-  if (request$status != 200) {
-
-    # parse error message
-    h <- headers(request)
-    cat(paste0("ERROR line #", h[["X-Warp10-Error-Line"]], ": ", h[["X-Warp10-Error-Message"]], "\n"))
-  
-  } else {
-
-    body <- gsub('NaN', 'null', body)
-    raw <- fromJSON(body, simplifyDataFrame=FALSE)
-    dt <- data.table(raw[[2]])
-    colnames(dt) <- raw[[1]]
-    return(dt)
-  }
-
 }
 
 #' Generate a Permalink

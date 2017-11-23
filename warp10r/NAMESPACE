@@ -3,7 +3,6 @@
 export(extractGTS)
 export(permalink)
 export(postWarpscript)
-export(postWarpscript_)
 export(pushWarp10)
 export(toGtsInputFormat)
 importFrom(RCurl,base64)
