@@ -327,13 +327,13 @@ $gtsList
   'gts' STORE
   $gts NAME 'name' STORE
   $gts VALUES 0 GET TYPEOF 'type' STORE
-  [ [ $gts  $baseGTS ] []
-  <%
-    'info' STORE
-    $info 0 GET $info 4 GET 0 GET $info 5 GET 0 GET $info 6 GET 0 GET $info 7 GET 0 GET <% DUP TYPEOF 'NULL' == %> <% DROP $type @NA %> IFT
-  %>
-  MACROREDUCER
-  ] REDUCE 0 GET 'gts' STORE
+  [ $gts true mapper.replace 0 0 0 ] MAP
+  'mask' STORE
+  [ $mask [ $baseGTS ] [] op.negmask ] APPLY
+  [ SWAP $type @NA mapper.replace 0 0 0 ] MAP 
+  0 GET 'residualSeries' STORE
+  [ $gts $residualSeries ] MERGE
+  'gts' STORE
   $gts LOCATIONS 'lon' STORE 'lat' STORE
   <% $lat @isAllNaN ! %> <% $lat $name '.lat' + @colName %> IFT
   <% $lon @isAllNaN ! %> <% $lon $name '.lon' + @colName %> IFT
@@ -379,13 +379,13 @@ $gtsList
   'gts' STORE
   $gts NAME $gts LABELS ->JSON + 'name' STORE
   $gts VALUES 0 GET TYPEOF 'type' STORE
-  [ [ $gts  $baseGTS ] []
-  <%
-    'info' STORE
-    $info 0 GET $info 4 GET 0 GET $info 5 GET 0 GET $info 6 GET 0 GET $info 7 GET 0 GET <% DUP TYPEOF 'NULL' == %> <% DROP $type @NA %> IFT
-  %>
-  MACROREDUCER
-  ] REDUCE 0 GET 'gts' STORE
+  [ $gts true mapper.replace 0 0 0 ] MAP
+  'mask' STORE
+  [ $mask [ $baseGTS ] [] op.negmask ] APPLY
+  [ SWAP $type @NA mapper.replace 0 0 0 ] MAP 
+  0 GET 'residualSeries' STORE
+  [ $gts $residualSeries ] MERGE
+  'gts' STORE
   $gts LOCATIONS 'lon' STORE 'lat' STORE
   <% $lat @isAllNaN ! %> <% $lat $name '.lat' + @colName %> IFT
   <% $lon @isAllNaN ! %> <% $lon $name '.lon' + @colName %> IFT
