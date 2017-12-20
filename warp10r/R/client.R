@@ -137,22 +137,23 @@ postWarpscript <- function(warpscript, outputType="json", endpoint="http://local
 
     if (outputType == "gts.list"){
       raw <- fromJSON(body, simplifyDataFrame=FALSE)[[1]]
-      gtsList <- list()
+      gtsList <- vector('list', length(raw))
       for (i in 1:length(raw)) {
-        name <- raw[[i]]$c
-        gtsList[[name]] <- data.table(raw[[i]]$v)
-        if (ncol(gtsList[[name]]) == 2) {
-          colnames(gtsList[[name]]) = c('timestamp', 'value')
-        } else if (ncol(gtsList[[name]]) == 3) {
-          colnames(gtsList[[name]]) = c('timestamp', 'elevation', 'value')
-        } else if (ncol(gtsList[[name]]) == 4) {
-          colnames(gtsList[[name]]) = c('timestamp', 'latitude', 'longitude', 'value')
-        } else if (ncol(gtsList[[name]]) == 5) {
-          colnames(gtsList[[name]]) = c('timestamp', 'latitude', 'longitude', 'elevation', 'value')
+        gtsList[[i]] <- data.table(raw[[i]]$v)
+        numCol <- ncol(gtsList[[i]])
+        if (numCol == 2) {
+          colnames(gtsList[[i]]) = c('timestamp', 'value')
+        } else if (numCol == 3) {
+          colnames(gtsList[[i]]) = c('timestamp', 'elevation', 'value')
+        } else if (numCol == 4) {
+          colnames(gtsList[[i]]) = c('timestamp', 'latitude', 'longitude', 'value')
+        } else if (numCol == 5) {
+          colnames(gtsList[[i]]) = c('timestamp', 'latitude', 'longitude', 'elevation', 'value')
         } else {
           cat("ERROR: incorrect number of columns\n")
         }
       }
+      gtsList <- setNames(gtsList, lapply(raw, function(r){r$c}))
       return(gtsList)
     }
 
