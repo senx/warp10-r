@@ -90,6 +90,8 @@ postWarpscript <- function(warpscript, outputType="json", endpoint="http://local
   # post request
   if (outputType == "data.table"){
     request <- POST(endpoint, body=paste0(warpscript, if (withLabels) preconverter_with_labels else preconverter))
+  } else if (outputType == "gts.list") {
+    request <- POST(endpoint, body=paste0(warpscript, if (withLabels) enforce_gts_list_with_labels else enforce_gts_list))
   } else {
     request <- POST(endpoint, body=warpscript)
   }
@@ -122,6 +124,27 @@ postWarpscript <- function(warpscript, outputType="json", endpoint="http://local
       dt <- data.table(raw[[2]])
       colnames(dt) <- raw[[1]]
       return(dt)
+    }
+
+    if (outputType == "gts.list"){
+      raw <- fromJSON(body, simplifyDataFrame=FALSE)[[1]]
+      gtsList <- list()
+      for (i in 1:length(raw)) {
+        name <- raw[[i]]$c
+        gtsList[[name]] <- data.table(raw[[i]]$v)
+        if (ncol(gtsList[[name]]) == 2) {
+          colnames(gtsList[[name]]) = c('timestamp', 'value')
+        } else if (ncol(gtsList[[name]]) == 3) {
+          colnames(gtsList[[name]]) = c('timestamp', 'elevation', 'value')
+        } else if (ncol(gtsList[[name]]) == 4) {
+          colnames(gtsList[[name]]) = c('timestamp', 'latitude', 'longitude', 'value')
+        } else if (ncol(gtsList[[name]]) == 5) {
+          colnames(gtsList[[name]]) = c('timestamp', 'latitude', 'longitude', 'elevation', 'value')
+        } else {
+          cat("ERROR: incorrect number of columns\n")
+        }
+      }
+      return(gtsList)
     }
 
     body <- gsub('(\\W)NaN(\\W)', '\\1null\\2', body)
@@ -396,4 +419,40 @@ $gtsList
 FOREACH
 DEPTH ->LIST ZIP
 $meta
+"
+
+enforce_gts_list = "
+//
+// Enforce warpscript output type
+//
+
+// check depth
+DEPTH <% 1 != %> <% 'Warpscript output must be a single level stack consisting of a list of GTS' MSGFAIL %> IFT
+
+// retrieve first level of the stack
+'gtsList' STORE CLEAR
+
+// check if it is a list of GTS
+$gtsList <% TYPEOF 'LIST' != %> <% 'List of Gts must be on first level of the stack' MSGFAIL %> IFT
+$gtsList <% <% TYPEOF 'GTS' != %> <% 'List of Gts must be on first level of the stack' MSGFAIL %> IFT %> FOREACH
+$gtsList
+"
+
+enforce_gts_list_with_labels = "
+//
+// Enforce warpscript output type
+//
+
+// check depth
+DEPTH <% 1 != %> <% 'Warpscript output must be a single level stack consisting of a list of GTS' MSGFAIL %> IFT
+
+// retrieve first level of the stack
+'gtsList' STORE CLEAR
+
+// check if it is a list of GTS
+$gtsList <% TYPEOF 'LIST' != %> <% 'List of Gts must be on first level of the stack' MSGFAIL %> IFT
+$gtsList <% <% TYPEOF 'GTS' != %> <% 'List of Gts must be on first level of the stack' MSGFAIL %> IFT %> FOREACH
+
+// add labels to name
+$gtsList <% DROP DUP DUP NAME SWAP LABELS ->JSON + RENAME %> LMAP
 "
