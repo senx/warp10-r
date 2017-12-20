@@ -71,11 +71,20 @@ extractGTS <- function(response, withLabels=FALSE){
 
 #' Post Warpscript Code
 #' 
-#' Post warpscript code to a Warp 10 instance and retrieve response as character vector, json, named list or data.table
+#' Post warpscript code to a Warp 10 instance and retrieve response as a specified type
 #' @param warpscript code or file name ending with .mc2
-#' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "data.table". If outputType is "data.table", it requires the first level of the warpscript stack to be a list of GTS. Default to "json". Output type "dataFrame" is deprecated in favor of "data.table".
+#' @param outputType one of:
+#' \itemize{
+#'   \item "json" - returns a json (default)
+#'   \item "raw" - returns a character vector
+#'   \item "pretty" - returns a json that is pretty indented
+#'   \item "list" - returns a list
+#'   \item "data.table" - returns a single data.table with all data. Requires the first level of the stack to be a list of GTS
+#'   \item "gts.list" - returns a named list of one data.table per GTS. Requires the first level of the stack to be a list of GTS. The keys of the returned list are the GTS classnames. NaN values are not supported
+#'   \item "dataFrame" - deprecated in favors of data.table
+#' }
 #' @param endpoint egress endpoint. Default to "http://localhost:8080/api/v0/exec"
-#' @param withLabels if TRUE and if outputType is "data.table", column names also include Labels. Default to FALSE
+#' @param withLabels if TRUE, labels are appended to classnames when outputType is "data.table" or "gts.list"
 #' @return character vector or json or named list or data.table
 #' @export
 #' @importFrom httr POST content headers
