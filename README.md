@@ -1,6 +1,6 @@
 # warp10r #
 
-R client for executing Warpscript on a Warp10 instance
+R client for executing WarpScript on a Warp 10 instance
 
 ### Installation from source ###
 
@@ -21,7 +21,7 @@ Hello World
 
 ```R
 library(warp10r)
-postWarpscript("'Hello world' NOW", outputType="pretty", endpoint="https://warp.cityzendata.net/api/v0/exec")
+postWarpscript("'Hello world' NOW", outputType="pretty", endpoint="https://warp.senx.io/api/v0/exec")
 ```
 
 ```out
@@ -40,7 +40,7 @@ df <- postWarpscript( #expects a warpscript returning a list of GTS
   "[ NEWGTS 'randGTS' RENAME 1 10 <% h RAND RAND NaN RAND ADDVALUE %> FOR
   NEWGTS 'nogeoTS' RENAME 2 11 <% h NaN NaN NaN RAND ADDVALUE %> FOR ]",
   outputType="data.table",
-  endpoint="https://warp.cityzendata.net/api/v0/exec")
+  endpoint="https://warp.senx.io/api/v0/exec")
 df
 ```
 
@@ -77,11 +77,11 @@ permalink(
   "NEWGTS 1 1000 <% 'i' STORE $i 1 w * NaN NaN NaN $i PI 120 / * COS ADDVALUE %> FOR
   'Cosinus example' RENAME",
   plot=TRUE,
-  endpoint="https://warp.cityzendata.net/api/v0/exec",
-  quantum="https://home.cityzendata.net/quantum/")
+  endpoint="https://warp.senx.io/api/v0/exec",
+  quantum="https://home.senx.io/quantum/")
 ```
 
-[`[1] "https://home.cityzendata.net/quantum/#/plot/TkVXR1RTIDEgMTAwMCA8JSAnaScgU1RPUkUgJGkgMSB3ICogTmFOIE5hTiBOYU4gJGkgUEkgMTIwIC8gKiBDT1MgQUREVkFMVUUgJT4gRk9SCiAgJ0Nvc2ludXMgZXhhbXBsZScgUkVOQU1F/aHR0cHM6Ly93YXJwLmNpdHl6ZW5kYXRhLm5ldC9hcGkvdjAvZXhlYw==`](https://home.cityzendata.net/quantum/#/plot/TkVXR1RTIDEgMTAwMCA8JSAnaScgU1RPUkUgJGkgMSB3ICogTmFOIE5hTiBOYU4gJGkgUEkgMTIwIC8gKiBDT1MgQUREVkFMVUUgJT4gRk9SCiAgJ0Nvc2ludXMgZXhhbXBsZScgUkVOQU1F/aHR0cHM6Ly93YXJwLmNpdHl6ZW5kYXRhLm5ldC9hcGkvdjAvZXhlYw==)"
+[`[1] "https://home.senx.io/quantum/#/plot/TkVXR1RTIDEgMTAwMCA8JSAnaScgU1RPUkUgJGkgMSB3ICogTmFOIE5hTiBOYU4gJGkgUEkgMTIwIC8gKiBDT1MgQUREVkFMVUUgJT4gRk9SCiAgJ0Nvc2ludXMgZXhhbXBsZScgUkVOQU1F/aHR0cHM6Ly93YXJwLmNpdHl6ZW5kYXRhLm5ldC9hcGkvdjAvZXhlYw==`](https://home.senx.io/quantum/#/plot/TkVXR1RTIDEgMTAwMCA8JSAnaScgU1RPUkUgJGkgMSB3ICogTmFOIE5hTiBOYU4gJGkgUEkgMTIwIC8gKiBDT1MgQUREVkFMVUUgJT4gRk9SCiAgJ0Nvc2ludXMgZXhhbXBsZScgUkVOQU1F/aHR0cHM6Ly93YXJwLmNpdHl6ZW5kYXRhLm5ldC9hcGkvdjAvZXhlYw==)"
 
 To convert timestamp in human readable date
 
