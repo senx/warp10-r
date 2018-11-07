@@ -86,9 +86,9 @@ extractGTS <- function(response, withLabels=FALSE){
 
 #' Post Warpscript Code
 #' 
-#' Post warpscript code to a Warp 10 instance and retrieve response as character vector, json, named list or data.table
+#' Post warpscript code to a Warp 10 instance and retrieve response as character vector, json, named list or data.table. If outputType is "data.table", only the top of the stack is converted and it must be a list of GTS. If this list is not a singleton, these GTS must have at most one value per timestamp.
 #' @param warpscript code or file name ending with .mc2
-#' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "data.table". If outputType is "data.table", it requires the first level of the warpscript stack to be a list of GTS. Default to "json". Output type "dataFrame" is deprecated in favor of "data.table".
+#' @param outputType the type of the returned value. The supported types are "raw", "json", "pretty", "list" and "data.table". Default to "json". Output type "dataFrame" is deprecated in favor of "data.table".
 #' @param endpoint egress endpoint. Default to "http://localhost:8080/api/v0/exec"
 #' @param withLabels if TRUE and if outputType is "data.table", column names also include Labels. Default to FALSE
 #' @return character vector or json or named list or data.table
@@ -367,7 +367,22 @@ $gtsList
   $gts VALUES $name @colName
 %>
 FOREACH
-DEPTH ->LIST ZIP
+
+// TRY to ZIP data
+DEPTH ->LIST
+<% ZIP %>
+<%
+  $gtsList
+  <%
+    <% DUP SIZE SWAP DEDUP SIZE != %>
+    <% 'When the list have more than one GTS, they cannot have more than one value per timestamp' MSGFAIL %>
+    IFT
+  %>
+  FOREACH
+  'Zipping data prior to data.table conversion failed.' MSGFAIL
+%>
+<% %>
+TRY
 $meta
 "
 
@@ -428,6 +443,20 @@ $gtsList
   $gts VALUES $name @colName
 %>
 FOREACH
-DEPTH ->LIST ZIP
+// TRY to ZIP data
+DEPTH ->LIST
+<% ZIP %>
+<%
+  $gtsList
+  <%
+    <% DUP SIZE SWAP DEDUP SIZE != %>
+    <% 'When the list have more than one GTS, they cannot have more than one value per timestamp' MSGFAIL %>
+    IFT
+  %>
+  FOREACH
+  'Zipping data prior to data.table conversion failed.' MSGFAIL
+%>
+<% %>
+TRY
 $meta
 "
