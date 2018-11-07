@@ -347,7 +347,7 @@ $gtsList
   [ $mask [ $baseGTS ] [] op.negmask ] APPLY
   [ SWAP $type @NA mapper.replace 0 0 0 ] MAP 
   0 GET 'residualSeries' STORE
-  [ $gts $residualSeries ] MERGE
+  [ $gts $residualSeries ] MERGE SORT
   'gts' STORE
   $gts LOCATIONS 'lon' STORE 'lat' STORE
   <% $lat @isAllNaN ! %> <% $lat $name '.lat' + @colName %> IFT
@@ -399,7 +399,7 @@ $gtsList
   [ $mask [ $baseGTS ] [] op.negmask ] APPLY
   [ SWAP $type @NA mapper.replace 0 0 0 ] MAP 
   0 GET 'residualSeries' STORE
-  [ $gts $residualSeries ] MERGE
+  [ $gts $residualSeries ] MERGE SORT
   'gts' STORE
   $gts LOCATIONS 'lon' STORE 'lat' STORE
   <% $lat @isAllNaN ! %> <% $lat $name '.lat' + @colName %> IFT
