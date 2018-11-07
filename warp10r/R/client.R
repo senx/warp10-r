@@ -321,8 +321,8 @@ preconverter = "
 $gtsList <% TYPEOF 'LIST' != %> <% 'List of Gts must be on first level of the stack' MSGFAIL %> IFT
 $gtsList <% <% TYPEOF 'GTS' != %> <% 'List of Gts must be on first level of the stack' MSGFAIL %> IFT %> FOREACH
 
-// make tickbase GTS
-$gtsList TICKS 'ticks' STORE
+// use either TICKS or TICKLIST to make base of ticks
+$gtsList <% DUP SIZE 1 == %> <% 0 GET TICKLIST %> <% TICKS %> IFTE 'ticks' STORE
 $ticks [] [] [] $ticks MAKEGTS 'baseGTS' STORE
 
 // function: meta-data gathering
@@ -335,20 +335,30 @@ $ticks [] [] [] $ticks MAKEGTS 'baseGTS' STORE
 // function: define NA equivalent
 <% { 'DOUBLE' NaN 'STRING' 'lviaezcdcdsqlzeuvnj' 'LONG' 8888888888888888888 } SWAP GET %> 'NA' STORE
 
-// data
+// fill in timestamps
 $ticks 'timestamps' @colName
+
+// other columns
 $gtsList
 <%
   'gts' STORE
   $gts NAME 'name' STORE
-  $gts VALUES 0 GET TYPEOF 'type' STORE
-  [ $gts true mapper.replace 0 0 0 ] MAP
-  'mask' STORE
-  [ $mask [ $baseGTS ] [] op.negmask ] APPLY
-  [ SWAP $type @NA mapper.replace 0 0 0 ] MAP 
-  0 GET 'residualSeries' STORE
-  [ $gts $residualSeries ] MERGE SORT
-  'gts' STORE
+
+  // Fill in missing values with @NA
+  <% $gtsList SIZE 1 == ! %>
+  <%
+    $gts VALUES 0 GET TYPEOF 'type' STORE
+    [ $gts true mapper.replace 0 0 0 ] MAP
+    'mask' STORE
+    [ $mask [ $baseGTS ] [] op.negmask ] APPLY
+    [ SWAP $type @NA mapper.replace 0 0 0 ] MAP 
+    0 GET 'residualSeries' STORE
+    [ $gts $residualSeries ] MERGE SORT
+    'gts' STORE
+  %>
+  IFT
+
+  // Fill in locations and values
   $gts LOCATIONS 'lon' STORE 'lat' STORE
   <% $lat @isAllNaN ! %> <% $lat $name '.lat' + @colName %> IFT
   <% $lon @isAllNaN ! %> <% $lon $name '.lon' + @colName %> IFT
@@ -373,8 +383,8 @@ preconverter_with_labels = "
 $gtsList <% TYPEOF 'LIST' != %> <% 'List of Gts must be on first level of the stack' MSGFAIL %> IFT
 $gtsList <% <% TYPEOF 'GTS' != %> <% 'List of Gts must be on first level of the stack' MSGFAIL %> IFT %> FOREACH
 
-// make tickbase GTS
-$gtsList TICKS 'ticks' STORE
+// use either TICKS or TICKLIST to make base of ticks
+$gtsList <% DUP SIZE 1 == %> <% 0 GET TICKLIST %> <% TICKS %> IFTE 'ticks' STORE
 $ticks [] [] [] $ticks MAKEGTS 'baseGTS' STORE
 
 // function: meta-data gathering
@@ -394,13 +404,22 @@ $gtsList
   'gts' STORE
   $gts NAME $gts LABELS ->JSON + 'name' STORE
   $gts VALUES 0 GET TYPEOF 'type' STORE
-  [ $gts true mapper.replace 0 0 0 ] MAP
-  'mask' STORE
-  [ $mask [ $baseGTS ] [] op.negmask ] APPLY
-  [ SWAP $type @NA mapper.replace 0 0 0 ] MAP 
-  0 GET 'residualSeries' STORE
-  [ $gts $residualSeries ] MERGE SORT
-  'gts' STORE
+
+  // Fill in missing values with @NA
+  <% $gtsList SIZE 1 == ! %>
+  <%
+    $gts VALUES 0 GET TYPEOF 'type' STORE
+    [ $gts true mapper.replace 0 0 0 ] MAP
+    'mask' STORE
+    [ $mask [ $baseGTS ] [] op.negmask ] APPLY
+    [ SWAP $type @NA mapper.replace 0 0 0 ] MAP 
+    0 GET 'residualSeries' STORE
+    [ $gts $residualSeries ] MERGE SORT
+    'gts' STORE
+  %>
+  IFT
+
+  // Fill in locations and values
   $gts LOCATIONS 'lon' STORE 'lat' STORE
   <% $lat @isAllNaN ! %> <% $lat $name '.lat' + @colName %> IFT
   <% $lon @isAllNaN ! %> <% $lon $name '.lon' + @colName %> IFT

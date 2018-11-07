@@ -41,10 +41,13 @@ df <- postWarpscript( #expects a warpscript returning a list of GTS
   NEWGTS 'nogeoTS' RENAME 2 11 <% h NaN NaN NaN RAND ADDVALUE %> FOR ]",
   outputType="data.table",
   endpoint="https://warp.senx.io/api/v0/exec")
-df
 ```
 
+Returns a data.table for which the column `timestamps` is shared between all GTS.<br/>
+Note that in case of multiple GTS, they need to have at most one value per timestamp.
+
 ```out
+df
  Status: 200
      timestamps randGTS.lat randGTS.lon    randGTS    nogeoTS
  1:  3600000000   0.1360472   0.5646129 0.96810855         NA
