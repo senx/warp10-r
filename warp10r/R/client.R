@@ -336,7 +336,7 @@ $ticks [] [] [] $ticks MAKEGTS 'baseGTS' STORE
 <% { 'DOUBLE' NaN 'STRING' 'lviaezcdcdsqlzeuvnj' 'LONG' 8888888888888888888 } SWAP GET %> 'NA' STORE
 
 // fill in timestamps
-$ticks 'timestamps' @colName
+$ticks 'timestamp' @colName
 
 // other columns
 $gtsList
@@ -413,7 +413,7 @@ $ticks [] [] [] $ticks MAKEGTS 'baseGTS' STORE
 <% { 'DOUBLE' NaN 'STRING' 'lviaezcdcdsqlzeuvnj' 'LONG' 8888888888888888888 } SWAP GET %> 'NA' STORE
 
 // data
-$ticks 'timestamps' @colName
+$ticks 'timestamp' @colName
 $gtsList
 <%
   'gts' STORE
