@@ -209,7 +209,7 @@ pushWarp10 <- function(data, token, endpoint="http://localhost:8080/api/v0/updat
   }
 }
 
-#' Convert a data frame
+#' Convert a data frame or data table
 #' 
 #' Convert a data frame into GTS input format.
 #' @param dataFrame first column must be named "timestamp". Column names corresponding to GTS values must be in the <selector> form: "classname\{label1=value1,label2=value2,...\}" (or "classname"). Optional geo columns must be named "<selector>.lat", "<selector>.lon" or "<selector>.elev"
@@ -217,6 +217,15 @@ pushWarp10 <- function(data, token, endpoint="http://localhost:8080/api/v0/updat
 #' @export
 
 toGtsInputFormat <- function(dataFrame){
+
+  if (class(dataFrame)[1] == "data.table") {
+    dataFrame <- as.data.frame(dataFrame)
+  }
+
+  if (class(dataFrame)[1] != "data.frame") {
+    stop("toGtsInputFormat() requires a data.frame or data.table as argument.")
+  }
+
   c <- colnames(dataFrame)
 
   if (c[1] != 'timestamp') {
