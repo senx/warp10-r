@@ -2,7 +2,7 @@
 % Please edit documentation in R/client.R
 \name{toGtsInputFormat}
 \alias{toGtsInputFormat}
-\title{Convert a data frame}
+\title{Convert a data frame or data table}
 \usage{
 toGtsInputFormat(dataFrame)
 }
