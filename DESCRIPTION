@@ -1,7 +1,15 @@
 Package: warp10r
 Title: R Client for executing WarpScript on a Warp 10 instance
 Version: 0.3.0
-Authors@R: person("Jean-Charles", "Vialatte", email = "jean-charles.vialatte@senx.io", role = c("aut", "cre"))
+Authors@R: 
+    c(person(given = "Jean-Charles",
+             family = "Vialatte",
+             role = c("aut", "cre"),
+             email = "jean-charles.vialatte@senx.io"),
+      person(given = "Denis",
+             family = "Roussel",
+             role = "ctb",
+             email = "droussel@centreon.com"))
 Description: This R client enables to make basic ingress and egress routine with Warp 10.
 Depends: R (>= 3.3.2)
 License: Apache 2.0

@@ -1,19 +1,19 @@
 # warp10r #
 
-R client for executing WarpScript on a Warp 10 instance
+R client for executing WarpScript on a Warp 10 instance.
 
-### Installation from source ###
+### Fork ###
 
-Require R libraries: httr, RCurl, jsonlite, stringr, bitops, data.table
+The original package [https://github.com/senx/warp10-r] has been forked to make the package more concilient with current developments of R packages :
 
-```bash
-R CMD INSTALL warp10r
+- Package has been moved to the root of the git repository
+- Dependancies have been added to the DESCRIPTION
+
+### Installation ###
+
+```r
+remotes::install_github("denrou/warp10-r")
 ```
-
-### Documentation ###
-
-see `warp10r.pdf`
-
 
 ### First steps ###
 
