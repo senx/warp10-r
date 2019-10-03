@@ -21,4 +21,6 @@ Imports:
     jsonlite,
     stringr,
     bitops,
-    data.table
+    data.table,
+    DBI,
+    methods

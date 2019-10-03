@@ -1,0 +1,60 @@
+#' Bucketize
+#'
+#' The Geo Time Series™ kept in the Warp 10 platform grow over time as more measurements are added.
+#' Some series have very regular measurements, others more sporadic ones.
+#' But when it comes to manipulating the data,
+#' it might be handy to be able to impose some kind of regularity to measurements.
+#' This is exactly what the BUCKETIZE framework does,
+#' it provides the tooling for putting the data of a Geo Time Series™ into regularly spaced buckets.
+#'
+#' A bucket is a time interval which spans a certain number of time units called the bucketspan,
+#'  ending at a tick called the lastbucket.
+#'
+#' As an example, the bucket spanning 10 time units and ending at time units 20 will contain all measurements
+#'  taken at the following times:
+#'
+#'  20, 19, 18, 17, 16, 15, 14, 13, 12, 11
+#'
+#' the previous bucket with the same bucketspan ends at 10 and covers ticks 10 down to 1.
+#' The next bucket ends at 30 and covers ticks 21 to 30.
+#'
+#' A bucketized Geo Time Series™ is characterized by its bucketspan, its bucketcount and the lastbucket.
+#' A bucketized Geo Time Series™ has at most one measurement per bucket, there might be buckets with no measurements.
+#'
+#' The BUCKETIZE framework is used to convert a non bucketized Geo Time Series™ into a bucketized one.
+#' The bucketization process collects the measurements of the original geo time series
+#' which fall in each bucket and apply a bucketizer function on those data,
+#' thus leading to at most a single measurement for each bucket.
+#'
+#' The BUCKETIZE framework comes with a number of bucketizer
+#' which implement very common aggregation functions such as SUM, MIN, MAX, MEAN, etc.
+#'
+#' A macro can be used instead of the bucketizer argument.
+#' In that case, in each bucket the measurements are collected as a sub Geo Time Series
+#' which is taken as parameter by the macro.
+#' This macro must then push onto the stack its result (see description in signature description below).
+#'
+#' If the bucketizer argument is NULL, then BUCKETIZE do not create any new Geo Time Series™
+#' but instead sets the lastbucket, bucketspan and bucketcount of its inputs without processing their data.
+#'
+#' @inheritParams documentation
+#'
+#' @param bucketizer Bucketizer function to apply
+#' @param last Specifies the timestamp in time units since the Unix Epoch of the end of the most recent bucket.
+#' If you set this value to 0, this timestamp will be computed automatically
+#' so it covers the most recent value of the geo time series and falls on a bucketspan boundary.
+#' @param span Width in time units of each bucket.
+#' If bucketspan is 0 but bucketcount is set, WarpScript will compute bucketspan
+#' so bucketcount buckets cover the complete set of values from firsttick to lasttick.
+#' If this value is set to -1, the number of buckets is computed
+#' so the first tick is towards the end of the first bucket.
+#' @param count Number of buckets of the bucketized geo time series.
+#' If this value is set to 0, the number of buckets will be computed
+#' so the first value of the geo time series is at the beginning of the first bucket.
+#'
+#' @export
+#'
+wrp_bucketize <- function(wrp_con, bucketizer, last = 0, span = 0, count = 0) {
+  script <- glue::glue("[ SWAP {bucketizer} {last} {span} {count} ] BUCKETIZE")
+  wrp_con$set_script(script)
+}
