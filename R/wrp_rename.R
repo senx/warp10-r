@@ -35,4 +35,6 @@
 wrp_rename <- function(wrp_con, name) {
   script <- glue::glue("'{name}' RENAME")
   wrp_con$set_script(script)
+  wrp_con$add_stack("gts", consume = "gts")
+  return(wrp_con)
 }

@@ -8,6 +8,17 @@ wrp_fetch(wrp_con, token = get_token(), class = "~.*", labels = NULL,
   end = "NOW", stop = -1)
 }
 \arguments{
+\item{wrp_con}{[wrp_connect] object.}
+
+\item{token}{a token needed to connect to database}
+
+\item{class}{Selector for the GTS classes.
+Can either be an exact match or a regular expression (the value should then start with a ~).}
+
+\item{labels}{Map of labels selectors.
+The key is the label name, the value a selector which can be an exact match or a regular expression
+(the value should then start with a ~).}
+
 \item{end}{Most recent timestamp to consider when fetching datapoints. Could be a Posixct Date.}
 
 \item{stop}{Either a number, a date or a duration, see details.}

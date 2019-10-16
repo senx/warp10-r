@@ -18,9 +18,27 @@ connect <- R6::R6Class(
       assert_endpoint(endpoint)
       private$endpoint <- endpoint
     },
+    add_stack = function(return, consume = list()) {
+      stack <- private$stack
+      call  <- gsub("\\(.*\\)", "", deparse(sys.call(-1)))
+      if (length(consume) > 0 && length(stack) == 0) {
+        msg <- glue::glue("{call} requires {length(consume)} object in the stack but none are provided.")
+        stop(msg, call. = FALSE)
+      }
+      for (object in consume) {
+        n        <- length(stack)
+        last     <- stack[[n]]
+        if (last != object) {
+          msg <- glue::glue("{call} requires `{object}` but `{last}` on the stack.")
+          stop(msg, call. = FALSE)
+        }
+        stack[[n]] <- NULL
+      }
+      private$stack <- append(stack, return)
+    },
     clear_script = function() {
       private$script <- ""
-      return(self)
+      private$stack <- list()
     },
     get_endpoint = function() {
       private$endpoint
@@ -28,18 +46,20 @@ connect <- R6::R6Class(
     get_script = function() {
       private$script
     },
+    get_stack = function() {
+      private$stack
+    },
     print = function() {
-      cat(private$script)
+      stack <- private$stack
+      cat(glue::glue("{length(stack)} elements in the stack : {toString(stack)}"))
     },
     set_script = function(script) {
-      private$script     <- paste(private$script, script, paste = "\n")
-      private$stack_size <- private$stack_size + 1
-      return(self)
+      private$script <- paste(private$script, script, paste = "\n")
     }
   ),
   private = list(
     script     = "",
     endpoint   = NULL,
-    stack_size = 0
+    stack      = list()
   )
 )

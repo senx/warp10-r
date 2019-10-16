@@ -16,4 +16,6 @@
 #'
 wrp_new_gts <- function(wrp_con) {
   wrp_con$set_script("NEWGTS")
+  wrp_con$add_stack("gts")
+  return(wrp_con)
 }

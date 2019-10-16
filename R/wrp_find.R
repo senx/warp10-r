@@ -17,4 +17,6 @@ wrp_find <- function(wrp_con, token = get_token(), class = "~.*", labels = NULL)
     "[ '{token}' '{class}' {{ {labels} }} ] FIND"
   )
   wrp_con$set_script(script)
+  wrp_con$add_stack("lgts")
+  return(wrp_con)
 }

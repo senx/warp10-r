@@ -2,7 +2,7 @@
 #'
 #' The FETCH function interacts with the Warp 10 Storage Engine to retrieve data according to given criteria.
 #'
-#' @inheritParams wrp_doc
+#' @inheritParams documentation
 #' @param end Most recent timestamp to consider when fetching datapoints. Could be a Posixct Date.
 #' @param stop Either a number, a date or a duration, see details.
 #'
@@ -30,4 +30,6 @@ wrp_fetch <- function(wrp_con, token = get_token(), class = "~.*", labels = NULL
   if (!is.numeric(stop)) stop <- format_ISO8601(stop)
   script <- glue::glue("[ '{token}' '{class}' {{ {labels} }} {end} {stop} ] FETCH")
   wrp_con$set_script(script)
+  wrp_con$add_stack("lgts")
+  return(wrp_con)
 }

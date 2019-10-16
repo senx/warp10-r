@@ -41,12 +41,11 @@ con <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec")
 
 # set_script store a script in the connection object and print the script as it is.
 set_script(con, "'Hello World' NOW")
-#>  'Hello World' NOW
 
 # Execute the script
 wrp_exec(con)
 #>  Status: 200
-#> [1] "1570111243955306" "Hello World"
+#> [1] "1571219200995892" "Hello World"
 ```
 
 ### Example with Geo Time Series
@@ -67,9 +66,27 @@ con %>%
   wrp_rename("nogeoTS") %>% 
   wrp_exec()
 #>  Status: 200
-#> # A tibble: 2 x 5
-#>   c       l        a           la v                 
-#>   <chr>   <df[,0]> <df[,0]> <int> <list>            
-#> 1 nogeoTS                       0 <dbl[,2] [10 × 2]>
-#> 2 randGTS                       0 <dbl[,2] [10 × 2]>
+#> # A GTS object: 20 x 3
+#>    timestamp            value class  
+#>  * <dttm>               <dbl> <chr>  
+#>  1 1970-01-01 00:00:00 -0.701 nogeoTS
+#>  2 1970-01-01 00:00:00  0.356 nogeoTS
+#>  3 1970-01-01 00:00:00 -0.428 nogeoTS
+#>  4 1970-01-01 00:00:00 -0.216 nogeoTS
+#>  5 1970-01-01 00:00:00  0.251 nogeoTS
+#>  6 1970-01-01 00:00:00 -0.513 nogeoTS
+#>  7 1970-01-01 00:00:00 -0.706 nogeoTS
+#>  8 1970-01-01 00:00:00 -0.391 nogeoTS
+#>  9 1970-01-01 00:00:00 -1.42  nogeoTS
+#> 10 1970-01-01 00:00:00 -0.869 nogeoTS
+#> 11 1970-01-01 00:00:00 -1.64  randGTS
+#> 12 1970-01-01 00:00:00  1.35  randGTS
+#> 13 1970-01-01 00:00:00  0.380 randGTS
+#> 14 1970-01-01 00:00:00 -1.97  randGTS
+#> 15 1970-01-01 00:00:00  0.117 randGTS
+#> 16 1970-01-01 00:00:00  0.589 randGTS
+#> 17 1970-01-01 00:00:00 -0.384 randGTS
+#> 18 1970-01-01 00:00:00  0.727 randGTS
+#> 19 1970-01-01 00:00:00  0.241 randGTS
+#> 20 1970-01-01 00:00:00  0.983 randGTS
 ```

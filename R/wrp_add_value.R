@@ -43,6 +43,8 @@ wrp_add_value <- function(wrp_con, tick, value, latitude = NA, longitude = NA, e
   else if (is.character(value)) value <- sanitize(value)
   script <- glue::glue("{tick} {latitude} {longitude} {elevation} {value} ADDVALUE", .na = "NaN")
   wrp_con$set_script(script)
+  wrp_con$add_stack("gts", "gts")
+  return(wrp_con)
 }
 
 #' Add Value from DataFrame
@@ -90,6 +92,6 @@ wrp_add_value_df <- function(wrp_con, df, tick = "tick", value = "value", latitu
   if (is.null(rlang::get_expr(longitude))) df_script[, "longitude"] <- NA
   if (is.null(rlang::get_expr(elevation))) df_script[, "elevation"] <- NA
   purrr::pwalk(df_script, wrp_add_value, wrp_con = wrp_con)
-  wrp_con
+  return(wrp_con)
 }
 #'
