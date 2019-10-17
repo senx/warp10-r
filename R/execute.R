@@ -17,12 +17,13 @@ wrp_exec <- function(wrp_con) {
     return(cat(wrp_script))
   }
 
-  res <- jsonlite::fromJSON(raw_res)
+  res <- jsonlite::fromJSON(raw_res, simplifyDataFrame = FALSE)
 
-  if (length(stack) > 1) {
-    stack <- "lgts"
+  if (length(stack) == 1) {
+    build_res(stack[[1]], res[[1]])
+  } else {
+    purrr::map2(stack, res, build_res)
   }
-  build_res(stack, res)
 }
 
 #' @export
@@ -41,7 +42,7 @@ build_res.default <- function(object, data) {
 #' @export
 #'
 build_res.gts <- function(object, data, other_names = NULL) {
-  new_data                <- as.data.frame(data[["v"]][[1]])
+  new_data                <- as.data.frame(data[["v"]])
   if (length(new_data) >= 2) {
     names(new_data)         <- c("timestamp", "value", other_names)
     new_data[["timestamp"]] <- lubridate::as_datetime(new_data[["timestamp"]] / 1e6)
@@ -50,7 +51,7 @@ build_res.gts <- function(object, data, other_names = NULL) {
   new_attributes          <- list(
     gts = list(
       class  = data[["c"]],
-      labels = as.list(data[["l"]])
+      labels = data[["l"]]
     )
   )
   attributes(new_data)    <- c(attributes(new_data), new_attributes)
@@ -61,34 +62,34 @@ build_res.gts <- function(object, data, other_names = NULL) {
 #' @export
 #'
 build_res.lgts <- function(object, data) {
-  data[["v"]] <- purrr::map(data[["v"]], as.data.frame)
-  classes     <- data[["c"]]
-  other_names <- NULL
+  metadata        <- list()
+  new_data        <- purrr::map(data, function(x) as.data.frame(x[["v"]]))
+  classes         <- purrr::map_chr(data, function(x) x[["c"]])
+  labels          <- purrr::map(data, function(x) x[["l"]])
+  labels_df       <- purrr::map_dfr(labels, as.data.frame, stringsAsFactors = FALSE)
+  other_names     <- NULL
   if (length(unique(classes)) > 1) {
-    data[["v"]] <- purrr::map2(data[["v"]], as.character(data[["c"]]), add_col)
-    data[["c"]] <- NULL
-    other_names <- c(other_names, "class")
+    new_data        <- purrr::map2(new_data, classes, add_col)
+    other_names     <- c(other_names, "class")
+  } else {
+    metadata[["c"]] <- classes[[1]]
   }
-  labels     <- data[["l"]]
-  len_labels <- purrr::map_int(labels, function(x) length(unique(x)))
-  for (label in names(len_labels)[len_labels > 1]) {
-    data[["v"]]          <- purrr::map2(data[["v"]], as.character(data[["l"]][[label]]), add_col)
-    data[["l"]][[label]] <- NULL
-    other_names <- c(other_names, label)
+  for (label in names(labels_df)) {
+    if (length(unique(labels_df[[label]])) > 1) {
+      new_data        <- purrr::map2(new_data, labels_df[[label]], add_col)
+      other_names     <- c(other_names, label)
+    } else {
+      metadata[["l"]] <- c(metadata[["l"]], setNames(list(labels_df[[label]][1]), label))
+    }
   }
-  new_data <- data %>%
-    split(seq_len(nrow(.))) %>%
-    purrr::map_dfr(build_res.gts, object = "gts", other_names = other_names) %>%
-    tibble::as_tibble()
-  new_attributes          <- list(
-    gts = list(
-      class  = data[["c"]],
-      labels = purrr::map(data[["l"]], unique)
-    )
+
+  list_gts <- list(
+    c = metadata[["c"]],
+    l = metadata[["l"]],
+    v = Reduce(rbind, new_data)
   )
-  attributes(new_data)    <- c(attributes(new_data), new_attributes)
-  class(new_data)         <- c("gts", class(new_data))
-  new_data
+
+  build_res.gts(list_gts, object = "gts", other_names = other_names)
 }
 
 add_col <- function(x, y) {
