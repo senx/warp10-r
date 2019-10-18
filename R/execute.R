@@ -41,10 +41,10 @@ build_res.default <- function(object, data) {
 
 #' @export
 #'
-build_res.gts <- function(object, data, other_names = NULL) {
+build_res.gts <- function(object, data) {
   new_data                <- as.data.frame(data[["v"]])
   if (length(new_data) >= 2) {
-    names(new_data)         <- c("timestamp", "value", other_names)
+    names(new_data)         <- c("timestamp", "value", names(new_data)[-c(1, 2)])
     new_data[["timestamp"]] <- lubridate::as_datetime(new_data[["timestamp"]] / 1e6)
   }
   new_data                <- tibble::as_tibble(drop_na_col(new_data))
@@ -64,20 +64,18 @@ build_res.gts <- function(object, data, other_names = NULL) {
 build_res.lgts <- function(object, data) {
   metadata        <- list()
   new_data        <- purrr::map(data, function(x) as.data.frame(x[["v"]]))
-  classes         <- purrr::map_chr(data, function(x) x[["c"]])
-  labels          <- purrr::map(data, function(x) x[["l"]])
-  labels_df       <- purrr::map_dfr(labels, as.data.frame, stringsAsFactors = FALSE)
+  classes         <- purrr::map_chr(data, "c")
+  labels          <- purrr::map(data, "l")
+  labels_df       <- dplyr::bind_rows(labels)
   other_names     <- NULL
   if (length(unique(classes)) > 1) {
-    new_data        <- purrr::map2(new_data, classes, add_col)
-    other_names     <- c(other_names, "class")
+    new_data        <- purrr::map2(new_data, classes, add_col, col_name = "class")
   } else {
     metadata[["c"]] <- classes[[1]]
   }
   for (label in names(labels_df)) {
     if (length(unique(labels_df[[label]])) > 1) {
-      new_data        <- purrr::map2(new_data, labels_df[[label]], add_col)
-      other_names     <- c(other_names, label)
+      new_data        <- purrr::map2(new_data, labels_df[[label]], add_col, col_name = label)
     } else {
       metadata[["l"]] <- c(metadata[["l"]], setNames(list(labels_df[[label]][1]), label))
     }
@@ -86,18 +84,18 @@ build_res.lgts <- function(object, data) {
   list_gts <- list(
     c = metadata[["c"]],
     l = metadata[["l"]],
-    v = Reduce(rbind, new_data)
+    v = dplyr::bind_rows(new_data)
   )
 
-  build_res.gts(list_gts, object = "gts", other_names = other_names)
+  build_res.gts(list_gts, object = "gts")
 }
 
-add_col <- function(x, y) {
-  if (nrow(x) == 0) {
-    data.frame(V1 = NA, V2 = NA, V3 = y, stringsAsFactors = FALSE)
-  } else {
-    cbind(x, y, stringsAsFactors = FALSE)
+add_col <- function(df, y, col_name) {
+  if (nrow(df) == 0) {
+    df <- data.frame(V1 = NA, V2 = NA)
   }
+  df[[col_name]] <- y
+  df
 }
 
 drop_na_col <- function(df) {
