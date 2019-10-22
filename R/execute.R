@@ -85,7 +85,11 @@ build_res.lgts <- function(object, data) {
     labels_df
   }
   if (length(unique(classes)) > 1) {
-    if (is_value) new_data <- purrr::map2(new_data, classes, add_col, col_name = "class")
+    new_data <- if (is_value) {
+      purrr::map2(new_data, classes, add_col, col_name = "class")
+    } else {
+      c(list(class = classes), new_data)
+    }
   } else {
     metadata[["c"]] <- classes[[1]]
     if (!is_value) new_data[[classes[[1]]]] <- NULL

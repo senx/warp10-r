@@ -18,5 +18,5 @@ format_iso8601 <- function(x) {
 }
 
 sanitize <- function(x) {
-  glue::glue("'x'")
+  glue::glue("'{x}'")
 }
