@@ -28,7 +28,9 @@ The FETCH function interacts with the Warp 10 Storage Engine to retrieve data ac
 }
 \details{
 The stop parameter can either be a number or a date.
-If a number, the depth to consider when fetching datapoints, if the value is positive then it is interpreted as a duration, if it is negative then as the maximum number of datapoints to fetch.
+If a number, the depth to consider when fetching datapoints,
+if the value is positive then it is interpreted as a duration,
+if it is negative then as the maximum number of datapoints to fetch.
 If a date, the stop timestamp to consider when fetching data, in ISO-8601 format.
 If a duration, the stop timestamp will be computed first before the request is adressed to Warp 10.
 }

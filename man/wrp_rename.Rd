@@ -18,7 +18,8 @@ If the name starts with '+', the specified name will be appended to the current 
 }
 \details{
 If you want to rename a Geo Time Series or an Encoder so its name starts with a '+',
-you must first set its name to the empty string then use rename with the desired name prefixed with an additional '+'.
+you must first set its name to the empty string then use rename with the desired name prefixed
+with an additional '+'.
 }
 \examples{
 \dontrun{

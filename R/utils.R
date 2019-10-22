@@ -13,7 +13,7 @@ quiet <- function(x) {
   force(x)
 }
 
-format_ISO8601 <- function(x) {
+format_iso8601 <- function(x) {
   sanitize(paste0(lubridate::format_ISO8601(lubridate::as_datetime(x)), "Z"))
 }
 

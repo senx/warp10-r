@@ -10,7 +10,7 @@ wrp_exec <- function(wrp_con) {
   wrp_script <- get_script(wrp_con)
   endpoint   <- wrp_con$get_endpoint()
   stack      <- get_stack(wrp_con)
-  raw_res    <- postWarpscript(warpscript = wrp_script, endpoint = endpoint)
+  raw_res    <- post_warpscript(warpscript = wrp_script, endpoint = endpoint)
 
   # If an error occured and was not catched by R wrapper
   if (is.null(raw_res)) {

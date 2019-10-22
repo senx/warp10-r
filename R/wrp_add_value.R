@@ -83,13 +83,15 @@ wrp_add_value <- function(wrp_con, tick, value, latitude = NA, longitude = NA, e
 #'
 #' @export
 #'
-wrp_add_value_df <- function(wrp_con, df, tick = "tick", value = "value", latitude = NULL, longitude = NULL, elevation = NULL) {
+wrp_add_value_df <- function(wrp_con, df, tick = "tick", value = "value", latitude = NULL, longitude = NULL,
+                             elevation = NULL) {
   tick      <- rlang::enquo(tick)
   value     <- rlang::enquo(value)
   latitude  <- rlang::enquo(latitude)
   longitude <- rlang::enquo(longitude)
   elevation <- rlang::enquo(elevation)
-  vars      <- tidyselect::vars_select(names(df), tick = !!tick, value = !!value, latitude = !!latitude, longitude = !!longitude, elevation = !!elevation)
+  vars      <- tidyselect::vars_select(names(df), tick = !!tick, value = !!value, latitude = !!latitude,
+                                       longitude = !!longitude, elevation = !!elevation)
   df_script <- stats::setNames(df[, vars], names(vars))
   if (is.null(rlang::get_expr(latitude)))  df_script[, "latitude"]  <- NA
   if (is.null(rlang::get_expr(longitude))) df_script[, "longitude"] <- NA
