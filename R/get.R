@@ -16,6 +16,10 @@ get_token <- function() {
   getOption("warp10")[["token"]]
 }
 
+#' Get scripts
+#'
+#' Returns a scripts to be send to endpoint.
+#'
 #' @inheritParams documentation
 #'
 #' @export
@@ -24,6 +28,10 @@ get_script <- function(wrp_con) {
   wrp_con$get_script()
 }
 
+#' Get stack
+#'
+#' Returns objects of the stack.
+#'
 #' @inheritParams documentation
 #'
 #' @export

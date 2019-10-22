@@ -8,6 +8,8 @@ set_script(wrp_con, script = "")
 }
 \arguments{
 \item{wrp_con}{[wrp_connect] object.}
+
+\item{script}{A script to be set as a string.}
 }
 \description{
 Add command to a Warp 10 script.

@@ -2,14 +2,10 @@
 % Please edit documentation in R/wrp_add_value.R
 \name{wrp_add_value}
 \alias{wrp_add_value}
-\alias{wrp_add_value_df}
 \title{Add Value}
 \usage{
 wrp_add_value(wrp_con, tick, value, latitude = NA, longitude = NA,
   elevation = NA)
-
-wrp_add_value_df(wrp_con, df, tick = "tick", value = "value",
-  latitude = NULL, longitude = NULL, elevation = NULL)
 }
 \arguments{
 \item{wrp_con}{[wrp_connect] object.}
@@ -21,16 +17,6 @@ wrp_add_value_df(wrp_con, df, tick = "tick", value = "value",
 \item{latitude, longitude}{Coordinates.}
 
 \item{elevation}{Elevation.}
-
-\item{df}{A dataframe}
-
-\item{tick}{column representing Timestamp}
-
-\item{value}{column representing value}
-
-\item{latitude, longitude}{columns representing coordinates. Can be NULL.}
-
-\item{elevation}{column representing elevation. Can be NULL.}
 }
 \description{
 The ADDVALUE function adds a value to a GTS, without checking for tick duplicates.
@@ -58,27 +44,9 @@ the value will be wrapped (as when using WRAPRAW) and added as a binary value.
     wrp_add_value(tick = 100, value = TRUE) \%>\%
     wrp_add_value(tick = 110, longitude = 45, value = TRUE) \%>\%
     wrp_add_value(tick = 120, latitude = 1.2, elevation = 250, value = TRUE) \%>\%
-    wrp_add_value(tick = 130, latitude = 48.44218, longitude = -4.41427, elevation = 80000, value = TRUE) \%>\%
+    wrp_add_value(tick = 130, latitude = 48.44218, longitude = -4.41427,
+                  elevation = 80000, value = TRUE) \%>\%
     wrp_add_value(tick = 100, value = FALSE) \%>\%
-    wrp_exec()
-}
-
-\dontrun{
-  library(tibble)
-  df <- tribble(
-    ~ tick, ~ value, ~ latitude, ~ longitude, ~ elevation,
-    100   , TRUE   , NA        , NA         , NA,
-    110   , TRUE   , 45        , NA         , NA,
-    120   , TRUE   , NA        , 1.2        , 250,
-    130   , TRUE   , 48.44218  , -4.41427   , 80000,
-    100   , FALSE  , NA        , NA         , NA
-  )
-  con <- wrp_connect()
-  con \%>\%
-    clear_script() \%>\%
-    wrp_new_gts() \%>\%
-    wrp_rename("test") \%>\%
-    wrp_add_value_df(df) \%>\%
     wrp_exec()
 }
 

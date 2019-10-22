@@ -1,8 +1,10 @@
-#' Helper function
+#' Assert Endpoint
 #'
-#' Helper function to assert that values are correctly sets.
+#' Check that endpoint is available.
 #'
-#' @param endpoint
+#' @family assert
+#'
+#' @param endpoint A string defining the endpoint of the Warp 10 database.
 #'
 assert_endpoint <- function(endpoint) {
   if (is.null(endpoint)) {
@@ -16,9 +18,13 @@ assert_endpoint <- function(endpoint) {
   }
 }
 
-#' @rdname assert_endpoint
+#' Assert Token
 #'
-#' @param token
+#' Check that token is available.
+#'
+#' @family assert
+#'
+#' @param token A string defining the token used to fetch or update data.
 #'
 assert_token <- function(token) {
   if (is.null(token)) {

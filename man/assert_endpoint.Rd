@@ -2,18 +2,17 @@
 % Please edit documentation in R/assert.R
 \name{assert_endpoint}
 \alias{assert_endpoint}
-\alias{assert_token}
-\title{Helper function}
+\title{Assert Endpoint}
 \usage{
 assert_endpoint(endpoint)
-
-assert_token(token)
 }
 \arguments{
-\item{endpoint}{}
-
-\item{token}{}
+\item{endpoint}{A string defining the endpoint of the Warp 10 database.}
 }
 \description{
-Helper function to assert that values are correctly sets.
+Check that endpoint is available.
 }
+\seealso{
+Other assert: \code{\link{assert_token}}
+}
+\concept{assert}

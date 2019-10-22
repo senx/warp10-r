@@ -26,6 +26,13 @@ wrp_exec <- function(wrp_con) {
   }
 }
 
+#' Build results
+#'
+#' Build results from parsed json file.
+#'
+#' @param object A string corresponding to the object fetched from Warp10 database.
+#' @param data A list resulting of a parsed json of all results.
+#'
 #' @export
 #'
 build_res <- function(object, data) {
@@ -87,7 +94,7 @@ build_res.lgts <- function(object, data) {
     if (length(unique(labels_df[[label]])) > 1) {
       if (is_value) new_data <- purrr::map2(new_data, labels_df[[label]], add_col, col_name = label)
     } else {
-      metadata[["l"]] <- c(metadata[["l"]], setNames(list(labels_df[[label]][1]), label))
+      metadata[["l"]] <- c(metadata[["l"]], stats::setNames(list(labels_df[[label]][1]), label))
       if (!is_value) new_data[[label]] <- NULL
     }
   }

@@ -3,6 +3,7 @@
 #' Add command to a Warp 10 script.
 #'
 #' @inheritParams documentation
+#' @param script A script to be set as a string.
 #'
 #' @export
 #'

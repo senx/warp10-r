@@ -31,7 +31,8 @@
 #'     wrp_add_value(tick = 100, value = TRUE) %>%
 #'     wrp_add_value(tick = 110, longitude = 45, value = TRUE) %>%
 #'     wrp_add_value(tick = 120, latitude = 1.2, elevation = 250, value = TRUE) %>%
-#'     wrp_add_value(tick = 130, latitude = 48.44218, longitude = -4.41427, elevation = 80000, value = TRUE) %>%
+#'     wrp_add_value(tick = 130, latitude = 48.44218, longitude = -4.41427,
+#'                   elevation = 80000, value = TRUE) %>%
 #'     wrp_add_value(tick = 100, value = FALSE) %>%
 #'     wrp_exec()
 #' }
@@ -49,7 +50,9 @@ wrp_add_value <- function(wrp_con, tick, value, latitude = NA, longitude = NA, e
 
 #' Add Value from DataFrame
 #'
-#' @rdname wrp_add_value
+#' Add values to a GTS from a data.frame.
+#'
+#' @seealso wrp_add_value
 #'
 #' @inheritParams documentation
 #' @param df A dataframe
@@ -87,7 +90,7 @@ wrp_add_value_df <- function(wrp_con, df, tick = "tick", value = "value", latitu
   longitude <- rlang::enquo(longitude)
   elevation <- rlang::enquo(elevation)
   vars      <- tidyselect::vars_select(names(df), tick = !!tick, value = !!value, latitude = !!latitude, longitude = !!longitude, elevation = !!elevation)
-  df_script <- setNames(df[, vars], names(vars))
+  df_script <- stats::setNames(df[, vars], names(vars))
   if (is.null(rlang::get_expr(latitude)))  df_script[, "latitude"]  <- NA
   if (is.null(rlang::get_expr(longitude))) df_script[, "longitude"] <- NA
   if (is.null(rlang::get_expr(elevation))) df_script[, "elevation"] <- NA
