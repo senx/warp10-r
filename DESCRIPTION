@@ -22,10 +22,12 @@ Imports:
     httr,
     jsonlite,
     lubridate,
+    magrittr,
     purrr,
     R6,
     RCurl,
     rlang,
+    stats,
     stringr,
     tibble,
     tidyselect
