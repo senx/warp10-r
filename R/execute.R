@@ -49,7 +49,7 @@ build_res.default <- function(object, data) {
 #' @export
 #'
 build_res.gts <- function(object, data) {
-  new_data                <- as.data.frame(data[["v"]], stringsAsFactors = FALSE)
+  new_data                <- as.data.frame(data[["v"]], stringsAsFactors = TRUE)
   if (length(new_data) >= 2 && c("V1", "V2") %in% names(new_data)) {
     names(new_data)         <- c("timestamp", "value", names(new_data)[-c(1, 2)])
     new_data[["timestamp"]] <- lubridate::as_datetime(new_data[["timestamp"]] / 1e6)
