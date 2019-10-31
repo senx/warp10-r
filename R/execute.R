@@ -54,16 +54,7 @@ build_res.gts <- function(object, data) {
     names(new_data)         <- c("timestamp", "value", names(new_data)[-c(1, 2)])
     new_data[["timestamp"]] <- lubridate::as_datetime(new_data[["timestamp"]] / 1e6)
   }
-  new_data                <- tibble::as_tibble(drop_na_col(new_data))
-  new_attributes          <- list(
-    gts = list(
-      class  = data[["c"]],
-      labels = data[["l"]]
-    )
-  )
-  attributes(new_data)    <- c(attributes(new_data), new_attributes)
-  class(new_data)         <- c(object, class(new_data))
-  new_data
+  as_gts(new_data, class = data[["c"]], labels = data[["l"]])
 }
 
 #' @export
