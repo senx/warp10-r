@@ -4,7 +4,9 @@
 \alias{wrp_bucketize}
 \title{Bucketize}
 \usage{
-wrp_bucketize(wrp_con, bucketizer, last = 0, span = 0, count = 0)
+wrp_bucketize(wrp_con, bucketizer = c("and", "count", "first", "join",
+  "last", "max", "mean", "mean.circular", "mean.circular.exclude-nulls",
+  "median", "min", "or", "sum"), last = 0, span = 0, count = 0)
 }
 \arguments{
 \item{wrp_con}{[wrp_connect] object.}

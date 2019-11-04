@@ -54,7 +54,14 @@
 #'
 #' @export
 #'
-wrp_bucketize <- function(wrp_con, bucketizer, last = 0, span = 0, count = 0) {
-  script <- glue::glue("[ SWAP {bucketizer} {last} {span} {count} ] BUCKETIZE")
+wrp_bucketize <- function(wrp_con,
+                          bucketizer = c("and", "count", "first", "join", "last", "max", "mean",
+                                         "mean.circular", "mean.circular.exclude-nulls", "median",
+                                         "min", "or", "sum"),
+                          last = 0, span = 0, count = 0) {
+  bucketizer <- match.arg(bucketizer)
+  script     <- glue::glue("[ SWAP bucketizer.{bucketizer} {last} {span} {count} ] BUCKETIZE")
   wrp_con$set_script(script)
+  wrp_con$add_stack("lgts", get_stack(wrp_con))
+  wrp_con
 }
