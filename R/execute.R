@@ -3,14 +3,19 @@
 #' Execute the Warp Script by sending it to the server.
 #'
 #' @inheritParams documentation
+#' @param combine For LGTS, should all GTS be combined into one single GTS.
+#' @param operator If `combine=TRUE` which function should be used to combine all the elements.
 #'
 #' @export
 #'
-wrp_exec <- function(wrp_con) {
+wrp_exec <- function(wrp_con, combine = TRUE, operator = sum) {
   wrp_script <- get_script(wrp_con)
   endpoint   <- wrp_con$get_endpoint()
   stack      <- get_stack(wrp_con)
   raw_res    <- post_warpscript(warpscript = wrp_script, endpoint = endpoint)
+
+  # Clear all scripts
+  clear_script(wrp_con)
 
   # If an error occured and was not catched by R wrapper
   if (is.null(raw_res)) {
@@ -20,9 +25,9 @@ wrp_exec <- function(wrp_con) {
   res <- jsonlite::fromJSON(raw_res, simplifyVector = FALSE)
 
   if (length(stack) == 1) {
-    build_res(stack[[1]], res[[1]])
+    build_res(stack[[1]], res[[1]], combine = combine, operator = operator)
   } else {
-    purrr::map2(stack, res, build_res)
+    purrr::map2(stack, res, build_res, combine = combine, operator = operator)
   }
 }
 
@@ -30,36 +35,41 @@ wrp_exec <- function(wrp_con) {
 #'
 #' Build results from parsed json file.
 #'
+#' @inheritParams wrp_exec
 #' @param object A string corresponding to the object fetched from Warp10 database.
 #' @param data A list resulting of a parsed json of all results.
+#' @param ... Other arguments passed on to individual methods.
 #'
 #' @export
 #'
-build_res <- function(object, data) {
+build_res <- function(object, data, combine, operator) {
   class(data) <- c(object, class(data))
   UseMethod("build_res", data)
 }
 
 #' @export
+#' @rdname build_res
 #'
-build_res.default <- function(object, data) {
+build_res.default <- function(object, data, ...) {
   return(data)
 }
 
 #' @export
+#' @rdname build_res
 #'
-build_res.gts <- function(object, data) {
-  new_data                <- as.data.frame(data[["v"]], stringsAsFactors = TRUE)
-  if (length(new_data) >= 2 && c("V1", "V2") %in% names(new_data)) {
-    names(new_data)         <- c("timestamp", "value", names(new_data)[-c(1, 2)])
-    new_data[["timestamp"]] <- lubridate::as_datetime(new_data[["timestamp"]] / 1e6)
+build_res.gts <- function(object, data, combine, operator) {
+  new_data <- if (!is.data.frame(data[["v"]])) {
+    build_gts_value(data[["v"]])
+  } else {
+    data[["v"]]
   }
-  as_gts(new_data, class = data[["c"]], labels = data[["l"]])
+
+  as_gts(new_data, class = data[["c"]], labels = data[["l"]], combine = combine, operator = operator)
 }
 
 #' @export
 #'
-build_res.lgts <- function(object, data) {
+build_res.lgts <- function(object, data, combine, operator) {
   metadata        <- list()
   n_values        <- purrr::map_int(data, ~ length(.x[["v"]]))
   classes         <- purrr::map_chr(data, "c")
@@ -67,10 +77,7 @@ build_res.lgts <- function(object, data) {
   is_value        <- all(n_values > 0L)
   new_data        <- if (is_value) {
     purrr::map(data, function(l) {
-      tibble::tibble(
-        V1 = purrr::map_dbl(l[["v"]], 1),
-        V2 = purrr::map_dbl(l[["v"]], 2)
-      )
+      build_gts_value(l[["v"]])
     })
   } else {
     labels_df
@@ -100,7 +107,7 @@ build_res.lgts <- function(object, data) {
     v = if (is_value) dplyr::bind_rows(new_data) else new_data
   )
 
-  build_res.gts(list_gts, object = "gts")
+  build_res.gts(list_gts, object = "gts", combine = combine, operator = operator)
 }
 
 add_col <- function(df, y, col_name) {
@@ -113,4 +120,28 @@ add_col <- function(df, y, col_name) {
 
 drop_na_col <- function(df) {
   df[, colSums(!is.na(df)) > 0, drop = FALSE]
+}
+
+build_gts_value <- function(l) {
+  n <- length(l)
+  res <- tibble::tibble(
+    timestamp = double(n),
+    latitude  = NA,
+    longitude = NA,
+    elevation = NA,
+    value     = NA
+  )
+  for (i in seq_along(l)) {
+    ll <- l[[i]]
+    res[i, "timestamp"] <- ll[[1]]
+    if (length(ll) == 3) {
+      res[i, "elevation"] <- ll[[2]]
+    } else if (length(ll) == 5) {
+      res[i, "latitude"]  <- ll[[3]]
+      res[i, "longitude"] <- ll[[4]]
+    }
+    res[i, "value"] <- ll[[length(ll)]]
+  }
+  res <- drop_na_col(res)
+  return(res)
 }
