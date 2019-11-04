@@ -4,10 +4,14 @@
 \alias{wrp_exec}
 \title{Execute Warp Script}
 \usage{
-wrp_exec(wrp_con)
+wrp_exec(wrp_con, combine = TRUE, operator = sum)
 }
 \arguments{
 \item{wrp_con}{[wrp_connect] object.}
+
+\item{combine}{For LGTS, should all GTS be combined into one single GTS.}
+
+\item{operator}{If `combine=TRUE` which function should be used to combine all the elements.}
 }
 \description{
 Execute the Warp Script by sending it to the server.

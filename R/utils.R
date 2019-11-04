@@ -1,3 +1,7 @@
+`%||%` <- function(x, y) {
+  if (is.null(x)) y else x
+}
+
 labels_to_string <- function(labels) {
   if (!is.null(labels)) {
     paste(glue::glue("'{names(labels)}'"), glue::glue("'{labels}'"), collapse = " ")

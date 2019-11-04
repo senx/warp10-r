@@ -4,12 +4,16 @@
 \alias{set_script}
 \title{Set Script}
 \usage{
-set_script(wrp_con, script = "")
+set_script(wrp_con, script = "", consume = list(), add = "map")
 }
 \arguments{
 \item{wrp_con}{[wrp_connect] object.}
 
 \item{script}{A script to be set as a string.}
+
+\item{consume}{What object(s) the warpscript is consuming from the stack.}
+
+\item{add}{What object the warpscript is returning in the stack.}
 }
 \description{
 Add command to a Warp 10 script.
