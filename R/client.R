@@ -118,7 +118,6 @@ post_warpscript <- function(warpscript, output_type="json", endpoint="http://loc
   } else {
     request <- POST(endpoint, body = warpscript)
   }
-  cat(paste0(" Status: ", request$status, "\n"))
 
   # retrieve body
   body <- content(request, "text", encoding = "UTF-8")
@@ -128,6 +127,7 @@ post_warpscript <- function(warpscript, output_type="json", endpoint="http://loc
 
     # parse error message
     h <- headers(request)
+    cat(" Status: ", request$status, "\n")
     cat(paste0("ERROR line #", h[["X-Warp10-Error-Line"]], ": ", h[["X-Warp10-Error-Message"]], "\n"))
 
   } else {
