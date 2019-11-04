@@ -62,6 +62,6 @@ wrp_bucketize <- function(wrp_con,
   bucketizer <- match.arg(bucketizer)
   script     <- glue::glue("[ SWAP bucketizer.{bucketizer} {last} {span} {count} ] BUCKETIZE")
   wrp_con$set_script(script)
-  wrp_con$add_stack("lgts", get_stack(wrp_con))
+  wrp_con$add_stack("lgts", "lgts|gts")
   wrp_con
 }

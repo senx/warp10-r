@@ -28,8 +28,9 @@ connect <- R6::R6Class(
       for (object in consume) {
         n        <- length(stack)
         last     <- stack[[n]]
-        if (last != object) {
-          msg <- glue::glue("{call} requires `{object}` but `{last}` on the stack.")
+        objects  <- strsplit(object, "|", fixed = TRUE)[[1]]
+        if (!last %in% objects) {
+          msg <- glue::glue("{call} requires `{toString(objects)}` but `{last}` on the stack.")
           stop(msg, call. = FALSE)
         }
         stack[[n]] <- NULL

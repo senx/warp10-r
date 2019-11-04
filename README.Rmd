@@ -41,13 +41,14 @@ remotes::install_github("centreon/warp10-r")
 
 ```{r}
 library(warp10r)
-library(magrittr)
 
 # Create a connection
 con <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec")
 
 # set_script store a script in the connection object and print the script as it is.
-set_script(con, "'Hello World' NOW")
+set_script(con, "'Hello World'")
+set_script(con, "NOW")
+cat("\n", get_script(con))
 
 # Execute the script
 wrp_exec(con)
@@ -70,5 +71,65 @@ con %>%
   wrp_add_value_df(df2, tick = ds, value = y) %>% 
   wrp_rename("nogeoTS") %>% 
   wrp_exec()
+```
+
+## Outlier detection
+
+Anomaly detection is already implemented in Warpscript.
+Let's take twitter data as an example.
+
+### Set up and show data
+
+```{r}
+library(AnomalyDetection)
+library(dplyr)
+library(ggplot2)
+library(hrbrthemes)
+library(lubridate)
+library(purrr)
+
+data("raw_data")
+
+raw_data %>% 
+  ggplot(aes(timestamp, count)) + 
+  geom_line() +
+  theme_ipsum()
+```
+
+### Create a subset of the data
+
+Default settings do not authorize more than 1,000 operations for a warpscript.
+Therefore, let's take the previous data and concatenate them into 3 hours timespan.
+
+```{r}
+df <- raw_data %>% 
+  group_by(date_hour = ceiling_date(timestamp, "3 hours")) %>% 
+  summarise_at("count", sum)
+
+df %>% 
+  ggplot(aes(date_hour, count)) +
+  geom_line() +
+  theme_ipsum()
+```
+
+### Lets find some anomalies
+
+```{r}
+res <- con %>% 
+  wrp_new_gts() %>% 
+  wrp_rename("twitter data") %>% 
+  wrp_add_value_df(df, tick = "date_hour", value = "count") %>% 
+  wrp_bucketize(span = "3 h", bucketizer = "sum") %>% 
+  wrp_hybridtest(period = 8, piece = 4, k = 4) %>% 
+  wrp_exec()
+
+# Results is a list of abnormal dates in microseconds
+res_dbl <- map_dbl(res[[1]], ~ .x / 1e6)
+
+df %>% 
+  ggplot(aes(date_hour, count)) +
+  geom_line() +
+  geom_vline(xintercept = res_dbl, linetype = 2, color = "red") +
+  theme_ipsum()
 ```
 

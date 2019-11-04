@@ -24,14 +24,14 @@
 #' as_gts(x)
 #'
 as_gts <- function(x, class = "", labels = list(), combine = TRUE, operator = sum) {
-  x              <- tibble::as_tibble(drop_na_col(x))
+  x <- tibble::as_tibble(drop_na_col(x))
 
   if (nrow(x) > 0 && is.numeric(x[["timestamp"]]) && max(x[["timestamp"]]) > 1e6) {
     x[["timestamp"]] <- lubridate::as_datetime(x[["timestamp"]] / 1e6)
   } else if (lubridate::is.Date(x[["timestamp"]])) {
     x[["timestamp"]] <- lubridate::as_datetime(x[["timestamp"]])
   }
-  if (combine) {
+  if (combine && nrow(x) > 0) {
     x <- dplyr::summarise_at(dplyr::group_by_at(x, "timestamp"), "value", operator)
   }
   # When a GTS is retrieved from Warp10 database, the structure of a label is named list.

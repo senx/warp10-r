@@ -24,4 +24,6 @@
 wrp_hybridtest <- function(wrp_con, period, piece, k, alpha = 0.05, ...) {
   script <- glue::glue("{period} {piece} {k} {alpha} HYBRIDTEST")
   wrp_con$set_script(script)
+  wrp_con$add_stack("map", "lgts|gts")
+  wrp_con
 }
