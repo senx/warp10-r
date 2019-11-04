@@ -12,7 +12,7 @@ wrp_add_value_df(wrp_con, df, tick = "tick", value = "value",
 
 \item{df}{A dataframe}
 
-\item{tick}{column representing Timestamp}
+\item{tick}{column representing Timestamp, could be numeric or date values}
 
 \item{value}{column representing value}
 

@@ -40,8 +40,11 @@
 #' @export
 #'
 wrp_add_value <- function(wrp_con, tick, value, latitude = NA, longitude = NA, elevation = NA) {
-  if (is.logical(value)) value <- as.character(tolower(value))
+  if (is.logical(value))        value <- as.character(tolower(value))
   else if (is.character(value)) value <- sanitize(value)
+
+  if (lubridate::is.Date(tick))    tick <- as.numeric(lubridate::as_datetime(tick)) * 1e6
+  if (lubridate::is.POSIXct(tick)) tick <- as.numeric(tick) * 1e6
   script <- glue::glue("{tick} {latitude} {longitude} {elevation} {value} ADDVALUE", .na = "NaN")
   wrp_con$set_script(script)
   wrp_con$add_stack("gts", "gts")
@@ -56,7 +59,7 @@ wrp_add_value <- function(wrp_con, tick, value, latitude = NA, longitude = NA, e
 #'
 #' @inheritParams documentation
 #' @param df A dataframe
-#' @param tick column representing Timestamp
+#' @param tick column representing Timestamp, could be numeric or date values
 #' @param value column representing value
 #' @param latitude,longitude columns representing coordinates. Can be NULL.
 #' @param elevation column representing elevation. Can be NULL.
