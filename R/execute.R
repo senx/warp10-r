@@ -70,11 +70,12 @@ build_res.gts <- function(object, data, combine, operator) {
 #' @export
 #'
 build_res.lgts <- function(object, data, combine, operator) {
+  if (length(data) == 0) return(data)
   metadata        <- list()
   n_values        <- purrr::map_int(data, ~ length(.x[["v"]]))
   classes         <- purrr::map_chr(data, "c")
   labels_df       <- purrr::map_dfr(data, "l")
-  is_value        <- all(n_values > 0L)
+  is_value        <- length(n_values) > 0L && all(n_values > 0L)
   new_data        <- if (is_value) {
     purrr::map(data, function(l) {
       build_gts_value(l[["v"]])
@@ -124,6 +125,7 @@ drop_na_col <- function(df) {
 
 build_gts_value <- function(l) {
   n <- length(l)
+  if (!is.null(names(l))) return(tibble::as_tibble(l))
   res <- tibble::tibble(
     timestamp = double(n),
     latitude  = NA,

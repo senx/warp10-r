@@ -31,7 +31,7 @@ as_gts <- function(x, class = "", labels = list(), combine = TRUE, operator = su
   } else if (lubridate::is.Date(x[["timestamp"]])) {
     x[["timestamp"]] <- lubridate::as_datetime(x[["timestamp"]])
   }
-  if (combine && nrow(x) > 0) {
+  if (combine && nrow(x) > 0 && "timestamp" %in% names(x)) {
     x <- dplyr::summarise_at(dplyr::group_by_at(x, "timestamp"), "value", operator)
   }
   # When a GTS is retrieved from Warp10 database, the structure of a label is named list.
@@ -47,6 +47,14 @@ as_gts <- function(x, class = "", labels = list(), combine = TRUE, operator = su
 #' @export
 #'
 as.data.frame.gts <- function(x, ...) {
+  class(x) <- class(x)[!class(x) == "gts"]
+  attr(x, "gts") <- NULL
+  NextMethod()
+}
+
+#' @export
+#'
+as.list.gts <- function(x, ...) {
   class(x) <- class(x)[!class(x) == "gts"]
   attr(x, "gts") <- NULL
   NextMethod()

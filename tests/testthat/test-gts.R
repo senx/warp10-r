@@ -53,3 +53,11 @@ test_that("bucketize works as expected", {
     wrp_exec()
   expect_equal(nrow(gts), n + 1)
 })
+
+test_that("find and fetch work as expected", {
+  con <- wrp_connect()
+  script <- wrp_find(con)
+  expect_error(df <- wrp_exec(script), NA)
+  script <- wrp_fetch(con, class = df$class[1], labels = as.list(df[1, !names(df) %in% "class"]))
+  expect_error(wrp_exec(script), NA)
+})
