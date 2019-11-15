@@ -4,9 +4,14 @@
 \alias{wrp_bucketize}
 \title{Bucketize}
 \usage{
-wrp_bucketize(wrp_con, bucketizer = c("and", "count", "first", "join",
-  "last", "max", "mean", "mean.circular", "mean.circular.exclude-nulls",
-  "median", "min", "or", "sum"), last = 0, span = 0, count = 0)
+wrp_bucketize(
+  wrp_con,
+  bucketizer = c("and", "count", "first", "join", "last", "max", "mean",
+    "mean.circular", "mean.circular.exclude-nulls", "median", "min", "or", "sum"),
+  last = 0,
+  span = 0,
+  count = 0
+)
 }
 \arguments{
 \item{wrp_con}{[wrp_connect] object.}
@@ -42,7 +47,7 @@ A bucket is a time interval which spans a certain number of time units called th
 As an example, the bucket spanning 10 time units and ending at time units 20 will contain all measurements
  taken at the following times:
 
-20, 19, 18, 17, 16, 15, 14, 13, 12, 11
+ 20, 19, 18, 17, 16, 15, 14, 13, 12, 11
 
 the previous bucket with the same bucketspan ends at 10 and covers ticks 10 down to 1.
 The next bucket ends at 30 and covers ticks 21 to 30.

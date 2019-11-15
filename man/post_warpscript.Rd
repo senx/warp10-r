@@ -4,8 +4,12 @@
 \alias{post_warpscript}
 \title{Post Warpscript Code}
 \usage{
-post_warpscript(warpscript, output_type = "json",
-  endpoint = "http://localhost:8080/api/v0/exec", with_labels = FALSE)
+post_warpscript(
+  warpscript,
+  output_type = "json",
+  endpoint = "http://localhost:8080/api/v0/exec",
+  with_labels = FALSE
+)
 }
 \arguments{
 \item{warpscript}{code or file name ending with .mc2}

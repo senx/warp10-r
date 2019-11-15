@@ -13,6 +13,7 @@ assert_endpoint(endpoint)
 Check that endpoint is available.
 }
 \seealso{
-Other assert: \code{\link{assert_token}}
+Other assert: 
+\code{\link{assert_token}()}
 }
 \concept{assert}

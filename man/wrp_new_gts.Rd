@@ -15,8 +15,8 @@ The NEWGTS function pushes onto the stack an empty Geo Time Series instance.
 \examples{
 \dontrun{
   con <- wrp_connect()
-  con \%>\%
-    clear_script() \%>\%
+  con %>%
+    clear_script() %>%
     wrp_new_gts()
 }
 

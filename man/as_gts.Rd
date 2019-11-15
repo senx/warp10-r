@@ -4,8 +4,7 @@
 \alias{as_gts}
 \title{Coersce object to GTS tibbles}
 \usage{
-as_gts(x, class = "", labels = list(), combine = TRUE,
-  operator = sum)
+as_gts(x, class = "", labels = list(), combine = TRUE, operator = sum)
 }
 \arguments{
 \item{x}{An object that could reasoably be coerced to a gts tibble.}

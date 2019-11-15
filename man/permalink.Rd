@@ -4,9 +4,12 @@
 \alias{permalink}
 \title{Generate a Permalink}
 \usage{
-permalink(warpscript, plot = FALSE,
+permalink(
+  warpscript,
+  plot = FALSE,
   endpoint = "http://localhost:8080/api/v0/exec",
-  quantum = "http://localhost:8090")
+  quantum = "http://localhost:8090"
+)
 }
 \arguments{
 \item{warpscript}{code or file name ending with .mc2}

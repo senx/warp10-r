@@ -4,8 +4,7 @@
 \alias{push_warp10}
 \title{Push data points}
 \usage{
-push_warp10(data, token,
-  endpoint = "http://localhost:8080/api/v0/update")
+push_warp10(data, token, endpoint = "http://localhost:8080/api/v0/update")
 }
 \arguments{
 \item{data}{data points in GTS input format as a character vector or a filename ending with .data or .gz}

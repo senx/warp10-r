@@ -24,19 +24,19 @@ with an additional '+'.
 \examples{
 \dontrun{
   con <- wrp_connect()
-  con \%>\%
-    clear_script() \%>\%
-    wrp_newgts() \%>\%
-    wrp_rename("foo") \%>\%
-    wrp_rename("+bar") \%>\%
+  con %>%
+    clear_script() %>%
+    wrp_newgts() %>%
+    wrp_rename("foo") %>%
+    wrp_rename("+bar") %>%
     wrp_exec()
 
-  con \%>\%
-    clear_script() \%>\%
-    wrp_newgts() \%>\%
-    wrp_rename("foo") \%>\%
-    wrp_rename("") \%>\%
-    wrp_rename("++bar") \%>\%
+  con %>%
+    clear_script() %>%
+    wrp_newgts() %>%
+    wrp_rename("foo") %>%
+    wrp_rename("") %>%
+    wrp_rename("++bar") %>%
     wrp_exec()
 }
 

@@ -4,8 +4,14 @@
 \alias{wrp_fetch}
 \title{Fetch}
 \usage{
-wrp_fetch(wrp_con, token = get_token(), class = "~.*", labels = NULL,
-  end = "NOW", stop = -1)
+wrp_fetch(
+  wrp_con,
+  token = get_token(),
+  class = "~.*",
+  labels = NULL,
+  end = "NOW",
+  stop = -1
+)
 }
 \arguments{
 \item{wrp_con}{[wrp_connect] object.}
