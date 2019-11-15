@@ -21,7 +21,7 @@ Hello World
 
 ```R
 library(warp10r)
-postWarpscript("'Hello world' NOW", outputType="pretty", endpoint="https://warp.senx.io/api/v0/exec")
+postWarpscript("'Hello world' NOW", outputType="pretty", endpoint="https://sandbox.senx.io/api/v0/exec")
 ```
 
 ```out
