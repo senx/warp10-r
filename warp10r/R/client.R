@@ -228,8 +228,16 @@ toGtsInputFormat <- function(dataFrame){
 
   c <- colnames(dataFrame)
 
-  if (c[1] != 'timestamp') {
-    stop("First column must be named timestamp")
+  findTimestamp <- FALSE
+
+  tsColumnName <- 'timestamp'
+  if (c[1] == 'timestamp' || c[1] == 'timestamps') {
+    tsColumnName = c[1]
+    findTimestamp = TRUE
+  }
+
+  if (!findTimestamp) {
+    stop("First column must be named timestamp or timestamps")
   }
 
   lat <- c[substr(c, nchar(c) - 3, nchar(c)) == '.lat']
@@ -240,26 +248,26 @@ toGtsInputFormat <- function(dataFrame){
   res <- ''
   for (name in value) {
 
-    if (name == 'timestamp') {
+    if (name == tsColumnName) {
       next
     }
 
-    sub <- c('timestamp', name)
+    sub <- c(tsColumnName, name)
 
     nlat <- paste0(name, '.lat')
     nlon <- paste0(name, '.lon')
     nelev <- paste0(name, '.elev')
 
     if ((nelev %in% elev)) {
-      sub <- c('timestamp', nelev, name)
+      sub <- c(tsColumnName, nelev, name)
     }
 
     if ((nlat %in% lat) & (nlon %in% lon)) {
-      sub <- c('timestamp', nlat, nlon, name)
+      sub <- c(tsColumnName, nlat, nlon, name)
     }
 
     if ((nlat %in% lat) & (nlon %in% lon) & (nelev %in% elev)) {
-      sub <- c('timestamp', nlat, nlon, nelev, name)
+      sub <- c(tsColumnName, nlat, nlon, nelev, name)
     }
 
     classname <- name
