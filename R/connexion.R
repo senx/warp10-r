@@ -51,8 +51,17 @@ connect <- R6::R6Class(
       private$stack
     },
     print = function() {
-      stack <- private$stack
-      cat(glue::glue("{length(stack)} elements in the stack : {toString(stack)}"))
+      stack    <- private$stack
+      endpoint <- self$get_endpoint()
+      token    <- !is.null(get_token())
+      msg      <- glue::glue(
+        "Warp10 connexion:",
+        "  - endpoint: {endpoint}",
+        "  - token:    {dplyr::if_else(token, 'available', 'not available')}",
+        "  - stack:    {dplyr::if_else(length(stack) == 0, 'empty', toString(stack))}",
+        .sep = "\n"
+      )
+      cat(msg)
     },
     set_script = function(script) {
       private$script <- paste(private$script, script, paste = "\n")
