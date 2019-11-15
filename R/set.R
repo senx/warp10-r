@@ -12,5 +12,5 @@
 set_script <- function(wrp_con, script = "", consume = list(), add = "map") {
   wrp_con$set_script(script)
   wrp_con$add_stack(add, consume)
-  wrp_con
+  invisible(wrp_con)
 }
