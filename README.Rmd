@@ -44,11 +44,16 @@ library(warp10r)
 
 # Create a connection
 con <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec")
+print(con)
 
-# set_script store a script in the connection object and print the script as it is.
+# set_script store a script in the connection object.
 set_script(con, "'Hello World'")
 set_script(con, "NOW")
-cat("\n", get_script(con))
+print(con)
+
+# We can see the script
+cat(get_script(con))
+
 
 # Execute the script
 wrp_exec(con)
@@ -93,7 +98,7 @@ data("raw_data")
 raw_data %>% 
   ggplot(aes(timestamp, count)) + 
   geom_line() +
-  theme_ipsum()
+  theme_ipsum(base_family = "Verdana")
 ```
 
 ### Create a subset of the data
@@ -109,7 +114,7 @@ df <- raw_data %>%
 df %>% 
   ggplot(aes(date_hour, count)) +
   geom_line() +
-  theme_ipsum()
+  theme_ipsum(base_family = "Verdana")
 ```
 
 ### Lets find some anomalies
@@ -123,6 +128,8 @@ res <- con %>%
   wrp_hybridtest(period = 8, piece = 4, k = 4) %>% 
   wrp_exec()
 
+print(res)
+
 # Results is a list of abnormal dates in microseconds
 res_dbl <- map_dbl(res[[1]], ~ .x / 1e6)
 
@@ -130,6 +137,6 @@ df %>%
   ggplot(aes(date_hour, count)) +
   geom_line() +
   geom_vline(xintercept = res_dbl, linetype = 2, color = "red") +
-  theme_ipsum()
+  theme_ipsum(base_family = "Verdana")
 ```
 

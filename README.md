@@ -37,21 +37,31 @@ library(warp10r)
 
 # Create a connection
 con <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec")
+print(con)
+#> Warp10 connexion:
+#> - endpoint: https://warp.senx.io/api/v0/exec
+#> - token:    available
+#> - stack:    empty
 
-# set_script store a script in the connection object and print the script as it is.
+# set_script store a script in the connection object.
 set_script(con, "'Hello World'")
-#> 1 elements in the stack : map
 set_script(con, "NOW")
-#> 2 elements in the stack : map, map
-cat("\n", get_script(con))
-#> 
-#>   'Hello World' 
+print(con)
+#> Warp10 connexion:
+#> - endpoint: https://warp.senx.io/api/v0/exec
+#> - token:    available
+#> - stack:    map, map
+
+# We can see the script
+cat(get_script(con))
+#>  'Hello World' 
 #>  NOW
+
 
 # Execute the script
 wrp_exec(con)
 #> [[1]]
-#> [1] 1.572865e+15
+#> [1] 1.573809e+15
 #> 
 #> [[2]]
 #> [1] "Hello World"
@@ -77,34 +87,34 @@ con %>%
 #> [[1]]
 #> # A GTS object: 10 x 2
 #> # class:        nogeoTS
-#>    timestamp   value
-#>  *     <dbl>   <dbl>
-#>  1         2  0.793 
-#>  2         3 -0.695 
-#>  3         4 -0.228 
-#>  4         5  0.0720
-#>  5         6 -0.634 
-#>  6         7  0.217 
-#>  7         8 -0.0588
-#>  8         9  0.181 
-#>  9        10  0.509 
-#> 10        11  1.28  
+#>    timestamp  value
+#>  *     <dbl>  <dbl>
+#>  1         2 -0.320
+#>  2         3 -1.15 
+#>  3         4 -0.500
+#>  4         5 -0.877
+#>  5         6 -0.234
+#>  6         7 -0.227
+#>  7         8  0.569
+#>  8         9 -0.514
+#>  9        10  2.17 
+#> 10        11 -1.24 
 #> 
 #> [[2]]
 #> # A GTS object: 10 x 2
 #> # class:        randGTS
 #>    timestamp   value
 #>  *     <dbl>   <dbl>
-#>  1         1  1.000 
-#>  2         2  1.62  
-#>  3         3 -0.903 
-#>  4         4  1.54  
-#>  5         5 -1.06  
-#>  6         6  0.714 
-#>  7         7 -0.0429
-#>  8         8 -0.913 
-#>  9         9  0.0384
-#> 10        10 -0.294
+#>  1         1 -1.66  
+#>  2         2  0.632 
+#>  3         3  0.0918
+#>  4         4 -1.78  
+#>  5         5 -0.0555
+#>  6         6  0.132 
+#>  7         7 -0.784 
+#>  8         8 -0.447 
+#>  9         9 -0.435 
+#> 10        10  0.432
 ```
 
 ## Outlier detection
@@ -143,7 +153,7 @@ data("raw_data")
 raw_data %>% 
   ggplot(aes(timestamp, count)) + 
   geom_line() +
-  theme_ipsum()
+  theme_ipsum(base_family = "Verdana")
 ```
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
@@ -162,7 +172,7 @@ df <- raw_data %>%
 df %>% 
   ggplot(aes(date_hour, count)) +
   geom_line() +
-  theme_ipsum()
+  theme_ipsum(base_family = "Verdana")
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
@@ -178,6 +188,17 @@ res <- con %>%
   wrp_hybridtest(period = 8, piece = 4, k = 4) %>% 
   wrp_exec()
 
+print(res)
+#> [[1]]
+#> [[1]][[1]]
+#> [1] 3.389256e+14
+#> 
+#> [[1]][[2]]
+#> [1] 3.392712e+14
+#> 
+#> [[1]][[3]]
+#> [1] 3.39606e+14
+
 # Results is a list of abnormal dates in microseconds
 res_dbl <- map_dbl(res[[1]], ~ .x / 1e6)
 
@@ -185,7 +206,7 @@ df %>%
   ggplot(aes(date_hour, count)) +
   geom_line() +
   geom_vline(xintercept = res_dbl, linetype = 2, color = "red") +
-  theme_ipsum()
+  theme_ipsum(base_family = "Verdana")
 ```
 
 <img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
