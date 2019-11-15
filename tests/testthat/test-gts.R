@@ -55,9 +55,14 @@ test_that("bucketize works as expected", {
 })
 
 test_that("find and fetch work as expected", {
-  con <- wrp_connect()
-  script <- wrp_find(con)
-  expect_error(df <- wrp_exec(script), NA)
-  script <- wrp_fetch(con, class = df$class[1], labels = as.list(df[1, !names(df) %in% "class"]))
-  expect_error(wrp_exec(script), NA)
+  if (length(get_token() > 0)) {
+    con <- wrp_connect()
+    script <- wrp_find(con)
+    expect_error(df <- wrp_exec(script), NA)
+    labels <- as.list(df[2, !names(df) %in% "class"])
+    labels <- labels[!purrr::map_lgl(labels, is.na)]
+    script <- wrp_fetch(con, class = df$class[2], labels = labels)
+    expect_error(wrp_exec(script), NA)
+  }
+
 })
