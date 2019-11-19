@@ -10,11 +10,11 @@
 #'
 #' @export
 #'
-wrp_find <- function(wrp_con, token = get_token(), class = "~.*", labels = NULL) {
-  assert_token(token)
+wrp_find <- function(wrp_con, class = "~.*", labels = NULL) {
+  assert_token(wrp_con$get_token())
   labels <- labels_to_string(labels)
   script <- glue::glue(
-    "[ '{token}' '{class}' {{ {labels} }} ] FIND"
+    "[ $token '{class}' {{ {labels} }} ] FIND"
   )
   wrp_con$set_script(script)
   wrp_con$add_stack("lgts")

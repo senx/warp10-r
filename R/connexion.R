@@ -7,16 +7,20 @@
 #'
 #' @export
 #'
-wrp_connect <- function(endpoint = get_endpoint()) {
-  connect$new(endpoint = endpoint)
+wrp_connect <- function(endpoint = get_endpoint(), token = get_token(endpoint)) {
+  connect$new(endpoint = endpoint, token = token)
 }
 
 connect <- R6::R6Class(
   classname = "warp10",
   public    = list(
-    initialize = function(endpoint) {
+    initialize = function(endpoint, token) {
       assert_endpoint(endpoint)
       private$endpoint <- endpoint
+      private$token    <- token
+      if (!is.null(token)) {
+        self$set_script(glue::glue("'{token}' 'token' STORE\n"))
+      }
     },
     add_stack = function(return, consume = list()) {
       stack <- private$stack
@@ -40,6 +44,9 @@ connect <- R6::R6Class(
     clear_script = function() {
       private$script <- ""
       private$stack <- list()
+      if (!is.null(private$token)) {
+        self$set_script(glue::glue("'{private$token}' 'token' STORE\n"))
+      }
     },
     get_endpoint = function() {
       private$endpoint
@@ -50,10 +57,13 @@ connect <- R6::R6Class(
     get_stack = function() {
       private$stack
     },
+    get_token = function() {
+      private$token
+    },
     print = function() {
       stack    <- private$stack
-      endpoint <- self$get_endpoint()
-      token    <- !is.null(get_token())
+      endpoint <- private$endpoint
+      token    <- !is.null(private$token)
       msg      <- glue::glue(
         "Warp10 connexion:",
         "  - endpoint: {endpoint}",
@@ -70,6 +80,7 @@ connect <- R6::R6Class(
   private = list(
     script     = "",
     endpoint   = NULL,
-    stack      = list()
+    stack      = list(),
+    token      = NULL
   )
 )

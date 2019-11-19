@@ -16,7 +16,8 @@
 #'
 #' @export
 #'
-wrp_fetch <- function(wrp_con, token = get_token(), class = "~.*", labels = NULL, end = "NOW", stop = -1) {
+wrp_fetch <- function(wrp_con, class = "~.*", labels = NULL, end = "NOW", stop = -1) {
+  assert_token(wrp_con$get_token())
   labels <- labels_to_string(labels)
   if (lubridate::is.POSIXct(end)) {
     if (is.numeric(stop)) stop("`stop` must be a date or a duration if `end` is a date")
@@ -30,7 +31,7 @@ wrp_fetch <- function(wrp_con, token = get_token(), class = "~.*", labels = NULL
     }
   }
   if (!is.numeric(stop)) stop <- format_iso8601(stop)
-  script <- glue::glue("[ '{token}' '{class}' {{ {labels} }} {end} {stop} ] FETCH")
+  script <- glue::glue("[ $token '{class}' {{ {labels} }} {end} {stop} ] FETCH")
   wrp_con$set_script(script)
   wrp_con$add_stack("lgts")
   return(wrp_con)

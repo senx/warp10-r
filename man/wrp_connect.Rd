@@ -4,10 +4,12 @@
 \alias{wrp_connect}
 \title{Create Connection}
 \usage{
-wrp_connect(endpoint = get_endpoint())
+wrp_connect(endpoint = get_endpoint(), token = get_token(endpoint))
 }
 \arguments{
 \item{endpoint}{egress endpoint.}
+
+\item{token}{a token needed to connect to database}
 }
 \description{
 Create a connection to a Warp 10 database.

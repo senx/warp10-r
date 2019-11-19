@@ -4,12 +4,10 @@
 \alias{wrp_find}
 \title{Find}
 \usage{
-wrp_find(wrp_con, token = get_token(), class = "~.*", labels = NULL)
+wrp_find(wrp_con, class = "~.*", labels = NULL)
 }
 \arguments{
 \item{wrp_con}{[wrp_connect] object.}
-
-\item{token}{a token needed to connect to database}
 
 \item{class}{Selector for the GTS classes.
 Can either be an exact match or a regular expression (the value should then start with a ~).}

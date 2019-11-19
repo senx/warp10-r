@@ -2,9 +2,13 @@
 #'
 #' Get endpoint and token from R options
 #'
+#' @param endpoint endpoint
+#'
 #' @export
 #'
 get_endpoint <- function() {
+  system_endpoint <- Sys.getenv("WRPENDPOINT")
+  if (system_endpoint != "") return(system_endpoint)
   getOption("warp10")[["endpoint"]]
 }
 
@@ -12,8 +16,11 @@ get_endpoint <- function() {
 #'
 #' @export
 #'
-get_token <- function() {
-  getOption("warp10")[["token"]]
+get_token <- function(endpoint) {
+  system_token <- Sys.getenv("WRPTOKEN")
+  if (system_token != "") return(system_token)
+  endpoint_option <- get_endpoint()
+  if (!is.null(endpoint_option) && endpoint == endpoint_option) return(getOption("warp10")[["token"]])
 }
 
 #' Get scripts

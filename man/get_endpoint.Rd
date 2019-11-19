@@ -7,7 +7,10 @@
 \usage{
 get_endpoint()
 
-get_token()
+get_token(endpoint)
+}
+\arguments{
+\item{endpoint}{endpoint}
 }
 \description{
 Get endpoint and token from R options
