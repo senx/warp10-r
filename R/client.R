@@ -127,9 +127,11 @@ post_warpscript <- function(warpscript, output_type="json", endpoint="http://loc
 
     # parse error message
     h <- headers(request)
-    cat(" Status: ", request$status, "\n")
-    cat(paste0("ERROR line #", h[["X-Warp10-Error-Line"]], ": ", h[["X-Warp10-Error-Message"]], "\n"))
-
+    msg <- glue::glue(
+      "Status: {request$status}",
+      "ERRPR line #{h[['X-Warp10-Error-Line']]}: {h[['X-Warp10-Error-Message']]}"
+    )
+    stop(msg, call. = FALSE)
   } else {
 
     if (output_type == "raw") {
