@@ -42,11 +42,11 @@ Add values to a GTS from a data.frame.
     100   , FALSE  , NA        , NA         , NA
   )
   con <- wrp_connect()
-  con %>%
-    clear_script() %>%
-    wrp_new_gts() %>%
-    wrp_rename("test") %>%
-    wrp_add_value_df(df) %>%
+  con \%>\%
+    clear_script() \%>\%
+    wrp_new_gts() \%>\%
+    wrp_rename("test") \%>\%
+    wrp_add_value_df(df) \%>\%
     wrp_exec()
 }
 

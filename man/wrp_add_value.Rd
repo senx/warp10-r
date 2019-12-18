@@ -43,16 +43,16 @@ the value will be wrapped (as when using WRAPRAW) and added as a binary value.
 \examples{
 \dontrun{
   con <- wrp_connect()
-  con %>%
-    clear_script() %>%
-    wrp_new_gts() %>%
-    wrp_rename("test") %>%
-    wrp_add_value(tick = 100, value = TRUE) %>%
-    wrp_add_value(tick = 110, longitude = 45, value = TRUE) %>%
-    wrp_add_value(tick = 120, latitude = 1.2, elevation = 250, value = TRUE) %>%
+  con \%>\%
+    clear_script() \%>\%
+    wrp_new_gts() \%>\%
+    wrp_rename("test") \%>\%
+    wrp_add_value(tick = 100, value = TRUE) \%>\%
+    wrp_add_value(tick = 110, longitude = 45, value = TRUE) \%>\%
+    wrp_add_value(tick = 120, latitude = 1.2, elevation = 250, value = TRUE) \%>\%
     wrp_add_value(tick = 130, latitude = 48.44218, longitude = -4.41427,
-                  elevation = 80000, value = TRUE) %>%
-    wrp_add_value(tick = 100, value = FALSE) %>%
+                  elevation = 80000, value = TRUE) \%>\%
+    wrp_add_value(tick = 100, value = FALSE) \%>\%
     wrp_exec()
 }
 

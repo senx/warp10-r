@@ -4,19 +4,10 @@
 \alias{wrp_fetch}
 \title{Fetch}
 \usage{
-wrp_fetch(
-  wrp_con,
-  token = get_token(),
-  class = "~.*",
-  labels = NULL,
-  end = "NOW",
-  stop = -1
-)
+wrp_fetch(wrp_con, class = "~.*", labels = NULL, end = "NOW", stop = -1)
 }
 \arguments{
 \item{wrp_con}{[wrp_connect] object.}
-
-\item{token}{a token needed to connect to database}
 
 \item{class}{Selector for the GTS classes.
 Can either be an exact match or a regular expression (the value should then start with a ~).}
