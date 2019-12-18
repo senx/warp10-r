@@ -4,7 +4,7 @@
 \alias{set_script}
 \title{Set Script}
 \usage{
-set_script(wrp_con, script = "", consume = list(), add = "map")
+set_script(wrp_con, script = "", consume = list(), add = "string")
 }
 \arguments{
 \item{wrp_con}{[wrp_connect] object.}
