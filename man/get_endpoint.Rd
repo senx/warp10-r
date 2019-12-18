@@ -7,7 +7,7 @@
 \usage{
 get_endpoint()
 
-get_token(endpoint)
+get_token(endpoint = get_endpoint())
 }
 \arguments{
 \item{endpoint}{endpoint}

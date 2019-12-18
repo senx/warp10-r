@@ -16,7 +16,7 @@ get_endpoint <- function() {
 #'
 #' @export
 #'
-get_token <- function(endpoint) {
+get_token <- function(endpoint = get_endpoint()) {
   system_token <- Sys.getenv("WRPTOKEN")
   if (system_token != "") return(system_token)
   endpoint_option <- get_endpoint()
