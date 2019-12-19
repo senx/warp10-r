@@ -1,4 +1,4 @@
-`%||%` <- function(x, y) {
+`%||%` <- function(x, y) { # nolint
   if (is.null(x)) y else x
 }
 
@@ -22,5 +22,6 @@ format_iso8601 <- function(x) {
 }
 
 sanitize <- function(x) {
+  if (is.null(x)) return(x)
   glue::glue("'{x}'")
 }

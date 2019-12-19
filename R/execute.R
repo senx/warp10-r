@@ -43,7 +43,9 @@ wrp_exec <- function(wrp_con, combine = TRUE, operator = sum) {
 #' @export
 #'
 build_res <- function(object, data, combine, operator) {
-  class(data) <- c(object, class(data))
+  if (!is.null(data)) {
+    class(data) <- c(object, class(data))
+  }
   UseMethod("build_res", data)
 }
 
@@ -52,6 +54,12 @@ build_res <- function(object, data, combine, operator) {
 #'
 build_res.default <- function(object, data, ...) {
   return(data)
+}
+
+#' @export
+#' @rdname build_res
+build_res.list <- function(object, data, ...) {
+  unlist(data)
 }
 
 #' @export

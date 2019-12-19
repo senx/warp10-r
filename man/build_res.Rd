@@ -3,12 +3,15 @@
 \name{build_res}
 \alias{build_res}
 \alias{build_res.default}
+\alias{build_res.list}
 \alias{build_res.gts}
 \title{Build results}
 \usage{
 build_res(object, data, combine, operator)
 
 \method{build_res}{default}(object, data, ...)
+
+\method{build_res}{list}(object, data, ...)
 
 \method{build_res}{gts}(object, data, combine, operator)
 }

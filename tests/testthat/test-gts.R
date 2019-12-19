@@ -65,5 +65,119 @@ test_that("find and fetch work as expected", {
     script <- wrp_fetch(con, class = df$class[2], labels = labels)
     expect_error(wrp_exec(script), NA)
   }
+})
 
+test_that("unwrap work as expected", {
+  df         <- data.frame(timestamp = as.numeric(1:100), value = 1L)
+  gts        <- as_gts(df)
+  gts_unwrap <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    set_script("60V.5k.L.0N.5k..KV.N5GyA1.........0nNL7O4W..rXE6gwV....Lm.3G..") %>%
+    wrp_unwrap() %>%
+    wrp_exec()
+  expect_equal(gts_unwrap, gts)
+})
+
+
+test_that("get work as expected", {
+  res     <- list(NULL, 3, 42)
+  get_res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    set_script("{ 'foo' 42 'bar' true }", add = "map") %>%
+    wrp_get("foo") %>%
+    set_script("[ 3 12 15 ]", add = "map") %>%
+    wrp_get(0) %>%
+    set_script("{ 'foo' 42 'bar' true }", add = "map") %>%
+    wrp_get(33) %>%
+    wrp_exec()
+  expect_equal(get_res, res)
+})
+
+test_that("clone work as expected", {
+  df  <- data.frame(
+    timestamp = c(1389139140000000, 1389139200000000, 1576674645000000),
+    value     = c(21.3, 21.5, 42)
+  )
+  gts <- as_gts(df, class = "com.cityzendata.tutorial.sensors.temperature", labels = list(sensorId = "01"))
+  res <- list(
+    c(1, 2, 3, 4, 42),
+    c(1, 2, 3, 4),
+    gts,
+    gts[1:2, ]
+  )
+  res_clone <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    set_script("[ '60VgNqxhAaCdS6_uOLtZNMGWAbGpS5xmPL4gAbC_QbCjRbBiS5KhR5KmNMGpRaJQ.NV7RqKiRqxmHLF1B23L.0N.5k..KV.N6bF.0DxeA7x..3.pV.......4EyQb2_.CJnBnBnBnGN33V.' '60VgNqxhAaCdS6_uOLtZNMGWAbGpS5xmPL4gAbC_QbCjRbBiS5KhR5KmNMGpRaJQ.NV7RqKiRqxmHLF1B27L.0N.5k..KV.N6rF.0Dxe1Bju.3.ltaOaOaOa472Jp9g0F26BnBnBnBoL007.' ]", add = "list") %>% # nolint
+    wrp_unwrap() %>%
+    wrp_get(0) %>%
+    wrp_clone() %>%
+    wrp_add_value(tick = 1576674645000000, value = 42) %>%
+    set_script("[ 1 2 3 4 ]", add = "list") %>%
+    wrp_clone() %>%
+    set_script("42 +!", consume = "list", add = "list") %>%
+    wrp_exec()
+  expect_equal(res_clone, res)
+})
+
+test_that("relabel work as expected", {
+  df <- data.frame()
+  res <- list(
+    as_gts(df, labels = c(star = "treck")),
+    as_gts(df, labels = c("next" = "generation", star = "treck")),
+    as_gts(df, labels = c(star = "treck", "next" = "generation", heckle = "jeckle")),
+    as_gts(df, labels = c(star = "treck")),
+    as_gts(df, labels = c(bar = "foo", foo = "bar")),
+    as_gts(df)
+  )
+  res_relabel <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    wrp_new_gts() %>%
+    wrp_clone() %>%
+    wrp_relabel(c("foo", "bar", "bar", "foo")) %>%
+    wrp_clone() %>%
+    wrp_relabel(list(NULL, NULL, "star", "treck")) %>%
+    wrp_clone() %>%
+    wrp_relabel(c("next", "generation", "heckle", "jeckle")) %>%
+    wrp_clone() %>%
+    wrp_relabel(list("heckle", NULL)) %>%
+    wrp_clone() %>%
+    wrp_relabel(c("next", "")) %>%
+    wrp_exec()
+  expect_equal(res_relabel, res)
+})
+
+test_that("store work as expected", {
+  res <- list()
+  res_store <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    set_script("42", add = "long") %>%
+    wrp_store("foo") %>%
+    wrp_exec()
+  expect_equal(res, res_store)
+})
+
+test_that("drop work as expected", {
+  res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    set_script("foo") %>%
+    set_script("bar") %>%
+    wrp_drop() %>%
+    wrp_exec()
+
+  expect_equal(res, "foo")
+})
+
+test_that("to selector work as expected", {
+  res <- c("test%20name{label0=42,label1=foo}", "test%20name{label0=33,label1=foo}")
+  res_to_selector <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    wrp_new_gts() %>%
+    wrp_rename("test name") %>%
+    wrp_relabel(c("label0", 42, "label1", "foo")) %>%
+    wrp_add_value(100, value = 10) %>%
+    wrp_add_value(200, value = 9) %>%
+    wrp_add_value(300, value = 8) %>%
+    wrp_store("gts1") %>%
+    set_script("$gts1", add = "gts") %>%
+    wrp_clone() %>%
+    wrp_relabel(c("label0", "33")) %>%
+    wrp_store("gts2") %>%
+    wrp_drop() %>%
+    set_script("[ $gts1 $gts2 ]", add = "gtslist") %>%
+    wrp_to_selector() %>%
+    wrp_exec()
+  expect_equal(res_to_selector, res)
 })
