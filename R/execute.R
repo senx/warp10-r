@@ -27,7 +27,7 @@ wrp_exec <- function(wrp_con, combine = TRUE, operator = sum) {
   if (length(stack) == 1) {
     build_res(stack[[1]], res[[1]], combine = combine, operator = operator)
   } else {
-    purrr::map2(stack, res, build_res, combine = combine, operator = operator)
+    purrr::map2(rev(stack), res, build_res, combine = combine, operator = operator)
   }
 }
 
