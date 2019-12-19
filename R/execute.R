@@ -58,54 +58,26 @@ build_res.default <- function(object, data, ...) {
 #' @rdname build_res
 #'
 build_res.gts <- function(object, data, combine, operator) {
-  new_data <- if (!is.data.frame(data[["v"]])) {
-    build_gts_value(data[["v"]])
-  } else {
-    data[["v"]]
-  }
+  new_data <- build_gts_value(data)
 
-  as_gts(new_data, class = data[["c"]], labels = data[["l"]], combine = combine, operator = operator)
+  as_gts(new_data, class = data[["c"]], labels = unlist(data[["l"]]), combine = combine, operator = operator)
 }
 
 #' @export
 #'
 build_res.lgts <- function(object, data, combine, operator) {
   if (length(data) == 0) return(data)
-  metadata        <- list()
-  n_values        <- purrr::map_int(data, ~ length(.x[["v"]]))
-  classes         <- purrr::map_chr(data, "c")
-  labels_df       <- purrr::map_dfr(data, "l")
-  is_value        <- length(n_values) > 0L && all(n_values > 0L)
-  new_data        <- if (is_value) {
-    purrr::map(data, function(l) {
-      build_gts_value(l[["v"]])
-    })
-  } else {
-    labels_df
-  }
-  if (length(unique(classes)) > 1) {
-    new_data <- if (is_value) {
-      purrr::map2(new_data, classes, add_col, col_name = "class")
-    } else {
-      c(list(class = classes), new_data)
-    }
-  } else {
-    metadata[["c"]] <- classes[[1]]
-    if (!is_value) new_data[[classes[[1]]]] <- NULL
-  }
-  for (label in names(labels_df)) {
-    if (length(unique(labels_df[[label]])) > 1) {
-      if (is_value) new_data <- purrr::map2(new_data, labels_df[[label]], add_col, col_name = label)
-    } else {
-      metadata[["l"]] <- c(metadata[["l"]], stats::setNames(list(labels_df[[label]][1]), label))
-      if (!is_value) new_data[[label]] <- NULL
-    }
-  }
+  is_value <- all(purrr::map_int(.x = data, ~ length(.x[["v"]])) > 0)
+  value    <- if (is_value) tibble::tibble(value = purrr::map(data, build_gts_value)) else NULL
+  class    <- build_gts_class(data)
+  label    <- build_gts_label(data)
+  value    <- dplyr::bind_cols(class = class[["value"]], label = label[["value"]], value = value)
+  if ("value" %in% names(value)) value <- tidyr::unnest(value, "value")
 
   list_gts <- list(
-    c = metadata[["c"]],
-    l = metadata[["l"]],
-    v = if (is_value) dplyr::bind_rows(new_data) else new_data
+    c = class[["metadata"]],
+    l = label[["metadata"]],
+    v = value
   )
 
   build_res.gts(list_gts, object = "gts", combine = combine, operator = operator)
@@ -123,8 +95,9 @@ drop_na_col <- function(df) {
   df[, colSums(!is.na(df)) > 0, drop = FALSE]
 }
 
-build_gts_value <- function(l) {
-  n <- length(l)
+build_gts_value <- function(data) {
+  l        <- data[["v"]]
+  n        <- length(l)
   if (!is.null(names(l))) return(tibble::as_tibble(l))
   res <- tibble::tibble(
     timestamp = double(n),
@@ -146,4 +119,29 @@ build_gts_value <- function(l) {
   }
   res <- drop_na_col(res)
   return(res)
+}
+
+build_gts_class <- function(data) {
+  class    <- purrr::map_chr(data, "c")
+  metadata <- NULL
+  if (length(unique(class)) == 1) {
+    metadata <- class
+    class    <- NULL
+  } else {
+    class <- tibble::tibble(class = class)
+  }
+  return(list(value = class, metadata = metadata))
+}
+
+build_gts_label <- function(data) {
+  label    <- purrr::map_dfr(data, "l")
+  metadata <- NULL
+  for (i in rev(seq_along(label))) {
+    if (length(unique(label[[i]])) == 1) {
+      metadata[names(label)[i]] <- unique(label[[i]])
+      label[[i]]                <- NULL
+    }
+  }
+  if (length(label) == 0) label <- NULL
+  return(list(value = label, metadata = metadata))
 }
