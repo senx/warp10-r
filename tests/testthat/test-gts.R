@@ -36,14 +36,15 @@ test_that("possibility to create and retrieve GTS with some values", {
 })
 
 test_that("bucketize works as expected", {
-  con <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec")
-  n   <- 4
-  df <- tibble::tibble(
+  con  <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec")
+  n    <- 4
+  date <- lubridate::ymd("2019-12-19")
+  df   <- tibble::tibble(
     timestamp = seq.Date(
-      from = lubridate::today() - lubridate::dweeks(n) + lubridate::ddays(1),
-      to   = lubridate::today(),
+      from = date - lubridate::dweeks(n) + lubridate::ddays(1),
+      to   = date,
       by   = "1 days"
-      ),
+    ),
     value     = rnorm(n * 7)
   )
   gts <-  con %>%
@@ -51,11 +52,11 @@ test_that("bucketize works as expected", {
     wrp_add_value_df(df, tick = "timestamp") %>%
     wrp_bucketize("mean", span = "7 d") %>%
     wrp_exec()
-  expect_equal(nrow(gts), n + 1)
+  expect_equal(nrow(gts), n)
 })
 
 test_that("find and fetch work as expected", {
-  if (length(get_token() > 0)) {
+  if (length(get_token(endpoint = get_endpoint())) > 0) {
     con <- wrp_connect()
     script <- wrp_find(con)
     expect_error(df <- wrp_exec(script), NA)
