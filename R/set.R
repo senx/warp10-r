@@ -13,5 +13,5 @@ set_script <- function(wrp_con, script = "", consume = list(), add = "string") {
   if (!is.null(add) && length(add) > 0 && add == "string") script <- sanitize(script)
   wrp_con$set_script(script)
   wrp_con$add_stack(add, consume)
-  invisible(wrp_con)
+  wrp_con
 }
