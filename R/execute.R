@@ -133,7 +133,7 @@ build_gts_class <- function(data) {
   class    <- purrr::map_chr(data, "c")
   metadata <- NULL
   if (length(unique(class)) == 1) {
-    metadata <- class
+    metadata <- unique(class)
     class    <- NULL
   } else {
     class <- tibble::tibble(class = class)
