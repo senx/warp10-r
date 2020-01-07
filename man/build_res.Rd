@@ -7,22 +7,22 @@
 \alias{build_res.gts}
 \title{Build results}
 \usage{
-build_res(object, data, combine, operator)
+build_res(object, data, combine, .funs)
 
 \method{build_res}{default}(object, data, ...)
 
 \method{build_res}{list}(object, data, ...)
 
-\method{build_res}{gts}(object, data, combine, operator)
+\method{build_res}{gts}(object, data, combine, .funs)
 }
 \arguments{
 \item{object}{A string corresponding to the object fetched from Warp10 database.}
 
 \item{data}{A list resulting of a parsed json of all results.}
 
-\item{combine}{For LGTS, should all GTS be combined into one single GTS.}
+\item{combine}{If TRUE, combine multiple time series into one by grouping dates.}
 
-\item{operator}{If `combine=TRUE` which function should be used to combine all the elements.}
+\item{.funs}{A function \code{fun}, a quosure style lambda \code{~ fun(.)} or a list of either form.}
 
 \item{...}{Other arguments passed on to individual methods.}
 }

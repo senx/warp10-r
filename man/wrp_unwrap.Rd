@@ -14,7 +14,6 @@ Unwraps packed Geo Time Series™ instances.
 }
 \examples{
 wrp_connect() \%>\%
-  set_script('60V.5k.L.0N.5k..KV.N5GyA1.........0nNL7O4W..rXE6gwV....Lm.3G..') \%>\%
+  set_script("60V.5k.L.0N.5k..KV.N5GyA1.........0nNL7O4W..rXE6gwV....Lm.3G..") \%>\%
   wrp_unwrap()
-
 }

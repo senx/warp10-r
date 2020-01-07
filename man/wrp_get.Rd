@@ -31,7 +31,7 @@ con <- wrp_connect()
 
 con \%>\%
   set_script("{ 'foo' 42 'bar' true }") \%>\%
-  wrp_get('foo') \%>\%
+  wrp_get("foo") \%>\%
   wrp_exec()
 
 con \%>\%
@@ -43,5 +43,4 @@ con \%>\%
   set_script("{ 'foo' 42 'bar' true }") \%>\%
   wrp_get(33) \%>\%
   wrp_exec()
-
 }

@@ -19,5 +19,4 @@ wrp_connect() \%>\%
   set_script("bar") \%>\%
   wrp_drop() \%>\%
   wrp_exec()
-
 }

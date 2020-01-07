@@ -37,5 +37,4 @@ wrp_connect() \%>\%
   wrp_clone() \%>\%
   wrp_relabel(c("next", "")) \%>\%
   wrp_exec()
-
 }

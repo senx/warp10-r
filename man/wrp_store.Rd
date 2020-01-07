@@ -19,5 +19,4 @@ wrp_connect() \%>\%
   set_script("42", add = "long") \%>\%
   wrp_store("foo") \%>\%
   wrp_exec()
-
 }

@@ -4,7 +4,7 @@
 \alias{as_gts}
 \title{Coersce object to GTS tibbles}
 \usage{
-as_gts(x, class = "", labels = list(), combine = TRUE, operator = sum)
+as_gts(x, class = "", labels = list(), combine = TRUE, .funs = "sum")
 }
 \arguments{
 \item{x}{An object that could reasoably be coerced to a gts tibble.}
@@ -16,9 +16,9 @@ Can either be an exact match or a regular expression (the value should then star
 The key is the label name, the value a selector which can be an exact match or a regular expression
 (the value should then start with a ~).}
 
-\item{combine}{For LGTS, should all GTS be combined into one single GTS.}
+\item{combine}{If TRUE, combine multiple time series into one by grouping dates.}
 
-\item{operator}{If `combine=TRUE` which function should be used to combine all the elements.}
+\item{.funs}{A function \code{fun}, a quosure style lambda \code{~ fun(.)} or a list of either form.}
 }
 \description{
 `as_gts()` turns an existing object, such as a data frame into

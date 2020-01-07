@@ -3,12 +3,11 @@
 #' Execute the Warp Script by sending it to the server.
 #'
 #' @inheritParams documentation
-#' @param combine For LGTS, should all GTS be combined into one single GTS.
-#' @param operator If `combine=TRUE` which function should be used to combine all the elements.
+#' @inheritParams as_gts
 #'
 #' @export
 #'
-wrp_exec <- function(wrp_con, combine = TRUE, operator = sum) {
+wrp_exec <- function(wrp_con, combine = TRUE, .funs = "sum") {
   wrp_script <- get_script(wrp_con)
   endpoint   <- wrp_con$get_endpoint()
   stack      <- get_stack(wrp_con)
@@ -25,9 +24,9 @@ wrp_exec <- function(wrp_con, combine = TRUE, operator = sum) {
   res <- jsonlite::fromJSON(raw_res, simplifyVector = FALSE)
 
   if (length(stack) == 1) {
-    build_res(stack[[1]], res[[1]], combine = combine, operator = operator)
+    build_res(stack[[1]], res[[1]], combine = combine, .funs = .funs)
   } else {
-    purrr::map2(rev(stack), res, build_res, combine = combine, operator = operator)
+    purrr::map2(rev(stack), res, build_res, combine = combine, .funs = .funs)
   }
 }
 
@@ -35,14 +34,14 @@ wrp_exec <- function(wrp_con, combine = TRUE, operator = sum) {
 #'
 #' Build results from parsed json file.
 #'
-#' @inheritParams wrp_exec
+#' @inheritParams as_gts
 #' @param object A string corresponding to the object fetched from Warp10 database.
 #' @param data A list resulting of a parsed json of all results.
 #' @param ... Other arguments passed on to individual methods.
 #'
 #' @export
 #'
-build_res <- function(object, data, combine, operator) {
+build_res <- function(object, data, combine, .funs) {
   if (!is.null(data)) {
     class(data) <- c(object, class(data))
   }
@@ -65,15 +64,15 @@ build_res.list <- function(object, data, ...) {
 #' @export
 #' @rdname build_res
 #'
-build_res.gts <- function(object, data, combine, operator) {
+build_res.gts <- function(object, data, combine, .funs) {
   new_data <- build_gts_value(data)
 
-  as_gts(new_data, class = data[["c"]], labels = unlist(data[["l"]]), combine = combine, operator = operator)
+  as_gts(new_data, class = data[["c"]], labels = unlist(data[["l"]]), combine = combine, .funs = .funs)
 }
 
 #' @export
 #'
-build_res.lgts <- function(object, data, combine, operator) {
+build_res.lgts <- function(object, data, combine, .funs) {
   if (length(data) == 0) return(data)
   is_value <- all(purrr::map_int(.x = data, ~ length(.x[["v"]])) > 0)
   value    <- if (is_value) tibble::tibble(value = purrr::map(data, build_gts_value)) else NULL
@@ -88,7 +87,7 @@ build_res.lgts <- function(object, data, combine, operator) {
     v = value
   )
 
-  build_res.gts(list_gts, object = "gts", combine = combine, operator = operator)
+  build_res.gts(list_gts, object = "gts", combine = combine, .funs = .funs)
 }
 
 add_col <- function(df, y, col_name) {
