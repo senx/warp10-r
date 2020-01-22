@@ -21,6 +21,7 @@ wrp_exec <- function(wrp_con, combine = TRUE, .funs = "sum") {
     return(cat(wrp_script))
   }
 
+  .funs <- eval(parse(text = .funs))
   res <- jsonlite::fromJSON(raw_res, simplifyVector = FALSE)
 
   if (length(stack) == 1) {
