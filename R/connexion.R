@@ -7,7 +7,7 @@
 #'
 #' @export
 #'
-wrp_connect <- function(endpoint = get_endpoint(), token = get_token(endpoint)) {
+wrp_connect <- function(endpoint = get_endpoint(), token = get_token()) {
   connect$new(endpoint = endpoint, token = token)
 }
 
