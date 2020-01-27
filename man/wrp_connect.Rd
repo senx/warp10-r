@@ -4,7 +4,7 @@
 \alias{wrp_connect}
 \title{Create Connection}
 \usage{
-wrp_connect(endpoint = get_endpoint(), token = get_token(endpoint))
+wrp_connect(endpoint = get_endpoint(), token = get_token())
 }
 \arguments{
 \item{endpoint}{egress endpoint.}

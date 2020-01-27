@@ -34,5 +34,4 @@ The resulting tibble contains at least two columns: `timestamp` and `value`.
 
 x <- data.frame(timestamp = 1:10, value = rnorm(10))
 as_gts(x)
-
 }
