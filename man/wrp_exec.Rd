@@ -4,7 +4,7 @@
 \alias{wrp_exec}
 \title{Execute Warp Script}
 \usage{
-wrp_exec(wrp_con, combine = TRUE, .funs = "sum")
+wrp_exec(wrp_con, combine = TRUE, .funs = "first")
 }
 \arguments{
 \item{wrp_con}{[wrp_connect] object.}

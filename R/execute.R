@@ -7,7 +7,7 @@
 #'
 #' @export
 #'
-wrp_exec <- function(wrp_con, combine = TRUE, .funs = "sum") {
+wrp_exec <- function(wrp_con, combine = TRUE, .funs = "first") {
   wrp_script <- get_script(wrp_con)
   endpoint   <- wrp_con$get_endpoint()
   stack      <- get_stack(wrp_con)
