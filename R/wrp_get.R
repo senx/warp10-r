@@ -20,17 +20,17 @@
 #' con <- wrp_connect()
 #'
 #' con %>%
-#'   set_script("{ 'foo' 42 'bar' true }") %>%
+#'   set_script("{ 'foo' 42 'bar' true }", add = "map") %>%
 #'   wrp_get("foo") %>%
 #'   wrp_exec()
 #'
 #' con %>%
-#'   set_script("[ 3 12 15 ]") %>%
+#'   set_script("[ 3 12 15 ]", add = "list") %>%
 #'   wrp_get(0) %>%
 #'   wrp_exec()
 #'
 #' con %>%
-#'   set_script("{ 'foo' 42 'bar' true }") %>%
+#'   set_script("{ 'foo' 42 'bar' true }", add = "map") %>%
 #'   wrp_get(33) %>%
 #'   wrp_exec()
 #' @export

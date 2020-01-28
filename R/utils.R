@@ -25,3 +25,5 @@ sanitize <- function(x) {
   if (is.null(x)) return(x)
   glue::glue("'{x}'")
 }
+
+first <- dplyr::first

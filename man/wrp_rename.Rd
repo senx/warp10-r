@@ -25,13 +25,13 @@ with an additional '+'.
 \dontrun{
 con <- wrp_connect()
 con \%>\%
-  wrp_newgts() \%>\%
+  wrp_new_gts() \%>\%
   wrp_rename("foo") \%>\%
   wrp_rename("+bar") \%>\%
   wrp_exec()
 
 con \%>\%
-  wrp_newgts() \%>\%
+  wrp_new_gts() \%>\%
   wrp_rename("foo") \%>\%
   wrp_rename("") \%>\%
   wrp_rename("++bar") \%>\%

@@ -31,6 +31,6 @@ wrp_connect() \%>\%
   wrp_relabel(c("label0", "33")) \%>\%
   wrp_store("gts2") \%>\%
   wrp_drop() \%>\%
-  set_script("[ $gts1 $gts2 ]", add = "gtslist")
-wrp_to_selector()
+  set_script("[ $gts1 $gts2 ]", add = "gtslist") \%>\%
+  wrp_to_selector()
 }

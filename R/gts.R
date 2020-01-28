@@ -23,7 +23,7 @@
 #'
 #' x <- data.frame(timestamp = 1:10, value = rnorm(10))
 #' as_gts(x)
-as_gts <- function(x, class = "", labels = list(), combine = TRUE, .funs = "sum") {
+as_gts <- function(x, class = "", labels = list(), combine = TRUE, .funs = "first") {
   x <- tibble::as_tibble(drop_na_col(x))
 
   if (nrow(x) > 0 && is.numeric(x[["timestamp"]]) && max(x[["timestamp"]]) > 1e6) {

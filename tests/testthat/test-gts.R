@@ -56,7 +56,7 @@ test_that("bucketize works as expected", {
 })
 
 test_that("find and fetch work as expected", {
-  if (length(get_token(endpoint = get_endpoint())) > 0) {
+  if (length(get_token()) > 0) {
     con <- wrp_connect()
     script <- wrp_find(con)
     expect_error(df <- wrp_exec(script), NA)
@@ -68,7 +68,7 @@ test_that("find and fetch work as expected", {
 })
 
 test_that("unwrap work as expected", {
-  df         <- data.frame(timestamp = as.numeric(1:100), value = 1L)
+  df         <- data.frame(timestamp = as.numeric(1:100), value = TRUE)
   gts        <- as_gts(df)
   gts_unwrap <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
     set_script("60V.5k.L.0N.5k..KV.N5GyA1.........0nNL7O4W..rXE6gwV....Lm.3G..") %>%

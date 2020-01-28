@@ -12,7 +12,7 @@ Authors@R:
              email = "droussel@centreon.com"))
 Description: This R client enables to make basic ingress and
     egress routine with Warp 10.
-License: Apache 2.0
+License: Apache License (>= 2.0)
 Depends: 
     R (>= 3.3.2)
 Imports: 
@@ -30,11 +30,9 @@ Imports:
     stats,
     stringr,
     tibble,
+    tidyr,
     tidyselect
 Suggests: 
-    testthat (>= 2.1.0),
-    AnomalyDetection,
-    ggplot2,
-    hrbrthemes
+    testthat (>= 2.1.0)
 Encoding: UTF-8
 RoxygenNote: 7.0.2

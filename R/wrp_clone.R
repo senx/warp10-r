@@ -13,8 +13,20 @@
 #'
 #' @examples
 #'
-#' wrp_connect() %>%
-#'   wrp_unwrap("'60VgNqxhAaCdS6_uOLtZNMGWAbGpS5xmPL4gAbC_QbCjRbBiS5KhR5KmNMGpRaJQ.NV7RqKiRqxmHLF1B23L.0N.5k..KV.N6bF.0DxeA7x..3.pV.......4EyQb2_.CJnBnBnBnGN33V.' '60VgNqxhAaCdS6_uOLtZNMGWAbGpS5xmPL4gAbC_QbCjRbBiS5KhR5KmNMGpRaJQ.NV7RqKiRqxmHLF1B27L.0N.5k..KV.N6rF.0Dxe1Bju.3.ltaOaOaOa472Jp9g0F26BnBnBnBoL007.'") %>% # nolint
+#' wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+#'   set_script(
+#'     paste(
+#'       paste0(
+#'         "[ '60VgNqxhAaCdS6_uOLtZNMGWAbGpS5xmPL4gAbC_QbCjRbBiS5KhR5KmNMGpRaJQ.NV7RqKiRqxmHLF1B2",
+#'         "3L.0N.5k..KV.N6bF.0DxeA7x..3.pV.......4EyQb2_.CJnBnBnBnGN33V.'"
+#'       ),
+#'       paste0(
+#'         "'60VgNqxhAaCdS6_uOLtZNMGWAbGpS5xmPL4gAbC_QbCjRbBiS5KhR5KmNMGpRaJQ.NV7RqKiRqxmHLF1B27L",
+#'         ".0N.5k..KV.N6rF.0Dxe1Bju.3.ltaOaOaOa472Jp9g0F26BnBnBnBoL007.' ]"
+#'       )
+#'     ), add = "list"
+#'   ) %>%
+#'   wrp_unwrap() %>% # nolint
 #'   wrp_get(0) %>%
 #'   wrp_clone() %>%
 #'   wrp_add_value(tick = "NOW", value = 42) %>%

@@ -1,3 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
+^.lintr$
+^.pre-commit-config.yaml$
+^LICENSE\.md$
