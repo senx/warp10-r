@@ -181,3 +181,16 @@ test_that("to selector work as expected", {
     wrp_exec()
   expect_equal(res_to_selector, res)
 })
+
+test_that("sort work as expected", {
+  df  <- data.frame(timestamp = as.numeric(10:1), value = as.integer(runif(10) * 10))
+  res <- df[order(df[["timestamp"]]), ]
+
+  res_sort <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    wrp_new_gts() %>%
+    wrp_add_value_df(df, tick = timestamp) %>%
+    wrp_sort() %>%
+    wrp_exec()
+
+  expect_equal(res_sort, res)
+})
