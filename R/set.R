@@ -11,7 +11,7 @@
 #'
 set_script <- function(wrp_con, script = "", consume = list(), add = "string") {
   if (!is.null(add)) {
-    if (length(add) > 0) {
+    if (length(add) == 1) {
       if (add == "string") {
         script <- sanitize(script)
       }
