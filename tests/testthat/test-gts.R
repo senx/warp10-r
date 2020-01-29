@@ -182,6 +182,7 @@ test_that("to selector work as expected", {
   expect_equal(res_to_selector, res)
 })
 
+
 test_that("sort work as expected", {
   df  <- data.frame(timestamp = as.numeric(10:1), value = as.integer(runif(10) * 10))
   res <- df[order(df[["timestamp"]]), ]
@@ -193,4 +194,19 @@ test_that("sort work as expected", {
     wrp_exec()
 
   expect_equal(res_sort, res)
+})
+
+test_that("interpolate work as expected", {
+  res <- data.frame(timestamp = seq(100, 500, by = 50), value = seq(10, 6, by = -0.5))
+  df  <- res[res[["timestamp"]] %% 100 == 0, ]
+
+  res_interpolate <- wrp_connect() %>%
+    wrp_new_gts() %>%
+    wrp_add_value_df(df, tick = "timestamp") %>%
+    wrp_bucketize("mean", 500, 50, 0) %>%
+    wrp_interpolate() %>%
+    wrp_sort() %>%
+    wrp_exec()
+
+  expect_equal(res_interpolate, res)
 })
