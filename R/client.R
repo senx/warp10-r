@@ -1,3 +1,4 @@
+# nolint start
 #
 #   Copyright 2018  SenX S.A.S.
 #
@@ -48,7 +49,7 @@ extract_gts <- function(response, with_labels = FALSE) {
       values <- fromJSON(caught[gts_id, 4])
       if (length(values) != 0) {
         gts_colname <- caught[gts_id, 2]
-        if (with_labels)  {
+        if (with_labels) {
           gts_colname <- paste0(gts_colname, caught[gts_id, 3])
         }
         num_col <- ncol(values)
@@ -66,7 +67,7 @@ extract_gts <- function(response, with_labels = FALSE) {
         }
         if (num_col == 5) {
           colnames(values) <- c("timestamp", paste0(gts_colname, ".lat"), paste0(gts_colname, ".lon"),
-                                paste0(gts_colname, ".elev"), gts_colname)
+            paste0(gts_colname, ".elev"), gts_colname)
         }
         values <- data.table(values, check.names = FALSE)
 
@@ -102,10 +103,10 @@ extract_gts <- function(response, with_labels = FALSE) {
 #'                   Default to FALSE
 #' @return character vector or json or named list or data.table
 #' @export
-#' @importFrom httr POST content headers
+#' @importFrom httr POST content headers config
 #' @importFrom jsonlite fromJSON minify prettify
 
-post_warpscript <- function(warpscript, output_type="json", endpoint="http://localhost:8080/api/v0/exec",
+post_warpscript <- function(warpscript, output_type = "json", endpoint = "http://localhost:8080/api/v0/exec",
                             with_labels = FALSE) {
 
   if (substr(warpscript, nchar(warpscript) - 3, nchar(warpscript)) == ".mc2") {
@@ -116,7 +117,7 @@ post_warpscript <- function(warpscript, output_type="json", endpoint="http://loc
   if (output_type == "data.table") {
     request <- POST(endpoint, body = paste0(warpscript, if (with_labels) preconverter_with_labels else preconverter))
   } else {
-    request <- POST(endpoint, body = warpscript)
+    request <- POST(endpoint, body = warpscript, config = config(ssl_verifypeer = 0L))
   }
 
   # retrieve body
@@ -126,7 +127,7 @@ post_warpscript <- function(warpscript, output_type="json", endpoint="http://loc
   if (request$status != 200) {
 
     # parse error message
-    h <- headers(request)
+    h <- headers(request) # nolint unused variable
     msg <- glue::glue(
       "Status: {request$status}",
       "ERRPR line #{h[['X-Warp10-Error-Line']]}: {h[['X-Warp10-Error-Message']]}"
@@ -208,7 +209,7 @@ permalink <- function(warpscript, plot = FALSE, endpoint = "http://localhost:808
 #' @export
 #' @importFrom httr POST content add_headers upload_file
 
-push_warp10 <- function(data, token, endpoint="http://localhost:8080/api/v0/update") {
+push_warp10 <- function(data, token, endpoint = "http://localhost:8080/api/v0/update") {
   if ((substr(data, nchar(data) - 4, nchar(data)) == ".data") | (substr(data, nchar(data) - 2, nchar(data)) == ".gz")) {
     data <- upload_file(data)
   }
@@ -313,22 +314,22 @@ to_gts_input_format <- function(df) {
       if (ncol(sub_df) == 4) {
         if (first) {
           res <- paste0(res, sub_df[rowId, 1], "/", sub_df[rowId, 2], ":", sub_df[rowId, 3], "/ ", classname, " ",
-                        sub_df[rowId, 4], "\n")
+            sub_df[rowId, 4], "\n")
           first <- FALSE
         } else {
           res <- paste0(res, sub_df[rowId, 1], "/", sub_df[rowId, 2], ":", sub_df[rowId, 3], "/ ",
-                        sub_df[rowId, 4], "\n")
+            sub_df[rowId, 4], "\n")
         }
       }
 
       if (ncol(sub_df) == 5) {
         if (first) {
           res <- paste0(res, sub_df[rowId, 1], "/", sub_df[rowId, 2], ":", sub_df[rowId, 3], "/",
-                        sub_df[rowId, 4], " ", classname, " ", sub_df[rowId, 5], "\n")
+            sub_df[rowId, 4], " ", classname, " ", sub_df[rowId, 5], "\n")
           first <- FALSE
         } else {
           res <- paste0(res, sub_df[rowId, 1], "/", sub_df[rowId, 2], ":", sub_df[rowId, 3], "/",
-                        sub_df[rowId, 4], " ", sub_df[rowId, 5], "\n")
+            sub_df[rowId, 4], " ", sub_df[rowId, 5], "\n")
         }
       }
 
@@ -490,3 +491,5 @@ DEPTH ->LIST
 TRY
 $meta
 "
+
+# nolint end
