@@ -109,6 +109,7 @@ extract_gts <- function(response, with_labels = FALSE) {
 post_warpscript <- function(warpscript, output_type = "json", endpoint = "http://localhost:8080/api/v0/exec",
                             with_labels = FALSE) {
 
+  endpoint <- paste0(endpoint, "/exec")
   if (substr(warpscript, nchar(warpscript) - 3, nchar(warpscript)) == ".mc2") {
     warpscript <- readLines(warpscript, warn = FALSE)
   }
@@ -117,7 +118,7 @@ post_warpscript <- function(warpscript, output_type = "json", endpoint = "http:/
   if (output_type == "data.table") {
     request <- POST(endpoint, body = paste0(warpscript, if (with_labels) preconverter_with_labels else preconverter))
   } else {
-    request <- POST(endpoint, body = warpscript, config = config(ssl_verifypeer = 0L))
+    request <- POST(endpoint, body = warpscript, config = config(ssl_verifypeer = FALSE))
   }
 
   # retrieve body
