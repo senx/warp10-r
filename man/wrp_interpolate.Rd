@@ -6,6 +6,9 @@
 \usage{
 wrp_interpolate(wrp_con)
 }
+\arguments{
+\item{wrp_con}{[wrp_connect] object.}
+}
 \description{
 The INTERPOLATE function fills gaps in a bucketized Geo Time Series™ instance with by interpolating linearly.
 }

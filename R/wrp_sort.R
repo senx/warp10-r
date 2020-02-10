@@ -2,6 +2,8 @@
 #'
 #' Sorts a Geo Time Series™ or each GTS of a list of GTS in ascending tick order.
 #'
+#' @inheritParams documentation
+#'
 #' @export
 #'
 #' @examples
@@ -14,17 +16,5 @@
 #'   wrp_sort() %>%
 #'   wrp_exec()
 wrp_sort <- function(wrp_con) {
-  script  <- glue::glue("SORT")
-  stack   <- get_stack(wrp_con)
-  consume <- stack[[length(stack)]]
-  return  <- switch(
-    consume,
-    gts = "gts",
-    lgts = "lgts",
-    stop(glue::glue("`wrp_sort` can't consume {consume}."))
-  )
-
-  set_script(wrp_con, script = script, consume = consume, add = return)
-
-  return(wrp_con)
+  add_stack(wrp_con, "SORT", return_object = list(gts = "gts", lgts = "lgts"))
 }

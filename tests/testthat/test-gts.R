@@ -200,7 +200,7 @@ test_that("interpolate work as expected", {
   res <- data.frame(timestamp = seq(100, 500, by = 50), value = seq(10, 6, by = -0.5))
   df  <- res[res[["timestamp"]] %% 100 == 0, ]
 
-  res_interpolate <- wrp_connect() %>%
+  res_interpolate <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
     wrp_new_gts() %>%
     wrp_add_value_df(df, tick = "timestamp") %>%
     wrp_bucketize("mean", 500, 50, 0) %>%

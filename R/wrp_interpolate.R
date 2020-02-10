@@ -4,6 +4,8 @@
 #'
 #' This function has no effect on non bucketized GTS instances.
 #'
+#' @inheritParams documentation
+#'
 #' @export
 #'
 #' @examples
@@ -18,17 +20,5 @@
 #'   wrp_sort() %>%
 #'   wrp_exec()
 wrp_interpolate <- function(wrp_con) {
-  script  <- glue::glue("INTERPOLATE")
-  stack   <- get_stack(wrp_con)
-  consume <- stack[[length(stack)]]
-  return  <- switch(
-    consume,
-    gts = "gts",
-    lgts = "lgts",
-    stop(glue::glue("`wrp_interpolate` can't consume {consume}."))
-  )
-
-  set_script(wrp_con, script = script, consume = consume, add = return)
-
-  return(wrp_con)
+  add_stack(wrp_con, "INTERPOLATE", return_object = list(gts = "gts", lgts = "lgts"))
 }

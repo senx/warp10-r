@@ -6,6 +6,9 @@
 \usage{
 wrp_sort(wrp_con)
 }
+\arguments{
+\item{wrp_con}{[wrp_connect] object.}
+}
 \description{
 Sorts a Geo Time Series™ or each GTS of a list of GTS in ascending tick order.
 }
