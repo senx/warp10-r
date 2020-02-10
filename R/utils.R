@@ -17,10 +17,6 @@ quiet <- function(x) {
   force(x)
 }
 
-format_iso8601 <- function(x) {
-  sanitize(paste0(lubridate::format_ISO8601(lubridate::as_datetime(x)), "Z"))
-}
-
 sanitize <- function(x) {
   if (is.null(x)) return(x)
   glue::glue("'{x}'")
