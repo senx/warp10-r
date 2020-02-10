@@ -220,3 +220,14 @@ test_that("dup", {
 
   expect_equal(res_dup, res)
 })
+
+test_that("remove_tick", {
+  df             <- data.frame(timestamp = as.numeric(0:2), value = 0:2)
+  res_removetick <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    wrp_new_gts() %>%
+    wrp_add_value_df(df, tick = "timestamp") %>%
+    wrp_remove_tick(1) %>%
+    wrp_exec()
+
+  expect_equal(res_removetick, df[-2, ])
+})
