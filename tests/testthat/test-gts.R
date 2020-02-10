@@ -210,3 +210,13 @@ test_that("interpolate work as expected", {
 
   expect_equal(res_interpolate, res)
 })
+
+test_that("dup", {
+  res <- list(123, 123)
+  res_dup <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    set_script(123, add = "numeric") %>%
+    wrp_dup() %>%
+    wrp_exec()
+
+  expect_equal(res_dup, res)
+})
