@@ -16,6 +16,7 @@ License: Apache License (>= 2.0)
 Depends: 
     R (>= 3.3.2)
 Imports: 
+    anytime,
     data.table,
     dplyr,
     glue,

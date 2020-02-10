@@ -27,3 +27,7 @@ sanitize <- function(x) {
 }
 
 first <- dplyr::first
+
+parse_boolean <- function(x) {
+  if (x) "true" else "false"
+}
