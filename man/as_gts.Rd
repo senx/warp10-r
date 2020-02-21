@@ -21,14 +21,14 @@ The key is the label name, the value a selector which can be an exact match or a
 \item{.funs}{A function \code{fun}, a quosure style lambda \code{~ fun(.)} or a list of either form.}
 }
 \description{
-`as_gts()` turns an existing object, such as a data frame into
-an extended tibble with class ['gts'], and attributes corresponding
+\code{as_gts()} turns an existing object, such as a data frame into
+an extended tibble with class \link{'gts'}, and attributes corresponding
 to the GTS attributes + class.
-A [`GTS`] object is basically a data frame with some information about the
+A \code{GTS} object is basically a data frame with some information about the
 timeserie.
-The resulting tibble contains at least two columns: `timestamp` and `value`.
+The resulting tibble contains at least two columns: \code{timestamp} and \code{value}.
 
-`as_gts()` is an S3 generic.
+\code{as_gts()} is an S3 generic.
 }
 \examples{
 

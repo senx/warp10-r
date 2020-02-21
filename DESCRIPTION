@@ -37,3 +37,4 @@ Suggests:
     testthat (>= 2.1.0)
 Encoding: UTF-8
 RoxygenNote: 7.0.2
+Roxygen: list(markdown = TRUE)

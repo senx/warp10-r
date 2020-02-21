@@ -7,7 +7,7 @@
 wrp_relabel(wrp_con, labels)
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 
 \item{labels}{Parameter map of label names to values.}
 }

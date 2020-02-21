@@ -7,7 +7,7 @@
 wrp_to_selector(wrp_con)
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 }
 \description{
 The TOSELECTOR function takes a Geo Time Series™ or Geo Time Series™ LIST from the top of the stack and,

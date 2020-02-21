@@ -7,7 +7,7 @@
 wrp_find(wrp_con, class = "~.*", labels = NULL)
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 
 \item{class}{Selector for the GTS classes.
 Can either be an exact match or a regular expression (the value should then start with a ~).}

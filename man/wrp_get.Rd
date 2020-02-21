@@ -7,7 +7,7 @@
 wrp_get(wrp_con, index)
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 
 \item{index}{Depending on map construction, could be a number, a string, a list, another map, a GTS, a boolean.}
 }

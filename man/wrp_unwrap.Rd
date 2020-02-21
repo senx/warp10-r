@@ -7,7 +7,7 @@
 wrp_unwrap(wrp_con)
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 }
 \description{
 Unwraps packed Geo Time Series™ instances.

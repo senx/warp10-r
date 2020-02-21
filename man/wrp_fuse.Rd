@@ -7,7 +7,7 @@
 wrp_fuse(wrp_con)
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 }
 \description{
 Fuses Geo Time Series™ chunks.
@@ -29,9 +29,8 @@ wrp_connect() \%>\%
   wrp_new_gts() \%>\%
   wrp_relabel(c("foo", "bar")) \%>\%
   wrp_add_value_df(df) \%>\%
-  wrp_chunk(100, 10, 0, 10, 'chunkid', FALSE) \%>\%
+  wrp_chunk(100, 10, 0, 10, "chunkid", FALSE) \%>\%
   wrp_dup() \%>\%
   wrp_fuse() \%>\%
   wrp_exec(combine = FALSE)
-
 }

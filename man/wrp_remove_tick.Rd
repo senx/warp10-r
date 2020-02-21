@@ -7,7 +7,7 @@
 wrp_remove_tick(wrp_con, tick = NULL)
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 
 \item{tick}{Tick (timestamp) to remove.
 If NULL, takes element on the stack.}
@@ -26,5 +26,4 @@ wrp_connect() \%>\%
   wrp_add_value(2, 2) \%>\%
   wrp_remove_tick(1) \%>\%
   wrp_exec()
-
 }

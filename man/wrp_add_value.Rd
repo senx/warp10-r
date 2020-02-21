@@ -14,7 +14,7 @@ wrp_add_value(
 )
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 
 \item{tick}{Timestamp}
 

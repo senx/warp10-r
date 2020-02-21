@@ -7,7 +7,7 @@
 wrp_hybridtest(wrp_con, period, piece, k, alpha = 0.05, ...)
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 
 \item{period}{Number of buckets that compose a period}
 

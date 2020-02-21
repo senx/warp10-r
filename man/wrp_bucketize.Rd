@@ -14,7 +14,7 @@ wrp_bucketize(
 )
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 
 \item{bucketizer}{Bucketizer function to apply}
 
@@ -42,12 +42,12 @@ it provides the tooling for putting the data of a Geo Time Series™ into regula
 }
 \details{
 A bucket is a time interval which spans a certain number of time units called the bucketspan,
- ending at a tick called the lastbucket.
+ending at a tick called the lastbucket.
 
 As an example, the bucket spanning 10 time units and ending at time units 20 will contain all measurements
- taken at the following times:
+taken at the following times:
 
- 20, 19, 18, 17, 16, 15, 14, 13, 12, 11
+20, 19, 18, 17, 16, 15, 14, 13, 12, 11
 
 the previous bucket with the same bucketspan ends at 10 and covers ticks 10 down to 1.
 The next bucket ends at 30 and covers ticks 21 to 30.

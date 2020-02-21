@@ -7,7 +7,7 @@
 wrp_chunk(wrp_con, last, width, overlap, count, label, keep_empty)
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 
 \item{last}{The end timestamp of the most recent split to consider.}
 
@@ -44,6 +44,5 @@ wrp_connect() \%>\%
     label      = ".chunkid",
     keep_empty = FALSE
   ) \%>\%
- wrp_exec()
-
+  wrp_exec()
 }

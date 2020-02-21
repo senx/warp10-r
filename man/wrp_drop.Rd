@@ -7,7 +7,7 @@
 wrp_drop(wrp_con)
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 }
 \description{
 The DROP function removes the element at the top of the stack.

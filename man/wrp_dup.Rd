@@ -7,7 +7,7 @@
 wrp_dup(wrp_con)
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 }
 \description{
 The DUP function duplicates the element on the top of the stack, it doesn’t copy the content.
@@ -23,5 +23,4 @@ wrp_connect() \%>\%
   set_script(123, add = "numeric") \%>\%
   wrp_dup() \%>\%
   wrp_exec()
-
 }

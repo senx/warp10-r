@@ -7,7 +7,7 @@
 wrp_new_gts(wrp_con)
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 }
 \description{
 The NEWGTS function pushes onto the stack an empty Geo Time Series instance.

@@ -15,7 +15,7 @@ wrp_add_value_df(
 )
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 
 \item{df}{A dataframe}
 

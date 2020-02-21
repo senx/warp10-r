@@ -7,7 +7,7 @@
 get_stack(wrp_con)
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 }
 \description{
 Returns objects of the stack.

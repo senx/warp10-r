@@ -7,7 +7,7 @@
 wrp_rename(wrp_con, name)
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 
 \item{name}{New name to give to the GTS.}
 }

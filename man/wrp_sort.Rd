@@ -7,7 +7,7 @@
 wrp_sort(wrp_con)
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 }
 \description{
 Sorts a Geo Time Series™ or each GTS of a list of GTS in ascending tick order.
@@ -21,5 +21,4 @@ wrp_connect() \%>\%
   wrp_add_value_df(df) \%>\%
   wrp_sort() \%>\%
   wrp_exec()
-
 }

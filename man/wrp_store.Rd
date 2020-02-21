@@ -7,7 +7,7 @@
 wrp_store(wrp_con, symbol)
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 
 \item{symbol}{Name of the symbol to modify.}
 }

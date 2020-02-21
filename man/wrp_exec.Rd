@@ -7,7 +7,7 @@
 wrp_exec(wrp_con, combine = TRUE, .funs = "first")
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 
 \item{combine}{If TRUE, combine multiple time series into one by grouping dates.}
 

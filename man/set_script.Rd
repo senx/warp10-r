@@ -7,7 +7,7 @@
 set_script(wrp_con, script = "", consume = list(), add = "string")
 }
 \arguments{
-\item{wrp_con}{[wrp_connect] object.}
+\item{wrp_con}{\link{wrp_connect} object.}
 
 \item{script}{A script to be set as a string.}
 
