@@ -34,7 +34,6 @@ wrp_connect() \%>\%
   wrp_dup() \%>\%
   wrp_size() \%>\%
   wrp_exec()
-
 }
 \references{
 \url{https://www.warp10.io/doc/SIZE}
