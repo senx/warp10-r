@@ -259,3 +259,23 @@ test_that("size", {
     wrp_exec()
   expect_equal(res_string, 5)
 })
+
+test_that("ticks", {
+  df  <- data.frame(tick = 1:10, value = rnorm(10))
+  res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    wrp_new_gts() %>%
+    wrp_add_value_df(df) %>%
+    wrp_ticks() %>%
+    wrp_exec()
+  expect_equal(res, unique(df[["tick"]]))
+})
+
+test_that("tick_list", {
+  df  <- data.frame(tick = 1:10, value = rnorm(10))
+  res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    wrp_new_gts() %>%
+    wrp_add_value_df(df) %>%
+    wrp_tick_list() %>%
+    wrp_exec()
+  expect_equal(res, df[["tick"]])
+})
