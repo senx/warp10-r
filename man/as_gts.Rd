@@ -22,7 +22,7 @@ The key is the label name, the value a selector which can be an exact match or a
 }
 \description{
 \code{as_gts()} turns an existing object, such as a data frame into
-an extended tibble with class \link{'gts'}, and attributes corresponding
+an extended tibble with class \code{gts}, and attributes corresponding
 to the GTS attributes + class.
 A \code{GTS} object is basically a data frame with some information about the
 timeserie.
