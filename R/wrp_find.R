@@ -18,11 +18,6 @@
 #'
 wrp_find <- function(wrp_con, class = "~.*", labels = NULL) {
   assert_token(wrp_con$get_token())
-  labels <- labels_to_string(labels)
-  script <- glue::glue(
-    "[ $token '{class}' {{ {labels} }} ] FIND"
-  )
-  wrp_con$set_script(script)
-  wrp_con$add_stack("lgts")
-  return(wrp_con)
+  params <- sanitize(list("ws:$token", class, labels %||% "ws:{}"))
+  add_stack(wrp_con, paste(params, "FIND"), "lgts")
 }

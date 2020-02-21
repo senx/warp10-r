@@ -8,9 +8,11 @@ wrp_fetch(
   wrp_con,
   class = "~.*",
   labels = NULL,
-  end = "NOW",
+  end = "ws:NOW",
   count = 1,
-  timespan = NULL
+  timespan = NULL,
+  selector = NULL,
+  selectors = NULL
 )
 }
 \arguments{
@@ -31,10 +33,44 @@ The key is the label name, the value a selector which can be an exact match or a
 If the value is positive then it is interpreted as a duration in time units,
 if it is negative then as the maximum number of datapoints to fetch.
 If negative, incompatible with \code{count}.}
+
+\item{selector}{A Geo Time Series™ selector with the syntax class{labels} where class is an exact match
+or a regular expression starting with ~ and labels a comma separated list of labels selector
+of the form name=exact or name~regexp.
+Names and values must be percent URL encoded if needed.}
+
+\item{selectors}{A list of GTS selectors, each with a syntax identical to that of 'selector'.}
 }
 \description{
 The FETCH function interacts with the Warp 10 Storage Engine to retrieve data according to given criteria.
 }
+\section{Concerned Geo Time Series}{
+
+
+FETCH selects Geo Time Series according to:
+\itemize{
+\item The selectors parameter, which is a list of selector.
+\item If selectors is not found, FETCH uses the selector parameter which is a single selector.
+\item If selector is not found, FETCH uses both class and labels parameters.
+}
+}
+
+\section{Time window}{
+
+
+FETCH begins from the newest value and stop when the oldest value is collected.
+Thus, end must be defined in your request and defines the newest included value in your time window.
+If end is anterior to your oldest value, the result will be empty (no Geo Time Series).
+The span of the time window ending at end is then defined according to:
+\itemize{
+\item The timespan parameter.
+\item If timespan is not defined, FETCH collects a maximum of count point.
+\item If count is not defined, FETCH determines timespan with start.
+If start is more recent than end, end and start are permuted internally.
+Be careful, this means end is included but start is excluded from the time window.
+}
+}
+
 \references{
 \url{https://www.warp10.io/doc/FETCH}
 }

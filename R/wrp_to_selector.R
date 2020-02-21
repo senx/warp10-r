@@ -27,18 +27,12 @@
 #' @export
 #'
 wrp_to_selector <- function(wrp_con) {
-  script  <- glue::glue("TOSELECTOR")
-  stack   <- get_stack(wrp_con)
-  consume <- stack[[length(stack)]]
-  return  <- switch(
-    consume,
+  return_object  <- list(
     gts         = "selector",
-    gtslist     = "selectorlist",
+    lgts        = "list",
     encoder     = "selector",
-    encoderlist = "selectorlist"
+    lencoder    = "list"
   )
 
-  set_script(wrp_con, script = script, consume = consume, add = return)
-
-  return(wrp_con)
+  add_stack(wrp_con, script = "TOSELECTOR", return_object = return_object)
 }

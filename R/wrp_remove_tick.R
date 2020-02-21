@@ -20,11 +20,5 @@
 #' @export
 #'
 wrp_remove_tick <- function(wrp_con, tick = NULL) {
-  if (!is.null(tick)) {
-    tick <- parse_timestamp(tick)
-  } else {
-    add_stack(wrp_con, script = NULL, list("list" = NULL, "numeric" = NULL, map = NULL))
-  }
-
-  add_stack(wrp_con, script = paste(tick, "REMOVETICK"), return_object = list(gts = "gts"))
+  add_stack(wrp_con, script = paste(sanitize(tick), "REMOVETICK"), return_object = list(gts = "gts"))
 }

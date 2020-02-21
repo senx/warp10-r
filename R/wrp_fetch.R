@@ -9,6 +9,32 @@
 #' if it is negative then as the maximum number of datapoints to fetch.
 #' If negative, incompatible with `count`.
 #' @param count Maximum number of datapoints to fetch for each GTS. Incompatible with negative 'timespan'.
+#' @param selector A Geo Time Series™ selector with the syntax class{labels} where class is an exact match
+#' or a regular expression starting with ~ and labels a comma separated list of labels selector
+#' of the form name=exact or name~regexp.
+#' Names and values must be percent URL encoded if needed.
+#' @param selectors A list of GTS selectors, each with a syntax identical to that of 'selector'.
+#'
+#' @section Concerned Geo Time Series:
+#'
+#' FETCH selects Geo Time Series according to:
+#'
+#' + The selectors parameter, which is a list of selector.
+#' + If selectors is not found, FETCH uses the selector parameter which is a single selector.
+#' + If selector is not found, FETCH uses both class and labels parameters.
+#'
+#' @section Time window:
+#'
+#' FETCH begins from the newest value and stop when the oldest value is collected.
+#' Thus, end must be defined in your request and defines the newest included value in your time window.
+#' If end is anterior to your oldest value, the result will be empty (no Geo Time Series).
+#' The span of the time window ending at end is then defined according to:
+#'
+#' + The timespan parameter.
+#' + If timespan is not defined, FETCH collects a maximum of count point.
+#' + If count is not defined, FETCH determines timespan with start.
+#' If start is more recent than end, end and start are permuted internally.
+#' Be careful, this means end is included but start is excluded from the time window.
 #'
 #' @seealso [wrp_find()]
 #'
@@ -18,13 +44,20 @@
 #'
 #' @export
 #'
-wrp_fetch <- function(wrp_con, class = "~.*", labels = NULL, end = "NOW", count = 1, timespan = NULL) {
+wrp_fetch <- function(wrp_con, class = "~.*", labels = NULL, end = "ws:NOW", count = 1, timespan = NULL,
+                      selector = NULL, selectors = NULL) {
   assert_token(wrp_con$get_token())
-  labels   <- labels_to_string(labels)
-  end      <- parse_timestamp(end)
-  timespan <- if (!is.null(timespan)) paste("'timespan'", parse_time_unit(timespan)) else ""
-  count    <- if (!is.null(count)) paste("'count'", count) else ""
-  script   <- glue::glue("{{ 'token' $token 'class' '{class}' 'labels' {{ {labels} }} 'end' {end} {timespan} {count} }} FETCH") # nolint
+  params <- list(
+    token     = "ws:$token",
+    class     = class,
+    labels    = labels %||% "ws:{}",
+    end       = end,
+    count     = count,
+    timespan  = timespan,
+    selector  = selector,
+    selectors = selectors
+  )
+  script <- paste(sanitize(params), "FETCH")
   add_stack(wrp_con, script, "lgts")
   return(wrp_con)
 }
