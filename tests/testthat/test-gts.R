@@ -231,3 +231,31 @@ test_that("remove_tick", {
 
   expect_equal(res_removetick, df[-2, ])
 })
+
+test_that("size", {
+  df     <- data.frame(tick = seq(100, 1000, by = 100), value = 10:1)
+  res_df <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    wrp_new_gts() %>%
+    wrp_add_value_df(df) %>%
+    wrp_size() %>%
+    wrp_exec()
+  expect_equal(res_df, 10)
+
+  res_map <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    set_script("{ 'label0' '42' 'label1' 'foo' }", add = "map") %>%
+    wrp_size() %>%
+    wrp_exec()
+  expect_equal(res_map, 2)
+
+  res_list <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    set_script("[ 'label0' '42' 'label1' 'foo' ]", add = "list") %>%
+    wrp_size() %>%
+    wrp_exec()
+  expect_equal(res_list, 4)
+
+  res_string <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    set_script("one %25", add = "string") %>%
+    wrp_size() %>%
+    wrp_exec()
+  expect_equal(res_string, 5)
+})
