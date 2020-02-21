@@ -279,3 +279,14 @@ test_that("tick_list", {
     wrp_exec()
   expect_equal(res, df[["tick"]])
 })
+
+test_that("flatten", {
+  x   <- c("a", "b", "c", "d", "e", "f", "g")
+  res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    set_script("[ 'a' 'b' 'c' ]", add = "list") %>%
+    set_script("[ 'd' 'e' [ 'f' 'g' ] ]", add = "list") %>%
+    set_script("2 ->LIST", consume = c("list", "list"), add = "list") %>%
+    wrp_flatten() %>%
+    wrp_exec()
+  expect_equal(res, x)
+})
