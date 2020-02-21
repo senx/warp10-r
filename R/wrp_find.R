@@ -8,6 +8,12 @@
 #'
 #' @return A data.frame if the request is exectued, a character string containing the Warpscript otherwise.
 #'
+#' @keywords gts
+#'
+#' @references <https://www.warp10.io/doc/FIND>
+#'
+#' @seealso [wrp_find_stats()], [wrp_find_sets()]
+#'
 #' @export
 #'
 wrp_find <- function(wrp_con, class = "~.*", labels = NULL) {

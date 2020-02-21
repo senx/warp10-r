@@ -24,3 +24,10 @@ The FIND function finds Geo Time Series™ labels and attributes of GTS, not the
 It is the fastest way to read attributes of GTS.
 FIND ask only directory component of Warp 10, while FETCH first ask directory, then ask store to read GTS values.
 }
+\references{
+\url{https://www.warp10.io/doc/FIND}
+}
+\seealso{
+\code{\link[=wrp_find_stats]{wrp_find_stats()}}, \code{\link[=wrp_find_sets]{wrp_find_sets()}}
+}
+\keyword{gts}

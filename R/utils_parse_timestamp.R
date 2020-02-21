@@ -27,3 +27,7 @@ parse_timestamp.character <- function(x) {
 parse_timestamp.numeric <- function(x) {
   return(x)
 }
+
+parse_timestamp.Duration <- function(x) {
+  paste(as.numeric(x), "s")
+}
