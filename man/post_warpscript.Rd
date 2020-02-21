@@ -4,27 +4,15 @@
 \alias{post_warpscript}
 \title{Post Warpscript Code}
 \usage{
-post_warpscript(
-  warpscript,
-  output_type = "json",
-  endpoint = "http://localhost:8080/api/v0/exec",
-  with_labels = FALSE
-)
+post_warpscript(warpscript, endpoint = get_endpoint())
 }
 \arguments{
 \item{warpscript}{code or file name ending with .mc2}
 
-\item{output_type}{the type of the returned value.
-The supported types are "raw", "json", "pretty", "list" and "data.table".
-Default to "json". Output type "dataFrame" is deprecated in favor of "data.table".}
-
-\item{endpoint}{egress endpoint. Default to "http://localhost:8080/api/v0/exec"}
-
-\item{with_labels}{if TRUE and if outputType is "data.table", column names also include Labels.
-Default to FALSE}
+\item{endpoint}{egress endpoint.}
 }
 \value{
-character vector or json or named list or data.table
+json
 }
 \description{
 Post warpscript code to a Warp 10 instance and retrieve response as character vector, json,

@@ -17,7 +17,6 @@ Depends:
     R (>= 3.3.2)
 Imports: 
     anytime,
-    data.table,
     dplyr,
     glue,
     httr,
@@ -26,15 +25,13 @@ Imports:
     magrittr,
     purrr,
     R6,
-    RCurl,
     rlang,
     stats,
-    stringr,
     tibble,
     tidyr,
     tidyselect
 Suggests: 
     testthat (>= 2.1.0)
 Encoding: UTF-8
-RoxygenNote: 7.0.2
 Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.0.2
