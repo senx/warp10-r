@@ -25,7 +25,7 @@ get_token <- function() {
 #' @export
 #'
 get_script <- function(wrp_con) {
-  wrp_con$get_script()
+  cat(wrp_con$get_script())
 }
 
 #' Get stack
