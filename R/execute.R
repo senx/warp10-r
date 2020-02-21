@@ -58,8 +58,22 @@ build_res.default <- function(object, data, ...) {
 
 #' @export
 #' @rdname build_res
+build_res.map <- function(object, data, ...) {
+  if (all(sapply(data, length) == 1)) {
+    unlist(data)
+  } else {
+    data
+  }
+}
+
+#' @export
+#' @rdname build_res
 build_res.list <- function(object, data, ...) {
-  unlist(data)
+  if (all(sapply(data, length) == 1)) {
+    unlist(data)
+  } else {
+    data
+  }
 }
 
 #' @export

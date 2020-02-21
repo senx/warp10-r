@@ -3,6 +3,7 @@
 \name{build_res}
 \alias{build_res}
 \alias{build_res.default}
+\alias{build_res.map}
 \alias{build_res.list}
 \alias{build_res.gts}
 \title{Build results}
@@ -10,6 +11,8 @@
 build_res(object, data, combine, .funs)
 
 \method{build_res}{default}(object, data, ...)
+
+\method{build_res}{map}(object, data, ...)
 
 \method{build_res}{list}(object, data, ...)
 
