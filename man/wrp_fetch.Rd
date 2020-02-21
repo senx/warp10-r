@@ -4,7 +4,14 @@
 \alias{wrp_fetch}
 \title{Fetch}
 \usage{
-wrp_fetch(wrp_con, class = "~.*", labels = NULL, end = "NOW", stop = -1)
+wrp_fetch(
+  wrp_con,
+  class = "~.*",
+  labels = NULL,
+  end = "NOW",
+  count = 1,
+  timespan = NULL
+)
 }
 \arguments{
 \item{wrp_con}{\link{wrp_connect} object.}
@@ -16,18 +23,22 @@ Can either be an exact match or a regular expression (the value should then star
 The key is the label name, the value a selector which can be an exact match or a regular expression
 (the value should then start with a ~).}
 
-\item{end}{Most recent timestamp to consider when fetching datapoints. Could be a Posixct Date.}
+\item{end}{Newest timestamp to consider when fetching datapoints.}
 
-\item{stop}{Either a number, a date or a duration, see details.}
+\item{count}{Maximum number of datapoints to fetch for each GTS. Incompatible with negative 'timespan'.}
+
+\item{timespan}{Depth to consider when fetching the datapoints.
+If the value is positive then it is interpreted as a duration in time units,
+if it is negative then as the maximum number of datapoints to fetch.
+If negative, incompatible with \code{count}.}
 }
 \description{
 The FETCH function interacts with the Warp 10 Storage Engine to retrieve data according to given criteria.
 }
-\details{
-The stop parameter can either be a number or a date.
-If a number, the depth to consider when fetching datapoints,
-if the value is positive then it is interpreted as a duration,
-if it is negative then as the maximum number of datapoints to fetch.
-If a date, the stop timestamp to consider when fetching data, in ISO-8601 format.
-If a duration, the stop timestamp will be computed first before the request is adressed to Warp 10.
+\references{
+\url{https://www.warp10.io/doc/FETCH}
 }
+\seealso{
+\code{\link[=wrp_find]{wrp_find()}}
+}
+\keyword{gts}

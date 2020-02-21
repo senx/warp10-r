@@ -15,11 +15,9 @@ parse_timestamp.POSIXct <- function(x) {
 }
 
 parse_timestamp.character <- function(x) {
-  if (x == "NOW") return(x)
-  timestamp <- anytime::anytime(x)
-  if (is.na(timestamp)) {
-    msg <- glue::glue("Could not parse '{x}' to a proper timestamp.")
-    stop(msg, call. = FALSE)
+  timestamp_chr <- anytime::anytime(x)
+  if (is.na(timestamp_chr)) {
+    return(x)
   }
   format_iso8601(x)
 }
