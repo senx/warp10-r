@@ -3,7 +3,7 @@
 #' @description
 #'
 #' `as_gts()` turns an existing object, such as a data frame into
-#' an extended tibble with class ['gts'], and attributes corresponding
+#' an extended tibble with class `gts`, and attributes corresponding
 #' to the GTS attributes + class.
 #' A `GTS` object is basically a data frame with some information about the
 #' timeserie.
