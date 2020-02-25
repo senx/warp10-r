@@ -19,6 +19,6 @@
 #'   wrp_exec()
 #' @export
 #'
-wrp_remove_tick <- function(wrp_con, tick = NULL) {
+wrp_remove_tick <- function(wrp_con, tick) {
   add_stack(wrp_con, script = paste(sanitize(tick), "REMOVETICK"), return_object = list(gts = "gts"))
 }

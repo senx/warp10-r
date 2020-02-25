@@ -4,7 +4,7 @@
 \alias{wrp_remove_tick}
 \title{Remove tick}
 \usage{
-wrp_remove_tick(wrp_con, tick = NULL)
+wrp_remove_tick(wrp_con, tick)
 }
 \arguments{
 \item{wrp_con}{\link{wrp_connect} object.}
