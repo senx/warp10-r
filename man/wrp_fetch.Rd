@@ -9,7 +9,8 @@ wrp_fetch(
   class = "~.*",
   labels = NULL,
   end = "ws:NOW",
-  count = 1,
+  start = NULL,
+  count = NULL,
   timespan = NULL,
   selector = NULL,
   selectors = NULL
@@ -26,6 +27,8 @@ The key is the label name, the value a selector which can be an exact match or a
 (the value should then start with a ~).}
 
 \item{end}{Newest timestamp to consider when fetching datapoints.}
+
+\item{start}{Oldest timestamp to consider when fetching datapoints.}
 
 \item{count}{Maximum number of datapoints to fetch for each GTS. Incompatible with negative 'timespan'.}
 

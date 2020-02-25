@@ -4,6 +4,7 @@
 #'
 #' @inheritParams documentation
 #' @param end Newest timestamp to consider when fetching datapoints.
+#' @param start Oldest timestamp to consider when fetching datapoints.
 #' @param timespan Depth to consider when fetching the datapoints.
 #' If the value is positive then it is interpreted as a duration in time units,
 #' if it is negative then as the maximum number of datapoints to fetch.
@@ -44,13 +45,14 @@
 #'
 #' @export
 #'
-wrp_fetch <- function(wrp_con, class = "~.*", labels = NULL, end = "ws:NOW", count = 1, timespan = NULL,
-                      selector = NULL, selectors = NULL) {
+wrp_fetch <- function(wrp_con, class = "~.*", labels = NULL, end = "ws:NOW", start = NULL, count = NULL,
+                      timespan = NULL, selector = NULL, selectors = NULL) {
   assert_token(wrp_con$get_token())
   params <- list(
     token     = "ws:$token",
     class     = class,
     labels    = labels %||% "ws:{}",
+    start     = start,
     end       = end,
     count     = count,
     timespan  = timespan,
