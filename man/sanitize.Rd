@@ -45,5 +45,4 @@ sanitize(
     warpscript = "ws:NOW"
   )
 )
-
 }
