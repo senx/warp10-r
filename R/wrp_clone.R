@@ -37,19 +37,13 @@
 #' @export
 #'
 wrp_clone <- function(wrp_con) {
-  script  <- glue::glue("CLONE")
-  stack   <- get_stack(wrp_con)
-  consume <- stack[[length(stack)]]
-  return  <- switch(
-    consume,
+  return_object <- list(
     gts     = list("gts", "gts"),
     list    = list("list", "list"),
     map     = list("map", "map"),
     vector  = list("vector", "vector"),
-    encoder = list("encoder", "encoder")
+    encoder = list("encoder", "encoder"),
+    lgts    = list("lgts", "lgts")
   )
-
-  set_script(wrp_con, script = script, consume = consume, add = return)
-
-  return(wrp_con)
+  add_stack(wrp_con, "CLONE", return_object)
 }
