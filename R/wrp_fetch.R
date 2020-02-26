@@ -48,6 +48,7 @@
 wrp_fetch <- function(wrp_con, class = "~.*", labels = NULL, end = "ws:NOW", start = NULL, count = NULL,
                       timespan = NULL, selector = NULL, selectors = NULL) {
   assert_token(wrp_con$get_token())
+  if (is.null(start) && is.null(timespan) && is.null(count)) count <- 1
   params <- list(
     token     = "ws:$token",
     class     = class,
