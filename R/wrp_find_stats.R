@@ -41,9 +41,6 @@
 #'
 wrp_find_stats <- function(wrp_con, class = "~.*", labels = NULL) {
   assert_token(wrp_con$get_token())
-  labels <- labels_to_string(labels)
-  script <- glue::glue(
-    "[ $token '{class}' {{ {labels} }} ] FINDSTATS"
-  )
-  add_stack(wrp_con, script, "map")
+  params <- sanitize(list("ws:$token", class, labels %||% "ws:{}"))
+  add_stack(wrp_con, paste(params, "FINDSTATS"), "map")
 }
