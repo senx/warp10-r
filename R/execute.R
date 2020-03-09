@@ -68,6 +68,12 @@ build_res.map <- function(object, data, ...) {
 
 #' @export
 #' @rdname build_res
+build_res.lastactivity <- function(object, data, ...) {
+  lubridate::as_datetime(data / 1e6)
+}
+
+#' @export
+#' @rdname build_res
 build_res.list <- function(object, data, ...) {
   if (all(sapply(data, length) == 1)) {
     unlist(data)
