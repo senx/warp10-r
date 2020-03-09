@@ -125,18 +125,23 @@ drop_na_col <- function(df) {
 
 build_gts_value <- function(data) {
   l        <- data[["v"]]
-  if (!is.null(names(l))) return(tibble::as_tibble(l))
-  res <- as.data.frame(do.call(rbind, lapply(l, unlist)))
-  if (ncol(res) == 2) {
-    names(res) <- c("timestamp", "value")
-  } else if (ncol(res) == 3) {
-    names(res) <- c("timestamp", "elevation", "value")
-  } else if (ncol(res) == 5) {
-    names(res) <- c("timestamp", "latitude", "longitude", "elevation", "value")
+  if (!is.null(names(l)) || length(l) == 0) return(tibble::as_tibble(l))
+  n <- length(l[[1]])
+  if (n == 2) {
+    colnames <- c("timestamp", "value")
+  } else if (n == 3) {
+    colnames <- c("timestamp", "elevation", "value")
+  } else if (n == 5) {
+    colnames <- c("timestamp", "latitude", "longitude", "elevation", "value")
   } else {
     stop("Something went wrong when building the GTS.")
   }
-  return(tibble::as_tibble(res))
+  tibble::as_tibble(
+    setNames(
+      object = lapply(seq_len(n), function(i) sapply(l, `[[`, i)),
+      nm = colnames
+    )
+  )
 }
 
 build_gts_class <- function(data) {

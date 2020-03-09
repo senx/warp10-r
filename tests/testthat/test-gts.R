@@ -68,7 +68,7 @@ test_that("find and fetch work as expected", {
 })
 
 test_that("unwrap work as expected", {
-  df         <- data.frame(timestamp = as.numeric(1:100), value = TRUE)
+  df         <- data.frame(timestamp = 1:100, value = TRUE)
   gts        <- as_gts(df)
   gts_unwrap <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
     set_script("60V.5k.L.0N.5k..KV.N5GyA1.........0nNL7O4W..rXE6gwV....Lm.3G..") %>%
@@ -184,7 +184,7 @@ test_that("to selector work as expected", {
 
 
 test_that("sort work as expected", {
-  df  <- data.frame(timestamp = as.numeric(10:1), value = as.integer(runif(10) * 10))
+  df  <- data.frame(timestamp = 10:1, value = as.integer(runif(10) * 10))
   res <- df[order(df[["timestamp"]]), ]
 
   res_sort <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
@@ -197,7 +197,7 @@ test_that("sort work as expected", {
 })
 
 test_that("interpolate work as expected", {
-  res <- data.frame(timestamp = seq(100, 500, by = 50), value = seq(10, 6, by = -0.5))
+  res <- data.frame(timestamp = as.integer(seq(100, 500, by = 50)), value = seq(10, 6, by = -0.5))
   df  <- res[res[["timestamp"]] %% 100 == 0, ]
 
   res_interpolate <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
@@ -222,7 +222,7 @@ test_that("dup", {
 })
 
 test_that("remove_tick", {
-  df             <- data.frame(timestamp = as.numeric(0:2), value = 0:2)
+  df             <- data.frame(timestamp = 0:2, value = 0:2)
   res_removetick <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
     wrp_new_gts() %>%
     wrp_add_value_df(df, tick = "timestamp") %>%
