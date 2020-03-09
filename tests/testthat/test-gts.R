@@ -290,3 +290,14 @@ test_that("flatten", {
     wrp_exec()
   expect_equal(res, x)
 })
+
+test_that("time_shift", {
+  df     <- data.frame(timestamp = 1:100, value = 1:100)
+  df_res <- as_gts(transform(df, timestamp = as.integer(timestamp + 10)))
+  res    <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    wrp_new_gts() %>%
+    wrp_add_value_df(df, tick = "timestamp") %>%
+    wrp_time_shift(10) %>%
+    wrp_exec()
+  expect_equal(df_res, res)
+})
