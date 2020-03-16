@@ -137,7 +137,7 @@ build_gts_value <- function(data) {
     stop("Something went wrong when building the GTS.")
   }
   tibble::as_tibble(
-    setNames(
+    stats::setNames(
       object = lapply(seq_len(n), function(i) sapply(l, `[[`, i)),
       nm = colnames
     )
