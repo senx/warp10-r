@@ -34,11 +34,11 @@
 #' @export
 #'
 wrp_chunk <- function(wrp_con, last, width, overlap, count, label, keep_empty) {
-  last       <- parse_timestamp(last)
-  width      <- parse_time_unit(width)
-  overlap    <- parse_time_unit(overlap)
+  last       <- sanitize(last)
+  width      <- sanitize(width)
+  overlap    <- sanitize(overlap)
   label      <- sanitize(label)
-  keep_empty <- parse_boolean(keep_empty)
+  keep_empty <- sanitize(keep_empty)
 
   script         <- paste(last, width, overlap, count, label, keep_empty, "CHUNK")
   return_object  <- list("gts" = "lgts", "lgts" = "lgts", encoder = "lenconder", lenconder = "lencoder")

@@ -87,6 +87,12 @@ sanitize.NULL <- function(x) {
   return(x)
 }
 
+#' @rdname sanitize
+#' @export
+sanitize.logical <- function(x) {
+  tolower(as.character(x))
+}
+
 format_iso8601 <- function(x) {
   as.character(glue::glue("'{paste0(anytime::iso8601(lubridate::as_datetime(x)), 'Z')}'"))
 }

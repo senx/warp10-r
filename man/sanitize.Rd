@@ -9,6 +9,7 @@
 \alias{sanitize.Date}
 \alias{sanitize.character}
 \alias{sanitize.NULL}
+\alias{sanitize.logical}
 \title{Sanitize}
 \usage{
 sanitize(x)
@@ -26,6 +27,8 @@ sanitize(x)
 \method{sanitize}{character}(x)
 
 \method{sanitize}{`NULL`}(x)
+
+\method{sanitize}{logical}(x)
 }
 \arguments{
 \item{x}{An object to be sanitized.
