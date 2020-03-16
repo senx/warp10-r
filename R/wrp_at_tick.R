@@ -25,5 +25,17 @@
 #'   wrp_at_tick(400) %>%
 #'   wrp_exec()
 wrp_at_tick <- function(wrp_con, timestamp) {
-  add_stack(wrp_con, paste(sanitize(timestamp), "ATTICK"), list(gts = "data", lgts = "ldata"))
+  if (is.null(timestamp)) {
+    stack <- get_stack(wrp_con)
+    if (stack[[length(stack) - 1]] == "gts") {
+      consume <- "gts"
+      add <- "data"
+    } else if (stack[[length(stack) - 1]] == "lgts") {
+      consume <- "lgts"
+      add <- "ldata"
+    }
+    set_script(wrp_con, "ATTICK", consume = list("long", consume), add = add)
+  } else {
+    add_stack(wrp_con, paste(sanitize(timestamp), "ATTICK"), list(gts = "data", lgts = "ldata"))
+  }
 }
