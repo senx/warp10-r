@@ -36,7 +36,7 @@ post_warpscript <- function(warpscript, endpoint = get_endpoint()) {
     stop(msg, call. = FALSE)
   } else {
 
-    body <- gsub("(\\W)NaN(\\W)", "\\1null\\2", body)
+    body <- gsub("(,*)NaN(,*)", "\\1null\\2", body)
 
     return(minify(body))
   }

@@ -2,6 +2,8 @@
 % Please edit documentation in R/execute.R
 \name{build_res}
 \alias{build_res}
+\alias{build_res.data}
+\alias{build_res.ldata}
 \alias{build_res.default}
 \alias{build_res.map}
 \alias{build_res.lastactivity}
@@ -10,6 +12,10 @@
 \title{Build results}
 \usage{
 build_res(object, data, combine, .funs)
+
+\method{build_res}{data}(object, data, ...)
+
+\method{build_res}{ldata}(object, data, ...)
 
 \method{build_res}{default}(object, data, ...)
 

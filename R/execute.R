@@ -52,6 +52,21 @@ build_res <- function(object, data, combine, .funs) {
 #' @export
 #' @rdname build_res
 #'
+build_res.data <- function(object, data, ...) {
+  purrr::compact(purrr::set_names(data, c("timestamp", "latitude", "longitude", "elevation", "value")))
+}
+
+#' @export
+#' @rdname build_res
+#'
+build_res.ldata <- function(object, data, ...) {
+  new_data <- purrr::compact(purrr::set_names(data, c("timestamp", "latitude", "longitude", "elevation", "value")))
+  do.call(cbind, new_data)
+}
+
+#' @export
+#' @rdname build_res
+#'
 build_res.default <- function(object, data, ...) {
   return(data)
 }

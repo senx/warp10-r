@@ -301,3 +301,45 @@ test_that("time_shift", {
     wrp_exec()
   expect_equal(df_res, res)
 })
+
+test_that("first tick", {
+  df  <- data.frame(tick = c(seq(100, 500, by = 100), 100, 200), value = c(10:6, 10, 9))
+  res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    wrp_new_gts() %>%
+    wrp_add_value_df(df) %>%
+    wrp_first_tick() %>%
+    wrp_exec()
+  expect_equal(res, min(df[["tick"]]))
+})
+
+test_that("last tick", {
+  df  <- data.frame(tick = c(seq(100, 500, by = 100), 100, 200), value = c(10:6, 10, 9))
+  res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    wrp_new_gts() %>%
+    wrp_add_value_df(df) %>%
+    wrp_last_tick() %>%
+    wrp_exec()
+  expect_equal(res, max(df[["tick"]]))
+})
+
+test_that("at tick", {
+  df <- data.frame(tick = seq(100, 1000, by = 100), value = 10:1)
+  df_res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    wrp_new_gts() %>%
+    wrp_add_value_df(df) %>%
+    wrp_at_tick(400) %>%
+    wrp_exec()
+  expect_equal(df_res, list(timestamp = 400, value = 7))
+})
+
+test_that("at index", {
+  df <- data.frame(tick = seq(100, 1000, by = 100), value = 10:1)
+  df_res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    wrp_new_gts() %>%
+    wrp_rename("test") %>%
+    wrp_relabel(list("label0", "42", "label1", "foo")) %>%
+    wrp_add_value_df(df) %>%
+    wrp_at_index(4) %>%
+    wrp_exec()
+  expect_equal(df_res, list(timestamp = 500, value = 6))
+})
