@@ -60,8 +60,13 @@ build_res.data <- function(object, data, ...) {
 #' @rdname build_res
 #'
 build_res.ldata <- function(object, data, ...) {
-  new_data <- purrr::compact(purrr::set_names(data, c("timestamp", "latitude", "longitude", "elevation", "value")))
-  do.call(cbind, new_data)
+  as_gts(purrr::map_dfr(data, function(l) {
+    as.data.frame(
+      purrr::compact(
+        purrr::set_names(l, nm = c("timestamp", "latitude", "longitude", "elevation", "value"))
+      )
+    )
+  }))
 }
 
 #' @export
