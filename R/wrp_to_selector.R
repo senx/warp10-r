@@ -22,7 +22,7 @@
 #'   wrp_relabel(c("label0", "33")) %>%
 #'   wrp_store("gts2") %>%
 #'   wrp_drop() %>%
-#'   set_script("[ $gts1 $gts2 ]", add = "gtslist") %>%
+#'   set_script("[ $gts1 $gts2 ]", add = "lgts") %>%
 #'   wrp_to_selector()
 #' @export
 #'
