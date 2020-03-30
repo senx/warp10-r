@@ -77,7 +77,7 @@ sanitize.character <- function(x, return = "iso8601") {
   }
   only_num <- grep("^[0-9]+$", x)
   if (length(only_num) == length(x)) {
-    return(x)
+    return(glue::glue("'{x}'"))
   }
   timestamp <- anytime::anytime(x)
   if (!any(is.na(timestamp))) {
