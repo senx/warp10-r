@@ -35,11 +35,9 @@ sanitize.numeric <- function(x, ...) {
 sanitize.list <- function(x, ...) {
   x <- x[!sapply(x, is.null)]
   if (!is.null(names(x))) {
-    map <- paste(sapply(names(x), sanitize), sapply(x, sanitize), collapse = " ") # nolint
-    as.character(glue::glue("{{ {map} }}"))
+    as.character(glue::glue("{{ {paste(sapply(names(x), sanitize), sapply(x, sanitize), collapse = \" \")} }}"))
   } else {
-    list <- paste(sapply(x, sanitize), collapse = " ") # nolint
-    as.character(glue::glue("[ {list} ]"))
+    as.character(glue::glue("[ {paste(sapply(x, sanitize), collapse = \" \")} ]"))
   }
 }
 
