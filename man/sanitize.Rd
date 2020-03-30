@@ -10,6 +10,7 @@
 \alias{sanitize.character}
 \alias{sanitize.NULL}
 \alias{sanitize.logical}
+\alias{sanitize.data.frame}
 \title{Sanitize}
 \usage{
 sanitize(x, ...)
@@ -29,6 +30,8 @@ sanitize(x, ...)
 \method{sanitize}{`NULL`}(x, ...)
 
 \method{sanitize}{logical}(x, ...)
+
+\method{sanitize}{data.frame}(x, ...)
 }
 \arguments{
 \item{x}{An object to be sanitized.}

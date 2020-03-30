@@ -20,3 +20,9 @@ test_that("sanitize to microseconds", {
   expect_equal(lubridate::as_datetime(as.numeric(sanitize(time, return = "microsecond")) / 1e6, tz = "UTC"), time)
   expect_equal(lubridate::as_date(as.numeric(sanitize(date, return = "microsecond")) / 8.64e10), date)
 })
+
+test_that("sanitize data.frame", {
+  expect <- list(x = 1:10)
+  res <- sanitize(data.frame(x = 1:10))
+  expect_identical(res, expect)
+})

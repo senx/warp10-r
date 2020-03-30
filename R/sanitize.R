@@ -74,19 +74,19 @@ sanitize.Date <- function(x, return = "iso8601") {
 #' @export
 sanitize.character <- function(x, return = "iso8601") {
   is_warpscript <- startsWith(x, "ws:")
-  if (is_warpscript) {
+  if (all(is_warpscript)) {
     return(as.character(gsub("^ws:", "", x)))
   }
   timestamp <- anytime::anytime(x)
-  if (!is.na(timestamp)) {
-    return(sanitize(timestamp))
+  if (!any(is.na(timestamp))) {
+    return(sanitize(timestamp, return = return))
   }
   duration <- lubridate::as.duration(x)
-  if (!is.na(duration)) {
+  if (!any(is.na(duration))) {
     return(sanitize(duration))
   }
   boolean <- as.logical(x)
-  if (!is.na(boolean)) {
+  if (!any(is.na(boolean))) {
     return(as.character(glue::glue("'{boolean}'")))
   }
   return(as.character(glue::glue("'{x}'")))
@@ -102,6 +102,12 @@ sanitize.NULL <- function(x, ...) {
 #' @export
 sanitize.logical <- function(x, ...) {
   tolower(as.character(x))
+}
+
+#' @rdname sanitize
+#' @export
+sanitize.data.frame <- function(x, ...) {
+  lapply(x, sanitize, ...)
 }
 
 format_iso8601 <- function(x) {
