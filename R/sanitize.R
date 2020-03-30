@@ -3,6 +3,8 @@
 #' Sanitize values to be compatible with warpscript.
 #'
 #' @param x An object to be sanitized.
+#' @param return Type of object return, one of `iso8601` or `microsecond`.
+#' @param ... Other parameters passed to method
 #' All character strings starting with `ws:` will be considered as valid warpscript.
 #'
 #' @export
@@ -18,19 +20,19 @@
 #'     warpscript = "ws:NOW"
 #'   )
 #' )
-sanitize <- function(x) {
+sanitize <- function(x, ...) {
   UseMethod("sanitize", x)
 }
 
 #' @rdname sanitize
 #' @export
-sanitize.numeric <- function(x) {
+sanitize.numeric <- function(x, ...) {
   return(x)
 }
 
 #' @rdname sanitize
 #' @export
-sanitize.list <- function(x) {
+sanitize.list <- function(x, ...) {
   x <- x[!sapply(x, is.null)]
   if (!is.null(names(x))) {
     map <- paste(sapply(names(x), sanitize), sapply(x, sanitize), collapse = " ") # nolint
@@ -43,25 +45,34 @@ sanitize.list <- function(x) {
 
 #' @rdname sanitize
 #' @export
-sanitize.Duration <- function(x) {
+sanitize.Duration <- function(x, ...) {
   paste(as.numeric(x), "s")
 }
 
 #' @rdname sanitize
 #' @export
-sanitize.POSIXct <- function(x) {
-  format_iso8601(x)
+sanitize.POSIXct <- function(x, return = "iso8601") {
+  if (return == "iso8601") {
+    format_iso8601(x)
+  } else if (return == "microsecond") {
+    as.numeric(x) * 1e6
+  }
 }
 
 #' @rdname sanitize
 #' @export
-sanitize.Date <- function(x) {
-  format_iso8601(x)
+sanitize.Date <- function(x, return = "iso8601") {
+  if (return == "iso8601") {
+    format_iso8601(x)
+  } else if (return == "microsecond") {
+    as.numeric(x) * 8.64e10
+  }
+
 }
 
 #' @rdname sanitize
 #' @export
-sanitize.character <- function(x) {
+sanitize.character <- function(x, return = "iso8601") {
   is_warpscript <- startsWith(x, "ws:")
   if (is_warpscript) {
     return(as.character(gsub("^ws:", "", x)))
@@ -83,13 +94,13 @@ sanitize.character <- function(x) {
 
 #' @rdname sanitize
 #' @export
-sanitize.NULL <- function(x) {
+sanitize.NULL <- function(x, ...) {
   return(x)
 }
 
 #' @rdname sanitize
 #' @export
-sanitize.logical <- function(x) {
+sanitize.logical <- function(x, ...) {
   tolower(as.character(x))
 }
 

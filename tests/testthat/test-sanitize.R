@@ -13,3 +13,10 @@ test_that("sanitize", {
   )
   expect_identical(res, expect)
 })
+
+test_that("sanitize to microseconds", {
+  time <- lubridate::now(tzone = "UTC")
+  date <- lubridate::today(tzone = "UTC")
+  expect_equal(lubridate::as_datetime(as.numeric(sanitize(time, return = "microsecond")) / 1e6, tz = "UTC"), time)
+  expect_equal(lubridate::as_date(as.numeric(sanitize(date, return = "microsecond")) / 8.64e10), date)
+})
