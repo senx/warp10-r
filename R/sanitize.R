@@ -75,6 +75,10 @@ sanitize.character <- function(x, return = "iso8601") {
   if (all(is_warpscript)) {
     return(as.character(gsub("^ws:", "", x)))
   }
+  only_num <- grep("^[0-9]+$", x)
+  if (length(only_num) == length(x)) {
+    return(x)
+  }
   timestamp <- anytime::anytime(x)
   if (!any(is.na(timestamp))) {
     return(sanitize(timestamp, return = return))
