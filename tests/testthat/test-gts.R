@@ -343,3 +343,24 @@ test_that("at index", {
     wrp_exec()
   expect_equal(df_res, list(timestamp = 500, value = 6))
 })
+
+test_that("lr", {
+  df <- data.frame(tick = 1:500, value = NA)
+  set.seed(1234)
+  df[["value"]][1] <- rnorm(1, sd = 3)
+  for (j in seq_len(nrow(df))[-1]) {
+    df[["value"]][j] <-  df[["value"]][j - 1] - rnorm(1, sd = 3) + 0.5
+  }
+
+  lr <- wrp_connect() %>%
+    wrp_new_gts() %>%
+    wrp_rename("random") %>%
+    wrp_add_value_df(df) %>%
+    wrp_lr() %>%
+    wrp_exec()
+
+  r_lm <- lm(value ~ tick, df)$coefficients
+
+  testthat::expect_equal(lr[[1]], r_lm[["tick"]])
+  testthat::expect_equal(lr[[2]], r_lm[["(Intercept)"]])
+})
