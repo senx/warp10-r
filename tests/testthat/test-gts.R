@@ -364,3 +364,14 @@ test_that("lr", {
   testthat::expect_equal(lr[[1]], r_lm[["tick"]])
   testthat::expect_equal(lr[[2]], r_lm[["(Intercept)"]])
 })
+
+test_that("parse_selector", {
+  l <- list(
+    c(sensortype = "~numeric.*", sensorId =  "=01"),
+    "io.senx.tutorial.sensors.temperature"
+  )
+  res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+    wrp_parse_selector('io.senx.tutorial.sensors.temperature{sensorId=01,sensortype~numeric.*}') %>%
+    wrp_exec()
+  testthat::expect_equal(res, l)
+})
