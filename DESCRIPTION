@@ -10,8 +10,8 @@ Authors@R:
              family = "Roussel",
              role = "ctb",
              email = "droussel@centreon.com"))
-Description: This R client enables to make basic ingress and egress
-    routine with Warp 10.
+Description: This R client enables to make basic ingress and
+    egress routine with Warp 10.
 License: Apache License (>= 2.0)
 Depends: 
     R (>= 3.3.2)
