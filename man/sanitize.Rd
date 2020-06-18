@@ -21,11 +21,11 @@ sanitize(x, ...)
 
 \method{sanitize}{Duration}(x, ...)
 
-\method{sanitize}{POSIXct}(x, return = "iso8601")
+\method{sanitize}{POSIXct}(x, return = "iso8601", ...)
 
-\method{sanitize}{Date}(x, return = "iso8601")
+\method{sanitize}{Date}(x, return = "iso8601", ...)
 
-\method{sanitize}{character}(x, return = "iso8601")
+\method{sanitize}{character}(x, return = "iso8601", ...)
 
 \method{sanitize}{`NULL`}(x, ...)
 

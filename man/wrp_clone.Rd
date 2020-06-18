@@ -22,7 +22,7 @@ for example by using LIST->, GET or LMAP.
 }
 \examples{
 
-wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") \%>\%
+wrp_connect() \%>\%
   set_script(
     paste(
       paste0(

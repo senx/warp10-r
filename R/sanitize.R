@@ -48,7 +48,7 @@ sanitize.Duration <- function(x, ...) {
 
 #' @rdname sanitize
 #' @export
-sanitize.POSIXct <- function(x, return = "iso8601") {
+sanitize.POSIXct <- function(x, return = "iso8601", ...) {
   if (return == "iso8601") {
     format_iso8601(x)
   } else if (return == "microsecond") {
@@ -58,7 +58,7 @@ sanitize.POSIXct <- function(x, return = "iso8601") {
 
 #' @rdname sanitize
 #' @export
-sanitize.Date <- function(x, return = "iso8601") {
+sanitize.Date <- function(x, return = "iso8601", ...) {
   if (return == "iso8601") {
     format_iso8601(x)
   } else if (return == "microsecond") {
@@ -69,7 +69,7 @@ sanitize.Date <- function(x, return = "iso8601") {
 
 #' @rdname sanitize
 #' @export
-sanitize.character <- function(x, return = "iso8601") {
+sanitize.character <- function(x, return = "iso8601", ...) {
   is_warpscript <- startsWith(x, "ws:")
   if (all(is_warpscript)) {
     return(as.character(gsub("^ws:", "", x)))

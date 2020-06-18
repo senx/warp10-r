@@ -13,7 +13,7 @@
 #'
 #' @examples
 #'
-#' wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+#' wrp_connect() %>%
 #'   set_script(
 #'     paste(
 #'       paste0(
