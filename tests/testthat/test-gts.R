@@ -69,18 +69,6 @@ test_that("bucketize works as expected", {
   expect_equal(nrow(gts), n)
 })
 
-test_that("find and fetch work as expected", {
-  if (length(get_token()) > 0) {
-    con <- wrp_connect()
-    script <- wrp_find(con)
-    expect_error(df <- wrp_exec(script), NA)
-    labels <- as.list(df[2, !names(df) %in% "class"])
-    labels <- labels[!purrr::map_lgl(labels, is.na)]
-    script <- wrp_fetch(con, class = df$class[2], labels = labels)
-    expect_error(wrp_exec(script), NA)
-  }
-})
-
 test_that("unwrap work as expected", {
   df         <- data.frame(timestamp = 1:100, value = TRUE)
   gts        <- as_gts(df)
@@ -419,4 +407,31 @@ test_that("set_attributes", {
     wrp_set_attributes(list(heckle = 'Peter')) %>%
     wrp_exec()
   expect_equal(res, expected)
+})
+
+test_that("update, find, fetch, meta and delete works", {
+  object <- wrp_connect() %>%
+    wrp_new_gts() %>%
+    wrp_rename("gts_test") %>%
+    wrp_add_value(1, 1) %>%
+    wrp_update() %>%
+    wrp_fetch(class = "gts_test") %>%
+    wrp_set_attributes(list(foo = "bar")) %>%
+    wrp_meta() %>%
+    wrp_find("gts_test") %>%
+    wrp_clone() %>%
+    wrp_to_selector() %>%
+    wrp_get(0) %>%
+    wrp_store("selector") %>%
+    wrp_delete("ws:$selector", count = 1) %>%
+    wrp_exec()
+
+  expect_error(object, NA)
+  expect_equal(object[[1]], 1)
+  attr <- attr(object[[2]], "gts")
+  class <- attr[["class"]]
+  labels <- attr[["labels"]]
+  attributes <- attr[["attributes"]]
+  expect_equal(class, "gts_test")
+  expect_equal(attributes, list(foo = "bar"))
 })
