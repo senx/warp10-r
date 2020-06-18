@@ -17,6 +17,8 @@ Can either be an exact match or a regular expression (the value should then star
 The key is the label name, the value a selector which can be an exact match or a regular expression
 (the value should then start with a ~).}
 
+\item{attributes}{Map of attributes.}
+
 \item{token}{a token needed to connect to database}
 }
 \description{

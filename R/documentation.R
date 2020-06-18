@@ -20,6 +20,8 @@
 #' The key is the label name, the value a selector which can be an exact match or a regular expression
 #' (the value should then start with a ~).
 #'
+#' @param attributes Map of attributes.
+#'
 #' @param token a token needed to connect to database
 #'
 NULL

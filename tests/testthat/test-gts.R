@@ -3,7 +3,14 @@ test_that("possibility to create GTS from a dataframe", {
   gts <- as_gts(df, class = "test")
   expect_is(gts, "gts")
   expect_identical(as.data.frame(gts), df)
-  expect_equal(attr(gts, "gts"), list(class = "test", labels = structure(list(), .Names = character(0))))
+  expect_equal(
+    object   = attr(gts, "gts"),
+    expected = list(
+      class      = "test",
+      labels     = structure(list(), .Names = character(0)),
+      attributes = structure(list(), .Names = character(0))
+    )
+  )
 })
 
 test_that("possibility to retrieve a GTS from a Warp10 database without values", {
@@ -12,7 +19,14 @@ test_that("possibility to retrieve a GTS from a Warp10 database without values",
     wrp_new_gts() %>%
     wrp_rename("test") %>%
     wrp_exec()
-  expect_equal(attr(gts, "gts"), list(class = "test", labels = structure(list(), .Names = character(0))))
+  expect_equal(
+    object   = attr(gts, "gts"),
+    expected = list(
+      class      = "test",
+      labels     = structure(list(), .Names = character(0)),
+      attributes = structure(list(), .Names = character(0))
+    )
+  )
 })
 
 test_that("possibility to create and retrieve GTS with some values", {
@@ -96,7 +110,12 @@ test_that("clone work as expected", {
     timestamp = c(1389139140000000, 1389139200000000, 1576674645000000),
     value     = c(21.3, 21.5, 42)
   )
-  gts <- as_gts(df, class = "com.cityzendata.tutorial.sensors.temperature", labels = list(sensorId = "01"))
+  gts <- as_gts(
+    x = df,
+    class = "com.cityzendata.tutorial.sensors.temperature",
+    labels = list(sensorId = "01"),
+    attributes = list()
+  )
   res <- list(
     c(1, 2, 3, 4, 42),
     c(1, 2, 3, 4),

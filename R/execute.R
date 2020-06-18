@@ -108,23 +108,30 @@ build_res.list <- function(object, data, ...) {
 build_res.gts <- function(object, data, combine, .funs) {
   new_data <- build_gts_value(data)
 
-  as_gts(new_data, class = data[["c"]], labels = unlist(data[["l"]]), combine = combine, .funs = .funs)
+  as_gts(new_data, class = data[["c"]], labels = unlist(data[["l"]]), attributes = unlist(data[["a"]]), combine = combine, .funs = .funs)
 }
 
 #' @export
 #'
 build_res.lgts <- function(object, data, combine, .funs) {
   if (length(data) == 0) return(data)
-  is_value <- all(purrr::map_int(.x = data, ~ length(.x[["v"]])) > 0)
-  value    <- if (is_value) tibble::tibble(value = purrr::map(data, build_gts_value)) else NULL
-  class    <- build_gts_class(data)
-  label    <- build_gts_label(data)
-  value    <- dplyr::bind_cols(class = class[["value"]], label = label[["value"]], value = value)
+  is_value  <- all(purrr::map_int(.x = data, ~ length(.x[["v"]])) > 0)
+  value     <- if (is_value) tibble::tibble(value = purrr::map(data, build_gts_value)) else NULL
+  class     <- build_gts_class(data)
+  label     <- build_gts_label(data)
+  attribute <- build_gts_attributes(data)
+  value     <- dplyr::bind_cols(
+    class     = class[["value"]],
+    label     = label[["value"]],
+    value     = value,
+    attribute = attribute[["value"]]
+  )
   if ("value" %in% names(value)) value <- tidyr::unnest(value, "value")
 
   list_gts <- list(
     c = class[["metadata"]],
     l = label[["metadata"]],
+    a = attribute[["metadata"]],
     v = value
   )
 
@@ -187,4 +194,17 @@ build_gts_label <- function(data) {
   }
   if (length(label) == 0) label <- NULL
   return(list(value = label, metadata = metadata))
+}
+
+build_gts_attributes <- function(data) {
+  attributes <- purrr::map_dfr(data, "a")
+  metadata   <- NULL
+  for (i in rev(seq_along(attributes))) {
+    if (length(unique(attributes[[i]])) == 1) {
+      metadata[names(attributes)[i]] <- unique(attributes[[i]])
+      attributes[[i]]                <- NULL
+    }
+  }
+  if (length(attributes) == 0) attributes <- NULL
+  return(list(value = attributes, metadata = metadata))
 }

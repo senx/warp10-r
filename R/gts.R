@@ -23,7 +23,7 @@
 #'
 #' x <- data.frame(timestamp = 1:10, value = rnorm(10))
 #' as_gts(x)
-as_gts <- function(x, class = "", labels = list(), combine = TRUE, .funs = "first") {
+as_gts <- function(x, class = "", labels = list(), attributes = list(), combine = TRUE, .funs = "first") {
   x <- tibble::as_tibble(drop_na_col(x))
 
   if (nrow(x) > 0 && is.numeric(x[["timestamp"]]) && max(x[["timestamp"]]) > 1e6) {
@@ -38,7 +38,8 @@ as_gts <- function(x, class = "", labels = list(), combine = TRUE, .funs = "firs
   # For consistency, if a gts object is built from a dataframe, the structure of labels must
   # also be a named list.
   if (length(labels) == 0) labels <- structure(list(), .Names = character(0))
-  new_attributes <- list(gts = list(class = class, labels = labels))
+  if (length(attributes) == 0) attributes <- structure(list(), .Names = character(0))
+  new_attributes <- list(gts = list(class = class, labels = as.list(labels), attributes = as.list(attributes)))
   attributes(x)  <- c(attributes(x), new_attributes)
   class(x)       <- c("gts", class(x))
   x

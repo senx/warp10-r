@@ -20,5 +20,6 @@ tbl_sum.gts <- function(x) {
   class      <- c("class" = attributes[["class"]])
   if (!is.null(class)) class <- c("class" = paste0(class, "\n"))
   labels     <- attributes[["labels"]]
-  return(c("A GTS object" = glue::glue("{nrow(x)} x {ncol(x)}"), class, labels))
+  attributes <- attributes[["attributes"]]
+  return(c("A GTS object" = glue::glue("{nrow(x)} x {ncol(x)}"), class, labels, attributes))
 }
