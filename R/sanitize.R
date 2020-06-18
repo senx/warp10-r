@@ -33,7 +33,6 @@ sanitize.numeric <- function(x, ...) {
 #' @rdname sanitize
 #' @export
 sanitize.list <- function(x, ...) {
-  x <- x[!sapply(x, is.null)]
   if (!is.null(names(x))) {
     as.character(glue::glue("{{ {paste(sapply(names(x), sanitize), sapply(x, sanitize), collapse = \" \")} }}"))
   } else {
@@ -91,13 +90,13 @@ sanitize.character <- function(x, return = "iso8601") {
   if (!any(is.na(boolean))) {
     return(as.character(glue::glue("'{boolean}'")))
   }
-  return(as.character(glue::glue("'{x}'")))
+  return(gsub("'NULL'|'null'|'Null'", "NULL", as.character(glue::glue("'{x}'"))))
 }
 
 #' @rdname sanitize
 #' @export
 sanitize.NULL <- function(x, ...) {
-  return(x)
+  return("NULL")
 }
 
 #' @rdname sanitize

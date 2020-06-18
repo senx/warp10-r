@@ -49,7 +49,7 @@ wrp_fetch <- function(wrp_con, class = "~.*", labels = NULL, end = "ws:NOW", sta
                       timespan = NULL, selector = NULL, selectors = NULL) {
   assert_token(wrp_con$get_token())
   if (is.null(start) && is.null(timespan) && is.null(count)) count <- 1
-  params <- list(
+  params <- purrr::compact(list(
     token     = "ws:$token",
     class     = class,
     labels    = labels %||% "ws:{}",
@@ -59,7 +59,7 @@ wrp_fetch <- function(wrp_con, class = "~.*", labels = NULL, end = "ws:NOW", sta
     timespan  = timespan,
     selector  = selector,
     selectors = selectors
-  )
+  ))
   script <- paste(sanitize(params), "FETCH")
   add_stack(wrp_con, script, "lgts")
   return(wrp_con)
