@@ -14,7 +14,7 @@ test_that("possibility to create GTS from a dataframe", {
 })
 
 test_that("possibility to retrieve a GTS from a Warp10 database without values", {
-  con <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec")
+  con <- wrp_connect()
   gts <- con %>%
     wrp_new_gts() %>%
     wrp_rename("test") %>%
@@ -30,7 +30,7 @@ test_that("possibility to retrieve a GTS from a Warp10 database without values",
 })
 
 test_that("possibility to create and retrieve GTS with some values", {
-  con <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec")
+  con <- wrp_connect()
   get_gts <- function(df) {
     con %>%
       wrp_new_gts() %>%
@@ -50,7 +50,7 @@ test_that("possibility to create and retrieve GTS with some values", {
 })
 
 test_that("bucketize works as expected", {
-  con  <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec")
+  con  <- wrp_connect()
   n    <- 4
   date <- lubridate::ymd("2019-12-19")
   df   <- tibble::tibble(
@@ -72,7 +72,7 @@ test_that("bucketize works as expected", {
 test_that("unwrap work as expected", {
   df         <- data.frame(timestamp = 1:100, value = TRUE)
   gts        <- as_gts(df)
-  gts_unwrap <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  gts_unwrap <- wrp_connect() %>%
     set_script("60V.5k.L.0N.5k..KV.N5GyA1.........0nNL7O4W..rXE6gwV....Lm.3G..") %>%
     wrp_unwrap() %>%
     wrp_exec()
@@ -82,7 +82,7 @@ test_that("unwrap work as expected", {
 
 test_that("get work as expected", {
   res     <- list(NULL, 3, 42)
-  get_res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  get_res <- wrp_connect() %>%
     set_script("{ 'foo' 42 'bar' true }", add = "map") %>%
     wrp_get("foo") %>%
     set_script("[ 3 12 15 ]", add = "map") %>%
@@ -110,7 +110,7 @@ test_that("clone work as expected", {
     gts,
     gts[1:2, ]
   )
-  res_clone <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res_clone <- wrp_connect() %>%
     set_script("[ '60VgNqxhAaCdS6_uOLtZNMGWAbGpS5xmPL4gAbC_QbCjRbBiS5KhR5KmNMGpRaJQ.NV7RqKiRqxmHLF1B23L.0N.5k..KV.N6bF.0DxeA7x..3.pV.......4EyQb2_.CJnBnBnBnGN33V.' '60VgNqxhAaCdS6_uOLtZNMGWAbGpS5xmPL4gAbC_QbCjRbBiS5KhR5KmNMGpRaJQ.NV7RqKiRqxmHLF1B27L.0N.5k..KV.N6rF.0Dxe1Bju.3.ltaOaOaOa472Jp9g0F26BnBnBnBoL007.' ]", add = "list") %>% # nolint
     wrp_unwrap() %>%
     wrp_get(0) %>%
@@ -133,7 +133,7 @@ test_that("relabel work as expected", {
     as_gts(df, labels = c(bar = "foo", foo = "bar")),
     as_gts(df)
   )
-  res_relabel <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res_relabel <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_clone() %>%
     wrp_relabel(c("foo", "bar", "bar", "foo")) %>%
@@ -151,7 +151,7 @@ test_that("relabel work as expected", {
 
 test_that("store work as expected", {
   res <- list()
-  res_store <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res_store <- wrp_connect() %>%
     set_script("42", add = "long") %>%
     wrp_store("foo") %>%
     wrp_exec()
@@ -159,7 +159,7 @@ test_that("store work as expected", {
 })
 
 test_that("drop work as expected", {
-  res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res <- wrp_connect() %>%
     set_script("foo") %>%
     set_script("bar") %>%
     wrp_drop() %>%
@@ -170,7 +170,7 @@ test_that("drop work as expected", {
 
 test_that("to selector work as expected", {
   res <- c("test%20name{label0=42,label1=foo}", "test%20name{label0=33,label1=foo}")
-  res_to_selector <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res_to_selector <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_rename("test name") %>%
     wrp_relabel(c("label0", 42, "label1", "foo")) %>%
@@ -192,9 +192,9 @@ test_that("to selector work as expected", {
 
 test_that("sort work as expected", {
   df  <- data.frame(timestamp = 10:1, value = as.integer(runif(10) * 10))
-  res <- df[order(df[["timestamp"]]), ]
+  res <- as_gts(df[order(df[["timestamp"]]), ])
 
-  res_sort <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res_sort <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_add_value_df(df, tick = timestamp) %>%
     wrp_sort() %>%
@@ -204,10 +204,10 @@ test_that("sort work as expected", {
 })
 
 test_that("interpolate work as expected", {
-  res <- data.frame(timestamp = as.integer(seq(100, 500, by = 50)), value = seq(10, 6, by = -0.5))
+  res <- as_gts(data.frame(timestamp = as.integer(seq(100, 500, by = 50)), value = seq(10, 6, by = -0.5)))
   df  <- res[res[["timestamp"]] %% 100 == 0, ]
 
-  res_interpolate <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res_interpolate <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_add_value_df(df, tick = "timestamp") %>%
     wrp_bucketize("mean", 500, 50, 0) %>%
@@ -220,7 +220,7 @@ test_that("interpolate work as expected", {
 
 test_that("dup", {
   res <- list(123, 123)
-  res_dup <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res_dup <- wrp_connect() %>%
     set_script(123, add = "numeric") %>%
     wrp_dup() %>%
     wrp_exec()
@@ -229,8 +229,8 @@ test_that("dup", {
 })
 
 test_that("remove_tick", {
-  df             <- data.frame(timestamp = 0:2, value = 0:2)
-  res_removetick <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  df             <- as_gts(data.frame(timestamp = 0:2, value = 0:2))
+  res_removetick <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_add_value_df(df, tick = "timestamp") %>%
     wrp_remove_tick(1) %>%
@@ -241,26 +241,26 @@ test_that("remove_tick", {
 
 test_that("size", {
   df     <- data.frame(tick = seq(100, 1000, by = 100), value = 10:1)
-  res_df <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res_df <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_add_value_df(df) %>%
     wrp_size() %>%
     wrp_exec()
   expect_equal(res_df, 10)
 
-  res_map <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res_map <- wrp_connect() %>%
     set_script("{ 'label0' '42' 'label1' 'foo' }", add = "map") %>%
     wrp_size() %>%
     wrp_exec()
   expect_equal(res_map, 2)
 
-  res_list <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res_list <- wrp_connect() %>%
     set_script("[ 'label0' '42' 'label1' 'foo' ]", add = "list") %>%
     wrp_size() %>%
     wrp_exec()
   expect_equal(res_list, 4)
 
-  res_string <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res_string <- wrp_connect() %>%
     set_script("one %25", add = "string") %>%
     wrp_size() %>%
     wrp_exec()
@@ -269,7 +269,7 @@ test_that("size", {
 
 test_that("ticks", {
   df  <- data.frame(tick = 1:10, value = rnorm(10))
-  res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_add_value_df(df) %>%
     wrp_ticks() %>%
@@ -279,7 +279,7 @@ test_that("ticks", {
 
 test_that("tick_list", {
   df  <- data.frame(tick = 1:10, value = rnorm(10))
-  res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_add_value_df(df) %>%
     wrp_tick_list() %>%
@@ -289,7 +289,7 @@ test_that("tick_list", {
 
 test_that("flatten", {
   x   <- c("a", "b", "c", "d", "e", "f", "g")
-  res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res <- wrp_connect() %>%
     set_script("[ 'a' 'b' 'c' ]", add = "list") %>%
     set_script("[ 'd' 'e' [ 'f' 'g' ] ]", add = "list") %>%
     set_script("2 ->LIST", consume = c("list", "list"), add = "list") %>%
@@ -301,7 +301,7 @@ test_that("flatten", {
 test_that("time_shift", {
   df     <- data.frame(timestamp = 1:100, value = 1:100)
   df_res <- as_gts(transform(df, timestamp = as.integer(timestamp + 10)))
-  res    <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res    <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_add_value_df(df, tick = "timestamp") %>%
     wrp_time_shift(10) %>%
@@ -311,7 +311,7 @@ test_that("time_shift", {
 
 test_that("first tick", {
   df  <- data.frame(tick = c(seq(100, 500, by = 100), 100, 200), value = c(10:6, 10, 9))
-  res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_add_value_df(df) %>%
     wrp_first_tick() %>%
@@ -321,7 +321,7 @@ test_that("first tick", {
 
 test_that("last tick", {
   df  <- data.frame(tick = c(seq(100, 500, by = 100), 100, 200), value = c(10:6, 10, 9))
-  res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_add_value_df(df) %>%
     wrp_last_tick() %>%
@@ -331,7 +331,7 @@ test_that("last tick", {
 
 test_that("at tick", {
   df <- data.frame(tick = seq(100, 1000, by = 100), value = 10:1)
-  df_res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  df_res <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_add_value_df(df) %>%
     wrp_at_tick(400) %>%
@@ -341,7 +341,7 @@ test_that("at tick", {
 
 test_that("at index", {
   df <- data.frame(tick = seq(100, 1000, by = 100), value = 10:1)
-  df_res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  df_res <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_rename("test") %>%
     wrp_relabel(list("label0", "42", "label1", "foo")) %>%
@@ -377,7 +377,7 @@ test_that("parse_selector", {
     c(sensortype = "~numeric.*", sensorId =  "=01"),
     "io.senx.tutorial.sensors.temperature"
   )
-  res <- wrp_connect(endpoint = "https://warp.senx.io/api/v0/exec") %>%
+  res <- wrp_connect() %>%
     wrp_parse_selector('io.senx.tutorial.sensors.temperature{sensorId=01,sensortype~numeric.*}') %>%
     wrp_exec()
   testthat::expect_equal(res, l)
