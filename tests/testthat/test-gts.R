@@ -394,3 +394,29 @@ test_that("parse_selector", {
     wrp_exec()
   testthat::expect_equal(res, l)
 })
+
+test_that("set_attributes", {
+  x <- data.frame()
+  expected <- list(
+    as_gts(x, attributes = list(star = "treck", heckle = "Peter")),
+    as_gts(x, attributes = list(heckle = "jeckle", star = "treck")),
+    as_gts(x, attributes = list(star = "treck", "next" = "generation", heckle = "jeckle")),
+    as_gts(x, attributes = list(star = "treck")),
+    as_gts(x, attributes = list(bar = "foo", foo = "bar")),
+    as_gts(x)
+  )
+  res <- wrp_connect() %>%
+    wrp_new_gts() %>%
+    wrp_clone() %>%
+    wrp_set_attributes(list(foo = "bar", bar = "foo")) %>%
+    wrp_clone() %>%
+    wrp_set_attributes(list("ws:NULL" = "ws:NULL", star = 'treck')) %>%
+    wrp_clone() %>%
+    wrp_set_attributes(list('next' = 'generation', heckle = 'jeckle')) %>%
+    wrp_clone() %>%
+    wrp_set_attributes(list('next' = '')) %>%
+    wrp_clone() %>%
+    wrp_set_attributes(list(heckle = 'Peter')) %>%
+    wrp_exec()
+  expect_equal(res, expected)
+})

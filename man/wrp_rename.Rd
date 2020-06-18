@@ -39,3 +39,6 @@ con \%>\%
 }
 
 }
+\seealso{
+\code{\link[=wrp_relabel]{wrp_relabel()}}, \code{\link[=wrp_set_attributes]{wrp_set_attributes()}}
+}

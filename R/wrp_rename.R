@@ -31,6 +31,8 @@
 #'
 #' @export
 #'
+#' @seealso [wrp_relabel()], [wrp_set_attributes()]
+#'
 wrp_rename <- function(wrp_con, name) {
   script <- glue::glue("'{name}' RENAME")
   wrp_con$set_script(script)

@@ -38,3 +38,6 @@ wrp_connect() \%>\%
   wrp_relabel(c("next", "")) \%>\%
   wrp_exec()
 }
+\seealso{
+\code{\link[=wrp_set_attributes]{wrp_set_attributes()}}, \code{\link[=wrp_rename]{wrp_rename()}}
+}

@@ -29,6 +29,8 @@
 #'   wrp_exec()
 #' @export
 #'
+#' @seealso [wrp_set_attributes()], [wrp_rename()]
+#'
 wrp_relabel <- function(wrp_con, labels) {
   labels  <- paste(purrr::map(labels, sanitize), collapse = " ")
   script  <- glue::glue("{{ {labels} }} RELABEL")
