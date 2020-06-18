@@ -40,7 +40,7 @@ wrp_connect() \%>\%
 
 }
 \seealso{
-\code{\link[=wrp_relabel]{wrp_relabel()}}, \code{\link[=wrp_rename]{wrp_rename()}}, \code{\link[=wrp_meta]{wrp_meta()}}
+\code{\link[=wrp_relabel]{wrp_relabel()}}, \code{\link[=wrp_rename]{wrp_rename()}}, \code{\link[=wrp_meta]{wrp_meta()}}, \code{\link[=wrp_attributes]{wrp_attributes()}}
 }
 \keyword{encoder}
 \keyword{gts}

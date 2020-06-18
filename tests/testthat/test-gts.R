@@ -435,3 +435,14 @@ test_that("update, find, fetch, meta and delete works", {
   expect_equal(class, "gts_test")
   expect_equal(attributes, list(foo = "bar"))
 })
+
+test_that("attributes", {
+  object <- wrp_connect() %>%
+    wrp_new_gts() %>%
+    wrp_rename("test") %>%
+    wrp_set_attributes(list(attr1 = "42", attr2 = "foo")) %>%
+    wrp_attributes() %>%
+    wrp_exec()
+  expected <- c(attr2 = "foo", attr1 = "42")
+  expect_equal(object, expected)
+})
