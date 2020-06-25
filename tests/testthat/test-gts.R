@@ -458,3 +458,21 @@ test_that("map", {
   expected <- as_gts(df_expected)
   expect_equal(object[[1]], expected)
 })
+
+test_that("esdtest", {
+  df <- tibble::tibble(tick = 1:1000, value = runif(1000) + runif(1000) +
+                         runif(1000) + runif(1000) + runif(1000) + runif(1000)
+                       - 3)
+ df[368, "value"] <- -3.1
+ df[422, "value"] <- 3.0001
+ df[456, "value"] <- 9.8
+ df[643, "value"] <- -200.9
+ expected <- c(643, 456, 368, 422)
+ object   <- wrp_connect() %>%
+   wrp_new_gts() %>%
+   wrp_add_value_df(df) %>%
+   wrp_dedup() %>%
+   wrp_esdtest(4, FALSE) %>%
+   wrp_exec()
+ expect_equal(object, expected)
+})
