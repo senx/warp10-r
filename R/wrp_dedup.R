@@ -10,5 +10,9 @@
 #' @export
 #'
 wrp_dedup <- function(wrp_con) {
-  wrp_con$set_script("DEDUP")
+  return_object <- list(
+    gts = "gts",
+    lgts = "lgts"
+  )
+  add_stack(wrp_con, "DEDUP", return_object)
 }
