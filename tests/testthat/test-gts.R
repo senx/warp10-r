@@ -476,3 +476,16 @@ test_that("esdtest", {
    wrp_exec()
  expect_equal(object, expected)
 })
+
+test_that("unbucketize", {
+  df <- data.frame(tick = 1:100, value = TRUE)
+  object <- wrp_connect() %>%
+    wrp_new_gts() %>%
+    wrp_add_value_df(df) %>%
+    wrp_bucketize("last", span = 10) %>%
+    wrp_get(0) %>%
+    wrp_unbucketize() %>%
+    wrp_exec()
+  expected <- as_gts(data.frame(timestamp = seq(100, 10, by = -10), value = TRUE))
+  expect_equal(object, expected)
+})

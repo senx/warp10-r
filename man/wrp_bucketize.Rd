@@ -71,3 +71,10 @@ This macro must then push onto the stack its result (see description in signatur
 If the bucketizer argument is NULL, then BUCKETIZE do not create any new Geo Time Series™
 but instead sets the lastbucket, bucketspan and bucketcount of its inputs without processing their data.
 }
+\references{
+\url{https://www.warp10.io/doc/BUCKETIZE}
+}
+\seealso{
+\code{\link[=wrp_unbucketize]{wrp_unbucketize()}}
+}
+\keyword{gts}

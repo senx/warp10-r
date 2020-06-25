@@ -52,6 +52,12 @@
 #' If this value is set to 0, the number of buckets will be computed
 #' so the first value of the geo time series is at the beginning of the first bucket.
 #'
+#' @keywords gts
+#'
+#' @seealso [wrp_unbucketize()]
+#'
+#' @references <https://www.warp10.io/doc/BUCKETIZE>
+#'
 #' @export
 #'
 wrp_bucketize <- function(wrp_con,
