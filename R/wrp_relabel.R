@@ -32,19 +32,13 @@
 #' @seealso [wrp_set_attributes()], [wrp_rename()]
 #'
 wrp_relabel <- function(wrp_con, labels) {
-  labels  <- paste(purrr::map(labels, sanitize), collapse = " ")
-  script  <- glue::glue("{{ {labels} }} RELABEL")
-  stack   <- get_stack(wrp_con)
-  consume <- stack[[length(stack)]]
-  return  <- switch(
-    consume,
+  script <- paste(sanitize(as.list(labels)), "RELABEL")
+  return_object  <- list(
     gts      = "gts",
     lgts     = "lgts",
     encoder  = "encoder",
     lencoder = "lencoder"
   )
 
-  set_script(wrp_con, script = script, consume = consume, add = return)
-
-  return(wrp_con)
+  add_stack(wrp_con, script, return_object)
 }
