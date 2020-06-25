@@ -446,3 +446,15 @@ test_that("attributes", {
   expected <- c(attr2 = "foo", attr1 = "42")
   expect_equal(object, expected)
 })
+
+test_that("map", {
+  df_object   <- data.frame(tick = 0:4, value = 0:4)
+  df_expected <- data.frame(timestamp = 0:4, value = c(0, rep(1e6, 4)))
+  object <- wrp_connect() %>%
+    wrp_new_gts() %>%
+    wrp_add_value_df(df_object) %>%
+    wrp_map("rate", 1) %>%
+    wrp_exec()
+  expected <- as_gts(df_expected)
+  expect_equal(object[[1]], expected)
+})
