@@ -4,14 +4,10 @@
 \alias{wrp_exec}
 \title{Execute Warp Script}
 \usage{
-wrp_exec(wrp_con, combine = TRUE, .funs = "first")
+wrp_exec(wrp_con)
 }
 \arguments{
 \item{wrp_con}{\link{wrp_connect} object.}
-
-\item{combine}{If TRUE, combine multiple time series into one by grouping dates.}
-
-\item{.funs}{A function \code{fun}, a quosure style lambda \code{~ fun(.)} or a list of either form.}
 }
 \description{
 Execute the Warp Script by sending it to the server.

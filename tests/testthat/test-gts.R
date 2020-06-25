@@ -65,6 +65,7 @@ test_that("bucketize works as expected", {
     wrp_new_gts() %>%
     wrp_add_value_df(df, tick = "timestamp") %>%
     wrp_bucketize("mean", span = "7 d") %>%
+    wrp_get(0) %>%
     wrp_exec()
   expect_equal(nrow(gts), n)
 })
@@ -95,8 +96,8 @@ test_that("get work as expected", {
 
 test_that("clone work as expected", {
   df  <- data.frame(
-    timestamp = c(1389139140000000, 1389139200000000, 1576674645000000),
-    value     = c(21.3, 21.5, 42)
+    timestamp = c(1389139200000000, 1389139140000000, 1576674645000000),
+    value     = c(21.5, 21.3, 42)
   )
   gts <- as_gts(
     x = df,
@@ -211,6 +212,7 @@ test_that("interpolate work as expected", {
     wrp_new_gts() %>%
     wrp_add_value_df(df, tick = "timestamp") %>%
     wrp_bucketize("mean", 500, 50, 0) %>%
+    wrp_get(0) %>%
     wrp_interpolate() %>%
     wrp_sort() %>%
     wrp_exec()
@@ -428,7 +430,7 @@ test_that("update, find, fetch, meta and delete works", {
 
   expect_error(object, NA)
   expect_equal(object[[1]], 1)
-  attr <- attr(object[[2]], "gts")
+  attr <- attr(object[[2]][[1]], "gts")
   class <- attr[["class"]]
   labels <- attr[["labels"]]
   attributes <- attr[["attributes"]]

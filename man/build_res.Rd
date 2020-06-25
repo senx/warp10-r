@@ -9,34 +9,29 @@
 \alias{build_res.lastactivity}
 \alias{build_res.list}
 \alias{build_res.gts}
+\alias{build_res.lgts}
 \title{Build results}
 \usage{
-build_res(object, data, combine, .funs)
+build_res(data)
 
-\method{build_res}{data}(object, data, ...)
+\method{build_res}{data}(data)
 
-\method{build_res}{ldata}(object, data, ...)
+\method{build_res}{ldata}(data)
 
-\method{build_res}{default}(object, data, ...)
+\method{build_res}{default}(data)
 
-\method{build_res}{map}(object, data, ...)
+\method{build_res}{map}(data)
 
-\method{build_res}{lastactivity}(object, data, ...)
+\method{build_res}{lastactivity}(data)
 
-\method{build_res}{list}(object, data, ...)
+\method{build_res}{list}(data)
 
-\method{build_res}{gts}(object, data, combine, .funs)
+\method{build_res}{gts}(data)
+
+\method{build_res}{lgts}(data)
 }
 \arguments{
-\item{object}{A string corresponding to the object fetched from Warp10 database.}
-
 \item{data}{A list resulting of a parsed json of all results.}
-
-\item{combine}{If TRUE, combine multiple time series into one by grouping dates.}
-
-\item{.funs}{A function \code{fun}, a quosure style lambda \code{~ fun(.)} or a list of either form.}
-
-\item{...}{Other arguments passed on to individual methods.}
 }
 \description{
 Build results from parsed json file.

@@ -12,8 +12,6 @@
 #' `as_gts()` is an S3 generic.
 #'
 #' @inheritParams documentation
-#' @param combine If TRUE, combine multiple time series into one by grouping dates.
-#' @inheritParams dplyr::summarise_at
 #' @param x An object that could reasoably be coerced to a gts tibble.
 #'
 #'
@@ -23,16 +21,13 @@
 #'
 #' x <- data.frame(timestamp = 1:10, value = rnorm(10))
 #' as_gts(x)
-as_gts <- function(x, class = "", labels = list(), attributes = list(), combine = TRUE, .funs = "first") {
+as_gts <- function(x, class = "", labels = list(), attributes = list()) {
   x <- tibble::as_tibble(drop_na_col(x))
 
   if (nrow(x) > 0 && is.numeric(x[["timestamp"]]) && max(x[["timestamp"]]) > 1e6) {
     x[["timestamp"]] <- lubridate::as_datetime(x[["timestamp"]] / 1e6)
   } else if (lubridate::is.Date(x[["timestamp"]])) {
     x[["timestamp"]] <- lubridate::as_datetime(x[["timestamp"]])
-  }
-  if (combine && nrow(x) > 0 && "timestamp" %in% names(x)) {
-    x <- dplyr::summarise_at(dplyr::group_by_at(x, "timestamp"), "value", .funs)
   }
   # When a GTS is retrieved from Warp10 database, the structure of a label is named list.
   # For consistency, if a gts object is built from a dataframe, the structure of labels must

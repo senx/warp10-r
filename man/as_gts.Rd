@@ -4,14 +4,7 @@
 \alias{as_gts}
 \title{Coersce object to GTS tibbles}
 \usage{
-as_gts(
-  x,
-  class = "",
-  labels = list(),
-  attributes = list(),
-  combine = TRUE,
-  .funs = "first"
-)
+as_gts(x, class = "", labels = list(), attributes = list())
 }
 \arguments{
 \item{x}{An object that could reasoably be coerced to a gts tibble.}
@@ -24,10 +17,6 @@ The key is the label name, the value a selector which can be an exact match or a
 (the value should then start with a ~).}
 
 \item{attributes}{Map of attributes.}
-
-\item{combine}{If TRUE, combine multiple time series into one by grouping dates.}
-
-\item{.funs}{A function \code{fun}, a quosure style lambda \code{~ fun(.)} or a list of either form.}
 }
 \description{
 \code{as_gts()} turns an existing object, such as a data frame into
