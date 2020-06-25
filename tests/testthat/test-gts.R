@@ -491,3 +491,32 @@ test_that("unbucketize", {
   expected <- as_gts(data.frame(timestamp = seq(100, 10, by = -10), value = TRUE))
   expect_equal(object, expected)
 })
+
+test_that("reduce", {
+  df1        <- data.frame(tick = 1:10, value = 1)
+  df2        <- data.frame(tick = 1:10, value = 2)
+  expect_df1 <- as_gts(data.frame(timestamp = 1:10, value = 1), labels = list(type = "1"))
+  expect_df2 <- as_gts(data.frame(timestamp = 1:10, value = 4), labels = list(type = "2"))
+  expected   <- list(expect_df1, expect_df2)
+  object     <- wrp_connect() %>%
+    wrp_new_gts() %>%
+    wrp_rename('a') %>%
+    wrp_relabel(list(type = "1")) %>%
+    wrp_add_value_df(df1) %>%
+    wrp_new_gts() %>%
+    wrp_rename('b') %>%
+    wrp_relabel(list(type = "1")) %>%
+    wrp_add_value_df(df1) %>%
+    wrp_new_gts() %>%
+    wrp_rename('a') %>%
+    wrp_relabel(list(type = "2")) %>%
+    wrp_add_value_df(df2) %>%
+    wrp_new_gts() %>%
+    wrp_rename('b') %>%
+    wrp_relabel(list(type = "2")) %>%
+    wrp_add_value_df(df2) %>%
+    set_script("4 ->LIST", consume = list("gts", "gts", "gts", "gts"), add = "lgts") %>%
+    wrp_reduce("product", "type") %>%
+    wrp_exec()
+  expect_equal(object, expected)
+})
