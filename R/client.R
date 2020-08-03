@@ -19,7 +19,7 @@ post_warpscript <- function(warpscript, endpoint = get_endpoint()) {
     warpscript <- readLines(warpscript, warn = FALSE)
   }
 
-  request <- POST(endpoint, body = warpscript, config = config(ssl_verifypeer = FALSE))
+  request <- POST(endpoint, body = warpscript, config = config(ssl_verifypeer = FALSE, ssl_verifyhost = FALSE))
 
   # retrieve body
   body <- content(request, "text", encoding = "UTF-8")
