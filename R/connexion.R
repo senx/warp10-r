@@ -69,6 +69,8 @@ connect <- R6::R6Class(
         "  - endpoint: {endpoint}",
         "  - token:    {dplyr::if_else(token, 'available', 'not available')}",
         "  - stack:    {dplyr::if_else(length(stack) == 0, 'empty', toString(stack))}",
+        "",
+        "{self$get_script()}",
         .sep = "\n"
       )
       cat(msg)
