@@ -531,3 +531,14 @@ test_that("reverse", {
     wrp_exec()
   expect_equal(object, expected)
 })
+
+test_that("values", {
+  expected <- 10:1
+  df <- data.frame(tick = c(100, 200, 300, 400, 500, 700, 800, 900, 1000, 1100), value = 10:1)
+  object <- wrp_connect() %>%
+    wrp_new_gts() %>%
+    wrp_add_value_df(df) %>%
+    wrp_values() %>%
+    wrp_exec()
+  expect_equal(object, expected)
+})
