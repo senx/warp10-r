@@ -263,7 +263,7 @@ test_that("size", {
   expect_equal(res_list, 4)
 
   res_string <- wrp_connect() %>%
-    set_script("one %25", add = "string") %>%
+    set_script("one %25") %>%
     wrp_size() %>%
     wrp_exec()
   expect_equal(res_string, 5)
