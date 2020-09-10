@@ -520,3 +520,13 @@ test_that("reduce", {
     wrp_exec()
   expect_equal(object, expected)
 })
+test_that("reverse", {
+  expected <- list("cat paws", c("drei", "zwei", "eins"))
+  object   <- wrp_connect() %>%
+    set_script(c("eins", "zwei", "drei")) %>%
+    wrp_reverse() %>%
+    set_script("swap tac") %>%
+    wrp_reverse() %>%
+    wrp_exec()
+  expect_equal(object, expected)
+})
