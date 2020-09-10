@@ -4,7 +4,7 @@
 \alias{set_script}
 \title{Set Script}
 \usage{
-set_script(wrp_con, script = "", consume = NULL, add = NULL)
+set_script(wrp_con, script = "", consume = NULL, add = "auto")
 }
 \arguments{
 \item{wrp_con}{\link{wrp_connect} object.}

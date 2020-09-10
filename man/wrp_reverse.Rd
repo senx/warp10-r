@@ -22,10 +22,8 @@ Applied on a byte array, REVERSE reverses the endianness.
 \examples{
 wrp_connect() \%>\%
   set_script(c("eins", "zwei", "drei")) \%>\%
-  wrp_store("mylist") \%>\%
   wrp_reverse() \%>\%
   set_script("swap tac") \%>\%
-  wrp_store("mystring") \%>\%
   wrp_reverse() \%>\%
   wrp_exec()
 

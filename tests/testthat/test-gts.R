@@ -520,6 +520,7 @@ test_that("reduce", {
     wrp_exec()
   expect_equal(object, expected)
 })
+
 test_that("reverse", {
   expected <- list("cat paws", c("drei", "zwei", "eins"))
   object   <- wrp_connect() %>%
