@@ -15,6 +15,7 @@
 #' of the form name=exact or name~regexp.
 #' Names and values must be percent URL encoded if needed.
 #' @param selectors A list of GTS selectors, each with a syntax identical to that of 'selector'.
+#' @param type Name of type to force for the GTS, either LONG, DOUBLE, BOOLEAN or STRING.
 #'
 #' @section Concerned Geo Time Series:
 #'
@@ -46,21 +47,26 @@
 #' @export
 #'
 wrp_fetch <- function(wrp_con, class = "~.*", labels = NULL, end = "ws:NOW", start = NULL, count = NULL,
-                      timespan = NULL, selector = NULL, selectors = NULL) {
-  assert_token(wrp_con$get_token())
-  if (is.null(start) && is.null(timespan) && is.null(count)) count <- 1
-  params <- purrr::compact(list(
-    token     = "ws:$token",
-    class     = class,
-    labels    = labels %||% "ws:{}",
-    start     = start,
-    end       = end,
-    count     = count,
-    timespan  = timespan,
-    selector  = selector,
-    selectors = selectors
-  ))
-  script <- paste(sanitize(params), "FETCH")
-  add_stack(wrp_con, script, "lgts")
-  return(wrp_con)
+                      timespan = NULL, selector = NULL, selectors = NULL, type = NULL) {
+    assert_token(wrp_con$get_token())
+    if (is.null(start) && is.null(timespan) && is.null(count)) count <- 1
+    available_types <- c("LONG", "DOUBLE", "BOOLEAN", "STRING")
+    if (!is.null(type) && !type %in% available_types) {
+        stop("`type` must be one of ", toString(available_types))
+    }
+    params <- purrr::compact(list(
+        token     = "ws:$token",
+        class     = class,
+        labels    = labels %||% "ws:{}",
+        start     = start,
+        end       = end,
+        count     = count,
+        timespan  = timespan,
+        selector  = selector,
+        selectors = selectors,
+        type      = type
+    ))
+    script <- paste(sanitize(params), "FETCH")
+    add_stack(wrp_con, script, "lgts")
+    return(wrp_con)
 }

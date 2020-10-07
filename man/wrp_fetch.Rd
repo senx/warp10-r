@@ -13,7 +13,8 @@ wrp_fetch(
   count = NULL,
   timespan = NULL,
   selector = NULL,
-  selectors = NULL
+  selectors = NULL,
+  type = NULL
 )
 }
 \arguments{
@@ -43,6 +44,8 @@ of the form name=exact or name~regexp.
 Names and values must be percent URL encoded if needed.}
 
 \item{selectors}{A list of GTS selectors, each with a syntax identical to that of 'selector'.}
+
+\item{type}{Name of type to force for the GTS, either LONG, DOUBLE, BOOLEAN or STRING.}
 }
 \description{
 The FETCH function interacts with the Warp 10 Storage Engine to retrieve data according to given criteria.
