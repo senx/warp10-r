@@ -27,6 +27,6 @@ wrp_connect() \%>\%
 
 }
 \seealso{
-\code{\link[=wrp_labels]{wrp_labels()}}
+\code{\link[=wrp_labels]{wrp_labels()}}, \code{\link[=wrp_name]{wrp_name()}}
 }
 \keyword{gts}

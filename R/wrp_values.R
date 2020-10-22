@@ -12,7 +12,7 @@
 #'
 #' @export
 #' 
-#' @seealso [wrp_labels()]
+#' @seealso [wrp_labels()], [wrp_name()]
 #'
 #' @examples
 #' df <- data.frame(tick = c(100, 200, 300, 400, 500, 700, 800, 900, 1000, 1100), value = 10:1)

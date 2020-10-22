@@ -552,3 +552,13 @@ test_that("labels", {
     wrp_exec()
   expect_equal(object, expected)
 })
+
+test_that("name", {
+  expected <- "GTS1"
+  object <- wrp_connect() %>%
+    wrp_new_gts() %>%
+    wrp_rename("GTS1") %>%
+    wrp_name() %>%
+    wrp_exec()
+  expect_equal(object, expected)
+})

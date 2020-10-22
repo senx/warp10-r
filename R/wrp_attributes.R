@@ -22,7 +22,7 @@
 #'
 #' @keywords gts
 #'
-#' @seealso [wrp_set_attributes()], [wrp_labels()]
+#' @seealso [wrp_set_attributes()], [wrp_labels()], [wrp_name()]
 #'
 wrp_attributes <- function(wrp_con) {
   return_object <- list(

@@ -9,7 +9,7 @@
 #'
 #' @export
 #'
-#' @seealso [wrp_attributes()], [wrp_set_attributes()], [wrp_values()]
+#' @seealso [wrp_attributes()], [wrp_name()], [wrp_set_attributes()], [wrp_values()]
 #'
 #' @examples
 #' wrp_connect() %>%

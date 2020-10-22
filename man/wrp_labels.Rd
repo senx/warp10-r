@@ -21,6 +21,6 @@ wrp_connect() \%>\%
     wrp_exec()
 }
 \seealso{
-\code{\link[=wrp_attributes]{wrp_attributes()}}, \code{\link[=wrp_set_attributes]{wrp_set_attributes()}}, \code{\link[=wrp_values]{wrp_values()}}
+\code{\link[=wrp_attributes]{wrp_attributes()}}, \code{\link[=wrp_name]{wrp_name()}}, \code{\link[=wrp_set_attributes]{wrp_set_attributes()}}, \code{\link[=wrp_values]{wrp_values()}}
 }
 \keyword{gts}
