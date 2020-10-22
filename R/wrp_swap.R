@@ -19,5 +19,12 @@ wrp_swap <- function(wrp_con) {
     return_object <- list(
         any = "any"
     )
-    add_stack(wrp_con, "SWAP", return_object)
+    stack       <- get_stack(wrp_con)
+    n           <- length(stack)
+    if (n < 2) stop("must have at least two elements on the stack.")
+    last_object <- stack[[n]]
+    last_last_object <- stack[[n - 1]]
+    wrp_con$set_script("SWAP")
+    wrp_con$add_stack(c(last_object, last_last_object), c(last_object, last_last_object))
+    return(wrp_con)
 }
