@@ -380,7 +380,7 @@ test_that("parse_selector", {
     "io.senx.tutorial.sensors.temperature"
   )
   res <- wrp_connect() %>%
-    wrp_parse_selector('io.senx.tutorial.sensors.temperature{sensorId=01,sensortype~numeric.*}') %>%
+    wrp_parse_selector("io.senx.tutorial.sensors.temperature{sensorId=01,sensortype~numeric.*}") %>%
     wrp_exec()
   testthat::expect_equal(res, l)
 })
@@ -400,13 +400,13 @@ test_that("set_attributes", {
     wrp_clone() %>%
     wrp_set_attributes(list(foo = "bar", bar = "foo")) %>%
     wrp_clone() %>%
-    wrp_set_attributes(list("ws:NULL" = "ws:NULL", star = 'treck')) %>%
+    wrp_set_attributes(list("ws:NULL" = "ws:NULL", star = "treck")) %>%
     wrp_clone() %>%
-    wrp_set_attributes(list('next' = 'generation', heckle = 'jeckle')) %>%
+    wrp_set_attributes(list("next" = "generation", heckle = "jeckle")) %>%
     wrp_clone() %>%
-    wrp_set_attributes(list('next' = '')) %>%
+    wrp_set_attributes(list("next" = "")) %>%
     wrp_clone() %>%
-    wrp_set_attributes(list(heckle = 'Peter')) %>%
+    wrp_set_attributes(list(heckle = "Peter")) %>%
     wrp_exec()
   expect_equal(res, expected)
 })
@@ -500,19 +500,19 @@ test_that("reduce", {
   expected   <- list(expect_df1, expect_df2)
   object     <- wrp_connect() %>%
     wrp_new_gts() %>%
-    wrp_rename('a') %>%
+    wrp_rename("a") %>%
     wrp_relabel(list(type = "1")) %>%
     wrp_add_value_df(df1) %>%
     wrp_new_gts() %>%
-    wrp_rename('b') %>%
+    wrp_rename("b") %>%
     wrp_relabel(list(type = "1")) %>%
     wrp_add_value_df(df1) %>%
     wrp_new_gts() %>%
-    wrp_rename('a') %>%
+    wrp_rename("a") %>%
     wrp_relabel(list(type = "2")) %>%
     wrp_add_value_df(df2) %>%
     wrp_new_gts() %>%
-    wrp_rename('b') %>%
+    wrp_rename("b") %>%
     wrp_relabel(list(type = "2")) %>%
     wrp_add_value_df(df2) %>%
     set_script("4 ->LIST", consume = list("gts", "gts", "gts", "gts"), add = "lgts") %>%
