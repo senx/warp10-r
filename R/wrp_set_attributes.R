@@ -31,7 +31,7 @@
 #'
 #' @keywords gts encoder
 #'
-#' @seealso [wrp_relabel()], [wrp_rename()], [wrp_meta()], [wrp_attributes()]
+#' @seealso [wrp_relabel()], [wrp_rename()], [wrp_meta()], [wrp_attributes()], [wrp_labels()]
 #'
 wrp_set_attributes <- function(wrp_con, attributes) {
   script        <- glue::glue("{sanitize(attributes)} SETATTRIBUTES")

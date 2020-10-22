@@ -542,3 +542,13 @@ test_that("values", {
     wrp_exec()
   expect_equal(object, expected)
 })
+
+test_that("labels", {
+  expected <- c(label0 = "42", label1 = "foo")
+  object <- wrp_connect() %>%
+    wrp_new_gts() %>%
+    wrp_relabel(list(label0 = "42", label1 = "foo")) %>%
+    wrp_labels() %>%
+    wrp_exec()
+  expect_equal(object, expected)
+})

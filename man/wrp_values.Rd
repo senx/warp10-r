@@ -26,4 +26,7 @@ wrp_connect() \%>\%
   wrp_exec()
 
 }
+\seealso{
+\code{\link[=wrp_labels]{wrp_labels()}}
+}
 \keyword{gts}
