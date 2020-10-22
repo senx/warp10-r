@@ -562,3 +562,14 @@ test_that("name", {
     wrp_exec()
   expect_equal(object, expected)
 })
+
+test_that("swap", {
+  expected <- list("Second level", "Top", "Third level")
+  object <- wrp_connect() %>%
+    set_script("Third level") %>%
+    set_script("Second level") %>%
+    set_script("Top") %>%
+    wrp_swap() %>%
+    wrp_exec()
+  expect_equal(object, expected)
+})
