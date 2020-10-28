@@ -11,6 +11,7 @@ wrp_exec <- function(wrp_con) {
   endpoint   <- wrp_con$get_endpoint()
   stack      <- get_stack(wrp_con)
   raw_res    <- post_warpscript(warpscript = wrp_script, endpoint = endpoint)
+  tz         <- wrp_con$get_tz()
 
   # Clear all scripts
   clear_script(wrp_con)
@@ -29,9 +30,9 @@ wrp_exec <- function(wrp_con) {
   })
 
   if (length(stack) == 1) {
-    build_res(res[[1]])
+    build_res(res[[1]], tz = tz)
   } else {
-    purrr::map(res, build_res)
+    purrr::map(res, build_res, tz = tz)
   }
 }
 
@@ -40,55 +41,57 @@ wrp_exec <- function(wrp_con) {
 #' Build results from parsed json file.
 #'
 #' @param data A list resulting of a parsed json of all results.
+#' @param tz Time Zone
+#' @param ... Other paramters passed into methods
 #'
 #' @export
 #'
-build_res <- function(data) {
+build_res <- function(data, ...) {
   UseMethod("build_res")
 }
 
 #' @export
 #' @rdname build_res
 #'
-build_res.data <- function(data) {
+build_res.data <- function(data, ...) {
   purrr::compact(purrr::set_names(data, c("timestamp", "latitude", "longitude", "elevation", "value")))
 }
 
 #' @export
 #' @rdname build_res
 #'
-build_res.ldata <- function(data) {
+build_res.ldata <- function(data, tz) {
   as_gts(purrr::map_dfr(data, function(l) {
     as.data.frame(
       purrr::compact(
         purrr::set_names(l, nm = c("timestamp", "latitude", "longitude", "elevation", "value"))
       )
     )
-  }))
+  }), tz = tz)
 }
 
 #' @export
 #' @rdname build_res
 #'
-build_res.default <- function(data) {
+build_res.default <- function(data, ...) {
   return(unclass(data))
 }
 
 #' @export
 #' @rdname build_res
-build_res.map <- function(data) {
+build_res.map <- function(data, ...) {
   build_res.list(data)
 }
 
 #' @export
 #' @rdname build_res
-build_res.lastactivity <- function(data) {
-  lubridate::as_datetime(data / 1e6)
+build_res.lastactivity <- function(data, tz) {
+  lubridate::as_datetime(data / 1e6, tz = tz)
 }
 
 #' @export
 #' @rdname build_res
-build_res.list <- function(data) {
+build_res.list <- function(data, ...) {
   if (all(sapply(data, length) == 1)) {
     unclass(unlist(data))
   } else {
@@ -99,16 +102,16 @@ build_res.list <- function(data) {
 #' @export
 #' @rdname build_res
 #'
-build_res.gts <- function(data) {
+build_res.gts <- function(data, tz) {
   new_data <- build_gts_value(data)
 
-  as_gts(new_data, class = data[["c"]], labels = unlist(data[["l"]]), attributes = unlist(data[["a"]]))
+  as_gts(new_data, class = data[["c"]], labels = unlist(data[["l"]]), attributes = unlist(data[["a"]]), tz = tz)
 }
 
 #' @export
 #' @rdname build_res
 #'
-build_res.lgts <- function(data) {
+build_res.lgts <- function(data, tz) {
   if (length(data) == 0) return(data)
-  purrr::map(data, build_res.gts)
+  purrr::map(data, build_res.gts, tz = tz)
 }

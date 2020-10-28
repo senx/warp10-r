@@ -4,12 +4,18 @@
 \alias{wrp_connect}
 \title{Create Connection}
 \usage{
-wrp_connect(endpoint = get_endpoint(), token = get_token())
+wrp_connect(
+  endpoint = get_endpoint(),
+  token = get_token(),
+  tz = Sys.getenv("TZ", "UTC")
+)
 }
 \arguments{
 \item{endpoint}{egress endpoint.}
 
 \item{token}{a token needed to connect to database}
+
+\item{tz}{Time Zone}
 }
 \description{
 Create a connection to a Warp 10 database.

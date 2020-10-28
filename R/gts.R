@@ -13,6 +13,7 @@
 #'
 #' @inheritParams documentation
 #' @param x An object that could reasoably be coerced to a gts tibble.
+#' @param tz Time zone
 #'
 #'
 #' @export
@@ -21,13 +22,14 @@
 #'
 #' x <- data.frame(timestamp = 1:10, value = rnorm(10))
 #' as_gts(x)
-as_gts <- function(x, class = "", labels = list(), attributes = list()) {
+as_gts <- function(x, class = "", labels = list(), attributes = list(), tz = Sys.getenv("TZ", "UTC")) {
   x <- tibble::as_tibble(drop_na_col(x))
 
   if (nrow(x) > 0 && is.numeric(x[["timestamp"]]) && max(x[["timestamp"]]) > 1e6) {
-    x[["timestamp"]] <- lubridate::as_datetime(x[["timestamp"]] / 1e6)
+    x[["timestamp"]] <- lubridate::as_datetime(x[["timestamp"]] / 1e6, tz = tz)
   } else if (lubridate::is.Date(x[["timestamp"]])) {
     x[["timestamp"]] <- lubridate::as_datetime(x[["timestamp"]])
+    lubridate::tz(x[["timestamp"]]) <- tz
   }
   # When a GTS is retrieved from Warp10 database, the structure of a label is named list.
   # For consistency, if a gts object is built from a dataframe, the structure of labels must

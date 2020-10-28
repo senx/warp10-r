@@ -14,9 +14,9 @@ Exchanges the positions of the top two elements of the stack.
 }
 \examples{
 wrp_connect() \%>\%
-    wrp_script("Thrid level") \%>\%
-    wrp_script("Second level") \%>\%
-    wrp_script("Top") \%>\%
+    set_script("Thrid level") \%>\%
+    set_script("Second level") \%>\%
+    set_script("Top") \%>\%
     wrp_swap() \%>\%
     wrp_exec()
 }

@@ -4,20 +4,22 @@
 #' The connexion is an R6 object with few informations
 #'
 #' @inheritParams documentation
+#' @param tz Time Zone
 #'
 #' @export
 #'
-wrp_connect <- function(endpoint = get_endpoint(), token = get_token()) {
-  connect$new(endpoint = endpoint, token = token)
+wrp_connect <- function(endpoint = get_endpoint(), token = get_token(), tz = Sys.getenv("TZ", "UTC")) {
+  connect$new(endpoint = endpoint, token = token, tz = tz)
 }
 
 connect <- R6::R6Class(
   classname = "warp10",
   public    = list(
-    initialize = function(endpoint, token) {
+    initialize = function(endpoint, token, tz) {
       assert_endpoint(endpoint)
       private$endpoint <- endpoint
       private$token    <- token
+      private$tz       <- tz
       if (!is.null(token)) {
         self$set_script(glue::glue("'{token}' 'token' STORE\n"))
       }
@@ -60,6 +62,9 @@ connect <- R6::R6Class(
     get_token = function() {
       private$token
     },
+    get_tz = function() {
+      private$tz
+    },
     print = function() {
       stack    <- private$stack
       endpoint <- private$endpoint
@@ -83,6 +88,7 @@ connect <- R6::R6Class(
     script     = "",
     endpoint   = NULL,
     stack      = list(),
-    token      = NULL
+    token      = NULL,
+    tz         = NULL
   )
 )
