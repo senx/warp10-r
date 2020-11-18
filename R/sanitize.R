@@ -78,7 +78,7 @@ sanitize.character <- function(x, return = "iso8601", ...) {
   if (length(only_num) == length(x)) {
     return(glue::glue("'{x}'"))
   }
-  timestamp <- anytime::anytime(x)
+  timestamp <- anytime::anytime(x, asUTC = TRUE, tz = "UTC")
   if (!any(is.na(timestamp))) {
     return(sanitize(timestamp, return = return))
   }
@@ -107,7 +107,7 @@ sanitize.logical <- function(x, ...) {
 
 #' @rdname sanitize
 #' @export
-sanitize.data.frame <- function(x, ...) {
+sanitize.data.frame <- function(x, ...) { # nolint
   lapply(x, sanitize, ...)
 }
 

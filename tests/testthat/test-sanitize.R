@@ -1,5 +1,5 @@
 test_that("sanitize", {
-  expect <- "{ 'num' [ [ 1 2 3 4 5 6 7 8 9 10 ] '11' ] 'char' 'test' 'duration' 259200 s 'date' '2019-12-31T23:00:00Z' 'boolean' true 'warpscript' NOW NULL NULL }" # nolint
+  expect <- "{ 'num' [ [ 1 2 3 4 5 6 7 8 9 10 ] '11' ] 'char' 'test' 'duration' 259200 s 'date' '2020-01-01T00:00:00Z' 'boolean' true 'warpscript' NOW NULL NULL }" # nolint
   res <- sanitize(
     list(
       num        = list(list(1:10), "11"),
