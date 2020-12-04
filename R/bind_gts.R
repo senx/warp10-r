@@ -12,8 +12,8 @@ bind_lgts <- function(lgts, combine = FALSE, .funs = "first") {
   is_value  <- all(purrr::map_int(.x = lgts, ~ nrow(.x) > 0))
   value     <- if (is_value) tibble::tibble(value = purrr::map(.x = lgts, ~ .x)) else NULL
   class     <- build_gts_class(lgts)
-  label     <- build_gts_label(lgts)
-  attribute <- build_gts_attributes(lgts)
+  label     <- build_gts_label(lgts, label = "labels")
+  attribute <- build_gts_label(lgts, label = "attributes")
   value     <- dplyr::bind_cols(
     class     = class[["value"]],
     label     = label[["value"]],
@@ -82,8 +82,8 @@ build_gts_class <- function(lgts) {
   return(list(value = class, metadata = metadata))
 }
 
-build_gts_label <- function(lgts) {
-  label    <- purrr::map(.x = lgts, ~ attr(.x, "gts")[["labels"]])
+build_gts_label <- function(lgts, label = "labels") {
+  label    <- purrr::map(.x = lgts, ~ attr(.x, "gts")[[label]])
   metadata <- NULL
   if (length(unique(label)) == 1) {
     metadata <- unique(label)
@@ -93,19 +93,4 @@ build_gts_label <- function(lgts) {
   }
   if (length(label) == 0) label <- NULL
   return(list(value = label, metadata = metadata))
-}
-
-build_gts_attributes <- function(lgts) {
-  attribute <- purrr::map(.x = lgts, ~ attr(.x, "gts")[["attributes"]])
-  metadata  <- NULL
-  if (length(unique(attribute)) == 1) {
-    if (length(attribute[[1]]) > 0) {
-      metadata  <- unique(attribute)
-    }
-    attribute <- NULL
-  } else {
-    attribute <- tibble::tibble(label = attribute)
-  }
-  if (length(attribute) == 0) attribute <- NULL
-  return(list(value = attribute, metadata = metadata))
 }
