@@ -137,15 +137,15 @@ test_that("relabel work as expected", {
   res_relabel <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_clone() %>%
-    wrp_relabel(list("foo" = "bar", "bar" = "foo")) %>%
+    wrp_relabel(foo = "bar", bar = "foo") %>%
     wrp_clone() %>%
-    wrp_relabel(list("null" = NULL, "star" = "treck")) %>%
+    wrp_relabel("null" = NULL, star = "treck") %>%
     wrp_clone() %>%
-    wrp_relabel(list("next" = "generation", "heckle" = "jeckle")) %>%
+    wrp_relabel("next" = "generation", "heckle" = "jeckle") %>%
     wrp_clone() %>%
-    wrp_relabel(list("heckle" = NULL)) %>%
+    wrp_relabel("heckle" = NULL) %>%
     wrp_clone() %>%
-    wrp_relabel(list("next" = "")) %>%
+    wrp_relabel("next" = "") %>%
     wrp_exec()
   expect_equal(res_relabel, res)
 })
@@ -174,14 +174,14 @@ test_that("to selector work as expected", {
   res_to_selector <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_rename("test name") %>%
-    wrp_relabel(c("label0" = "42", "label1" = "foo")) %>%
+    wrp_relabel("label0" = "42", "label1" = "foo") %>%
     wrp_add_value(100, value = 10) %>%
     wrp_add_value(200, value = 9) %>%
     wrp_add_value(300, value = 8) %>%
     wrp_store("gts1") %>%
     set_script("$gts1", add = "gts") %>%
     wrp_clone() %>%
-    wrp_relabel(c("label0" = "33")) %>%
+    wrp_relabel("label0" = "33") %>%
     wrp_store("gts2") %>%
     wrp_drop() %>%
     set_script("[ $gts1 $gts2 ]", add = "lgts") %>%
@@ -346,7 +346,7 @@ test_that("at index", {
   df_res <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_rename("test") %>%
-    wrp_relabel(list("label0" = "42", "label1" = "foo")) %>%
+    wrp_relabel("label0" = "42", "label1" = "foo") %>%
     wrp_add_value_df(df) %>%
     wrp_at_index(4) %>%
     wrp_exec()
@@ -376,7 +376,7 @@ test_that("lr", {
 
 test_that("parse_selector", {
   l <- list(
-    c(sensortype = "~numeric.*", sensorId =  "=01"),
+    c(sensorId =  "=01", sensortype = "~numeric.*"),
     "io.senx.tutorial.sensors.temperature"
   )
   res <- wrp_connect() %>%
@@ -398,15 +398,15 @@ test_that("set_attributes", {
   res <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_clone() %>%
-    wrp_set_attributes(list(foo = "bar", bar = "foo")) %>%
+    wrp_set_attributes(foo = "bar", bar = "foo") %>%
     wrp_clone() %>%
-    wrp_set_attributes(list("ws:NULL" = "ws:NULL", star = "treck")) %>%
+    wrp_set_attributes("NULL" = NULL, star = "treck") %>%
     wrp_clone() %>%
-    wrp_set_attributes(list("next" = "generation", heckle = "jeckle")) %>%
+    wrp_set_attributes("next" = "generation", heckle = "jeckle") %>%
     wrp_clone() %>%
-    wrp_set_attributes(list("next" = "")) %>%
+    wrp_set_attributes("next" = "") %>%
     wrp_clone() %>%
-    wrp_set_attributes(list(heckle = "Peter")) %>%
+    wrp_set_attributes(heckle = "Peter") %>%
     wrp_exec()
   expect_equal(res, expected)
 })
@@ -418,7 +418,7 @@ test_that("update, find, fetch, meta and delete works", {
     wrp_add_value(1, 1) %>%
     wrp_update() %>%
     wrp_fetch(class = "gts_test") %>%
-    wrp_set_attributes(list(foo = "bar")) %>%
+    wrp_set_attributes(foo = "bar") %>%
     wrp_meta() %>%
     wrp_find("gts_test") %>%
     wrp_clone() %>%
@@ -442,7 +442,7 @@ test_that("attributes", {
   object <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_rename("test") %>%
-    wrp_set_attributes(list(attr1 = "42", attr2 = "foo")) %>%
+    wrp_set_attributes(attr1 = "42", attr2 = "foo") %>%
     wrp_attributes() %>%
     wrp_exec()
   expected <- c(attr2 = "foo", attr1 = "42")
@@ -501,19 +501,19 @@ test_that("reduce", {
   object     <- wrp_connect() %>%
     wrp_new_gts() %>%
     wrp_rename("a") %>%
-    wrp_relabel(list(type = "1")) %>%
+    wrp_relabel(type = "1") %>%
     wrp_add_value_df(df1) %>%
     wrp_new_gts() %>%
     wrp_rename("b") %>%
-    wrp_relabel(list(type = "1")) %>%
+    wrp_relabel(type = "1") %>%
     wrp_add_value_df(df1) %>%
     wrp_new_gts() %>%
     wrp_rename("a") %>%
-    wrp_relabel(list(type = "2")) %>%
+    wrp_relabel(type = "2") %>%
     wrp_add_value_df(df2) %>%
     wrp_new_gts() %>%
     wrp_rename("b") %>%
-    wrp_relabel(list(type = "2")) %>%
+    wrp_relabel(type = "2") %>%
     wrp_add_value_df(df2) %>%
     set_script("4 ->LIST", consume = list("gts", "gts", "gts", "gts"), add = "lgts") %>%
     wrp_reduce("product", "type") %>%
@@ -547,7 +547,7 @@ test_that("labels", {
   expected <- c(label0 = "42", label1 = "foo")
   object <- wrp_connect() %>%
     wrp_new_gts() %>%
-    wrp_relabel(list(label0 = "42", label1 = "foo")) %>%
+    wrp_relabel(label0 = "42", label1 = "foo") %>%
     wrp_labels() %>%
     wrp_exec()
   expect_equal(object, expected)

@@ -23,7 +23,7 @@ allows the user to add some information that can change in a series.
 wrp_connect() \%>\%
   wrp_new_gts() \%>\%
   wrp_rename("test") \%>\%
-  wrp_set_attributes(list(attr1 = "42", attr2 = "foo")) \%>\%
+  wrp_set_attributes(attr1 = "42", attr2 = "foo") \%>\%
   wrp_attributes() \%>\%
   wrp_exec()
 

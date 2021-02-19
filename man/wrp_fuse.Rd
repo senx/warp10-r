@@ -27,7 +27,7 @@ df <- data.frame(tick = 1:100, value = rnorm(100))
 
 wrp_connect() \%>\%
   wrp_new_gts() \%>\%
-  wrp_relabel(c("foo", "bar")) \%>\%
+  wrp_relabel("foo" = "bar") \%>\%
   wrp_add_value_df(df) \%>\%
   wrp_chunk(100, 10, 0, 10, "chunkid", FALSE) \%>\%
   wrp_dup() \%>\%

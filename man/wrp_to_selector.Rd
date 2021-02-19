@@ -21,14 +21,14 @@ This selector can be used as input of PARSESELECTOR for a FETCH.
 wrp_connect() \%>\%
   wrp_new_gts() \%>\%
   wrp_rename("test name") \%>\%
-  wrp_relabel(c("label0", 42, "label1", "foo")) \%>\%
+  wrp_relabel("label0" = 42, "label1" = "foo") \%>\%
   wrp_add_value(100, value = 10) \%>\%
   wrp_add_value(200, value = 9) \%>\%
   wrp_add_value(300, value = 8) \%>\%
   wrp_store("gts1") \%>\%
   set_script("$gts1", add = "gts") \%>\%
   wrp_clone() \%>\%
-  wrp_relabel(c("label0", "33")) \%>\%
+  wrp_relabel("label0" = "33") \%>\%
   wrp_store("gts2") \%>\%
   wrp_drop() \%>\%
   set_script("[ $gts1 $gts2 ]", add = "lgts") \%>\%

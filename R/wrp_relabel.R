@@ -10,28 +10,29 @@
 #' An entry with an empty STRING value or a NULL value will have the effect of removing the label from the GTS' labels.
 #'
 #' @inheritParams documentation
-#' @param labels Parameter map of label names to values.
+#' @param ... Named parameters of label names to values.
 #'
 #' @examples
 #'
 #' wrp_connect() %>%
 #'   wrp_new_gts() %>%
 #'   wrp_clone() %>%
-#'   wrp_relabel(c("foo", "bar", "bar", "foo")) %>%
+#'   wrp_relabel(foo = "bar", bar = "foo") %>%
 #'   wrp_clone() %>%
-#'   wrp_relabel(list(NULL, NULL, "star", "treck")) %>%
+#'   wrp_relabel("NULL" = NULL, "star" = "treck") %>%
 #'   wrp_clone() %>%
-#'   wrp_relabel(c("next", "generation", "heckle", "jeckle")) %>%
+#'   wrp_relabel("next" = "generation", heckle = "jeckle") %>%
 #'   wrp_clone() %>%
-#'   wrp_relabel(list("heckle", NULL)) %>%
+#'   wrp_relabel(heckle =NULL) %>%
 #'   wrp_clone() %>%
-#'   wrp_relabel(c("next", "")) %>%
+#'   wrp_relabel("next" = "") %>%
 #'   wrp_exec()
 #' @export
 #'
 #' @seealso [wrp_set_attributes()], [wrp_rename()]
 #'
-wrp_relabel <- function(wrp_con, labels) {
+wrp_relabel <- function(wrp_con, ...) {
+  labels <- rlang::list2(...)
   script <- paste(sanitize(as.list(labels)), "RELABEL")
   return_object  <- list(
     gts      = "gts",

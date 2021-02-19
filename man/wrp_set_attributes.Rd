@@ -4,12 +4,12 @@
 \alias{wrp_set_attributes}
 \title{Set attributes}
 \usage{
-wrp_set_attributes(wrp_con, attributes)
+wrp_set_attributes(wrp_con, ...)
 }
 \arguments{
 \item{wrp_con}{\link{wrp_connect} object.}
 
-\item{attributes}{Map of attributes.}
+\item{...}{Named parameters of attributes names to values.}
 }
 \description{
 Modifies the attributes of a Geo Time Series™, an encoder or a list thereof.
@@ -27,15 +27,15 @@ attribute from the attributes of the GTSs or encoders.
 wrp_connect() \%>\%
   wrp_new_gts() \%>\%
   wrp_clone() \%>\%
-  wrp_set_attributes(list(foo = "bar", bar = "foo")) \%>\%
+  wrp_set_attributes(foo = "bar", bar = "foo") \%>\%
   wrp_clone() \%>\%
-  wrp_set_attributes(list("null" = NULL, star = 'treck')) \%>\%
+  wrp_set_attributes("null" = NULL, star = 'treck') \%>\%
   wrp_clone() \%>\%
-  wrp_set_attributes(list('next' = 'generation', heckle = 'jeckle')) \%>\%
+  wrp_set_attributes('next' = 'generation', heckle = 'jeckle') \%>\%
   wrp_clone() \%>\%
-  wrp_set_attributes(list('next' = '')) \%>\%
+  wrp_set_attributes('next' = '') \%>\%
   wrp_clone() \%>\%
-  wrp_set_attributes(list(heckle = 'Peter')) \%>\%
+  wrp_set_attributes(heckle = 'Peter') \%>\%
   wrp_exec()
 
 }

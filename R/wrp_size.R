@@ -14,7 +14,7 @@
 #' wrp_connect() %>%
 #'   wrp_new_gts() %>%
 #'   wrp_rename("test name") %>%
-#'   wrp_relabel(list("label0", "42", "label1", "foo")) %>%
+#'   wrp_relabel("label0" = "42", "label1" = "foo") %>%
 #'   wrp_add_value_df(df) %>%
 #'   wrp_clone() %>%
 #'   wrp_size() %>%

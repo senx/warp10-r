@@ -14,7 +14,7 @@
 #' @examples
 #' wrp_connect() %>%
 #'     wrp_new_gts() %>%
-#'     wrp_relabel(list(label0 = "42", label1 = "foo")) %>%
+#'     wrp_relabel(label0 = "42", label1 = "foo") %>%
 #'     wrp_labels() %>%
 #'     wrp_exec()
 wrp_labels <- function(wrp_con) {

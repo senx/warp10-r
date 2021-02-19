@@ -4,12 +4,12 @@
 \alias{wrp_relabel}
 \title{Relabel}
 \usage{
-wrp_relabel(wrp_con, labels)
+wrp_relabel(wrp_con, ...)
 }
 \arguments{
 \item{wrp_con}{\link{wrp_connect} object.}
 
-\item{labels}{Parameter map of label names to values.}
+\item{...}{Named parameters of label names to values.}
 }
 \description{
 Modifies the labels of a Geo Time Series™.
@@ -27,15 +27,15 @@ An entry with an empty STRING value or a NULL value will have the effect of remo
 wrp_connect() \%>\%
   wrp_new_gts() \%>\%
   wrp_clone() \%>\%
-  wrp_relabel(c("foo", "bar", "bar", "foo")) \%>\%
+  wrp_relabel(foo = "bar", bar = "foo") \%>\%
   wrp_clone() \%>\%
-  wrp_relabel(list(NULL, NULL, "star", "treck")) \%>\%
+  wrp_relabel("NULL" = NULL, "star" = "treck") \%>\%
   wrp_clone() \%>\%
-  wrp_relabel(c("next", "generation", "heckle", "jeckle")) \%>\%
+  wrp_relabel("next" = "generation", heckle = "jeckle") \%>\%
   wrp_clone() \%>\%
-  wrp_relabel(list("heckle", NULL)) \%>\%
+  wrp_relabel(heckle =NULL) \%>\%
   wrp_clone() \%>\%
-  wrp_relabel(c("next", "")) \%>\%
+  wrp_relabel("next" = "") \%>\%
   wrp_exec()
 }
 \seealso{
