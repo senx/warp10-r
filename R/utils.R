@@ -1,5 +1,5 @@
 `%||%` <- function(x, y) { # nolint
-  if (is.null(x)) y else x
+  if (is.null(x) || length(x) == 0) y else x
 }
 
 # From https://stackoverflow.com/questions/34208564/how-to-hide-or-disable-in-function-printed-message/34208658#34208658

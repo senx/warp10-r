@@ -9,17 +9,25 @@
 #' @export
 #'
 bind_lgts <- function(lgts, combine = FALSE, .funs = "first") {
-  is_value  <- all(purrr::map_int(.x = lgts, ~ nrow(.x) > 0))
-  value     <- if (is_value) tibble::tibble(value = purrr::map(.x = lgts, ~ .x)) else NULL
-  class     <- build_gts_class(lgts)
-  label     <- build_gts_label(lgts, label = "labels")
-  attribute <- build_gts_label(lgts, label = "attributes")
-  value     <- dplyr::bind_cols(
-    class     = class[["value"]],
-    label     = label[["value"]],
-    value     = value,
-    attribute = attribute[["value"]]
-  )
+  is_value  <- purrr::map_int(.x = lgts, ~ nrow(.x) > 0)
+  value     <- if (any(is_value)) {
+    tibble::tibble(value = lgts)
+    if (!all(is_value)) {
+      warning("Droping GTS with no values.", immediate. = TRUE)
+    }
+  } else {
+    NULL
+  }
+  class     <- build_col_gts(lgts, col = "class")
+  label     <- build_col_gts(lgts, col = "labels")
+  attribute <- build_col_gts(lgts, col = "attributes")
+  df        <- tibble::tibble(id = as.character(seq_along(lgts)))
+  for (col in list(class, label, attribute)) {
+    if (!is.null(col[["value"]])) {
+      df <- dplyr::left_join(df, col[["value"]], by = "id")
+    }
+  }
+  value <- dplyr::bind_cols(df, value = value)
   if ("value" %in% names(value)) value <- tidyr::unnest(value, "value")
 
   gts <- as_gts(
@@ -50,7 +58,7 @@ drop_na_col <- function(df) {
 }
 
 build_gts_value <- function(data) {
-  l        <- data[["v"]]
+  l <- data[["v"]]
   if (!is.null(names(l)) || length(l) == 0) return(tibble::as_tibble(l))
   n <- length(l[[1]])
   if (n == 2) {
@@ -70,27 +78,19 @@ build_gts_value <- function(data) {
   )
 }
 
-build_gts_class <- function(lgts) {
-  class    <- purrr::map_chr(.x = lgts, ~ attr(.x, "gts")[["class"]])
+build_col_gts <- function(lgts, col) {
+  x        <- purrr::map(.x = lgts, ~ attr(.x, "gts")[[col]])
   metadata <- NULL
-  if (length(unique(class)) == 1) {
-    metadata <- unique(class)
-    class    <- NULL
+  if (length(unique(x)) == 1) {
+    metadata <- unique(x)
+    x        <- NULL
   } else {
-    class <- tibble::tibble(class = class)
+    if (col == "class") {
+      x <- tibble::tibble(id = as.character(seq_along(lgts)), class = unlist(x))
+    } else {
+      x <- dplyr::bind_rows(x, .id = "id")
+    }
   }
-  return(list(value = class, metadata = metadata))
-}
-
-build_gts_label <- function(lgts, label = "labels") {
-  label    <- purrr::map(.x = lgts, ~ attr(.x, "gts")[[label]])
-  metadata <- NULL
-  if (length(unique(label)) == 1) {
-    metadata <- unique(label)
-    label    <- NULL
-  } else {
-    label <- dplyr::bind_rows(label)
-  }
-  if (length(label) == 0) label <- NULL
-  return(list(value = label, metadata = metadata))
+  if (length(x) == 0) x <- NULL
+  return(list(value = x, metadata = metadata))
 }
