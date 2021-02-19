@@ -11,10 +11,10 @@
 bind_lgts <- function(lgts, combine = FALSE, .funs = "first") {
   is_value  <- purrr::map_int(.x = lgts, ~ nrow(.x) > 0)
   value     <- if (any(is_value)) {
-    tibble::tibble(value = lgts)
     if (!all(is_value)) {
       warning("Droping GTS with no values.", immediate. = TRUE)
     }
+    tibble::tibble(value = lgts)
   } else {
     NULL
   }
@@ -27,7 +27,11 @@ bind_lgts <- function(lgts, combine = FALSE, .funs = "first") {
       df <- dplyr::left_join(df, col[["value"]], by = "id")
     }
   }
-  value <- dplyr::bind_cols(df, value = value)
+  df[["id"]] <- NULL
+  if (ncol(df) == 0) {
+    df <- NULL
+  }
+  value      <- dplyr::bind_cols(df, value = value)
   if ("value" %in% names(value)) value <- tidyr::unnest(value, "value")
 
   gts <- as_gts(
