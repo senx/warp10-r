@@ -32,5 +32,5 @@ wrp_connect() \%>\%
   wrp_chunk(100, 10, 0, 10, "chunkid", FALSE) \%>\%
   wrp_dup() \%>\%
   wrp_fuse() \%>\%
-  wrp_exec(combine = FALSE)
+  wrp_exec()
 }

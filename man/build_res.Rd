@@ -12,30 +12,30 @@
 \alias{build_res.lgts}
 \title{Build results}
 \usage{
-build_res(data, ...)
+build_res(data, tz, ...)
 
-\method{build_res}{data}(data, ...)
+\method{build_res}{data}(data, tz, ...)
 
-\method{build_res}{ldata}(data, tz)
+\method{build_res}{ldata}(data, tz, ...)
 
-\method{build_res}{default}(data, ...)
+\method{build_res}{default}(data, tz, ...)
 
-\method{build_res}{map}(data, ...)
+\method{build_res}{map}(data, tz, ...)
 
-\method{build_res}{lastactivity}(data, tz)
+\method{build_res}{lastactivity}(data, tz, ...)
 
-\method{build_res}{list}(data, ...)
+\method{build_res}{list}(data, tz, ...)
 
-\method{build_res}{gts}(data, tz)
+\method{build_res}{gts}(data, tz, ...)
 
-\method{build_res}{lgts}(data, tz)
+\method{build_res}{lgts}(data, tz, ...)
 }
 \arguments{
 \item{data}{A list resulting of a parsed json of all results.}
 
-\item{...}{Other paramters passed into methods}
-
 \item{tz}{Time Zone}
+
+\item{...}{Other paramters passed into methods}
 }
 \description{
 Build results from parsed json file.

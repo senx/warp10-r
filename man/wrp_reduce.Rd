@@ -16,7 +16,7 @@ classes. If the list is empty all Geo Time Series™ will end up in the same
 equivalence class. If the labels parameter NULL, all labels will be
 considered.}
 
-\item{override_tick}{Boolean, if true allows the reducer to modify the ticks
+\item{override_ticks}{Boolean, if true allows the reducer to modify the ticks
 of the GTSs. If not set, the reducer cannot modify the ticks.}
 }
 \description{

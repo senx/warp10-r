@@ -20,7 +20,7 @@
 #' equivalence class. If the labels parameter NULL, all labels will be
 #' considered.
 #' @param reducer Reducer function to apply.
-#' @param override_tick Boolean, if true allows the reducer to modify the ticks
+#' @param override_ticks Boolean, if true allows the reducer to modify the ticks
 #' of the GTSs. If not set, the reducer cannot modify the ticks.
 #'
 #' @keywords reducer, framework

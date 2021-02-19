@@ -46,21 +46,21 @@ wrp_exec <- function(wrp_con) {
 #'
 #' @export
 #'
-build_res <- function(data, ...) {
+build_res <- function(data, tz, ...) {
   UseMethod("build_res")
 }
 
 #' @export
 #' @rdname build_res
 #'
-build_res.data <- function(data, ...) {
+build_res.data <- function(data, tz, ...) {
   purrr::compact(purrr::set_names(data, c("timestamp", "latitude", "longitude", "elevation", "value")))
 }
 
 #' @export
 #' @rdname build_res
 #'
-build_res.ldata <- function(data, tz) {
+build_res.ldata <- function(data, tz, ...) {
   as_gts(purrr::map_dfr(data, function(l) {
     as.data.frame(
       purrr::compact(
@@ -73,25 +73,25 @@ build_res.ldata <- function(data, tz) {
 #' @export
 #' @rdname build_res
 #'
-build_res.default <- function(data, ...) {
+build_res.default <- function(data, tz, ...) {
   return(unclass(data))
 }
 
 #' @export
 #' @rdname build_res
-build_res.map <- function(data, ...) {
+build_res.map <- function(data, tz, ...) {
   build_res.list(data)
 }
 
 #' @export
 #' @rdname build_res
-build_res.lastactivity <- function(data, tz) {
+build_res.lastactivity <- function(data, tz, ...) {
   lubridate::as_datetime(data / 1e6, tz = tz)
 }
 
 #' @export
 #' @rdname build_res
-build_res.list <- function(data, ...) {
+build_res.list <- function(data, tz, ...) {
   if (all(sapply(data, length) == 1)) {
     unclass(unlist(data))
   } else {
@@ -102,7 +102,7 @@ build_res.list <- function(data, ...) {
 #' @export
 #' @rdname build_res
 #'
-build_res.gts <- function(data, tz) {
+build_res.gts <- function(data, tz, ...) {
   new_data <- build_gts_value(data)
 
   as_gts(new_data, class = data[["c"]], labels = unlist(data[["l"]]), attributes = unlist(data[["a"]]), tz = tz)
@@ -111,7 +111,7 @@ build_res.gts <- function(data, tz) {
 #' @export
 #' @rdname build_res
 #'
-build_res.lgts <- function(data, tz) {
+build_res.lgts <- function(data, tz, ...) {
   if (length(data) == 0) return(data)
   purrr::map(data, build_res.gts, tz = tz)
 }
