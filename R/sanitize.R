@@ -21,6 +21,9 @@
 #'   )
 #' )
 sanitize <- function(x, ...) {
+  if (missing(x)) {
+    return("")
+  }
   UseMethod("sanitize", x)
 }
 
@@ -34,9 +37,11 @@ sanitize.numeric <- function(x, ...) {
 #' @export
 sanitize.list <- function(x, ...) {
   if (!is.null(names(x))) {
-    as.character(glue::glue("{{ {paste(sapply(names(x), sanitize), sapply(x, sanitize), collapse = \" \")} }}"))
+    res <- paste(sapply(names(x), sanitize), sapply(x, sanitize), collapse = " ")
+    as.character(glue::glue("{{ {res} }}"))
   } else {
-    as.character(glue::glue("[ {paste(sapply(x, sanitize), collapse = \" \")} ]"))
+    res <- paste(sapply(x, sanitize), collapse = " ")
+    as.character(glue::glue("[ {res} ]"))
   }
 }
 

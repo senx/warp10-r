@@ -22,6 +22,10 @@ wrp_exec <- function(wrp_con) {
   }
 
   res <- jsonlite::fromJSON(raw_res, simplifyVector = FALSE)
+  if (length(res) != length(stack)) {
+    msg <- glue::glue("Number of elements declared in the stack ({length(stack)}) does not match the number of fetched data ({length(res)}).")
+    stop(msg)
+  }
   res <- purrr::map2(rev(stack), res, function(class, x) {
     if (!is.null(x)) {
       class(x) <- c(class, class(x))

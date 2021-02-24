@@ -26,3 +26,7 @@ test_that("sanitize data.frame", {
   res <- sanitize(data.frame(x = 1:10))
   expect_identical(res, expect)
 })
+
+test_that("sanitize with no arguments", {
+  expect_equal(sanitize(), "")
+})
