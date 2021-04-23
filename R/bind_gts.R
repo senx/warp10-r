@@ -9,6 +9,9 @@
 #' @export
 #'
 bind_lgts <- function(lgts, combine = FALSE, .funs = "first") {
+  if (length(lgts) == 0) {
+    return(as_gts(data.frame()))
+  }
   is_value  <- purrr::map_int(.x = lgts, ~ nrow(.x) > 0)
   value     <- if (any(is_value)) {
     if (!all(is_value)) {
