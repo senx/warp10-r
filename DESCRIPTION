@@ -1,6 +1,6 @@
 Package: warp10r
 Title: R Client for executing WarpScript on a Warp 10 instance
-Version: 0.19.1
+Version: 0.19.2
 Authors@R: 
     c(person(given = "Jean-Charles",
              family = "Vialatte",
@@ -36,4 +36,4 @@ Suggests:
     ctnconfig
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2

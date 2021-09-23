@@ -573,3 +573,61 @@ test_that("swap", {
     wrp_exec()
   expect_equal(object, expected)
 })
+
+test_that("to_list", {
+  expected <- c("el1", "TRUE", "el4", "4")
+  object <- wrp_connect() %>%
+    set_script("el1") %>%
+    set_script(TRUE) %>%
+    set_script("el4") %>%
+    set_script(4) %>%
+    wrp_to_list(4) %>%
+    wrp_exec()
+  expect_equal(object, expected)
+})
+
+test_that("merge", {
+  expected <- as_gts(
+    data.frame(timestamp = c(1:5, 1, 7:10), value = c(1, 1, 1, 2, 2, 2, 3, 4, 4, 4)),
+    class = "a",
+    labels = list(label1 = "foo")
+  )
+  object <- wrp_connect() %>%
+    wrp_new_gts() %>%
+    wrp_rename("a") %>%
+    wrp_relabel(label1 = "foo") %>%
+    wrp_add_value_df(data.frame(tick = 1:5, value = c(1, 1, 1, 2, 2))) %>%
+    wrp_new_gts() %>%
+    wrp_rename("b") %>%
+    wrp_relabel(label3 = "bar") %>%
+    wrp_add_value_df(data.frame(tick = c(1, 7:10), value = c(2, 3, 4, 4, 4))) %>%
+    wrp_to_list(2) %>%
+    wrp_merge()  %>%
+    wrp_exec()
+  expect_equal(object, expected)
+})
+
+test_that("from_b64 and from_bytes", {
+  expected <- "Warp 10 Geo Time Series™"
+  object <- wrp_connect() %>%
+    set_script("V2FycCAxMCBHZW8gVGltZSBTZXJpZXPihKI") %>%
+    wrp_from_b64() %>%
+    wrp_from_bytes() %>%
+    wrp_exec()
+  expect_equal(object, expected)
+})
+
+test_that("from_json", {
+  expected <- list(
+    list(menu = list(id = "file", value = "File")),
+    list(menu = list(id = "file", value = "File"))
+  )
+  object <- wrp_connect() %>%
+    set_script('[{"menu": {"id": "file","value": "File"}}]') %>%
+    wrp_from_json() %>%
+    wrp_get(0) %>%
+    set_script('{"menu": {"id": "file","value": "File"}}') %>%
+    wrp_from_json() %>%
+    wrp_exec()
+  expect_equal(expected, object)
+})
